@@ -19,7 +19,19 @@
 </head>
 
 <body>
-    <div id="wrapper">
+    <div class="row">
+        <div class="col-sm-3">
+          <p> Nav bar goes here </p>
+          <p> Maybe more stuff here?</p>
+        </div>
+        <div class="col-sm-6">
+            <textarea id="writing" form="writing" wrap="soft" autofocus rows="30" cols="40">
+            </textarea>
+        </div>
+        <div class="col-sm-3">
+            <p> Writing information goes here. </p>
+            <p id="wordcount"></p>
+        </div>
         <!--
         <nav class="navbar navbar-default navbar-fixed-top">
             <ul class="nav navbar-nav">
@@ -29,14 +41,6 @@
             </ul>
         </nav>
         !-->
-        <div class="content">
-            <textarea id="writing" form="writing" wrap="soft" autofocus rows="30" cols="40">
-            </textarea>
-        </div>
-        <div id="writing-info">
-            <p id="wordcount">0</p>
-        </div>
-
     </div>
     <!--
     <footer id="navbar-footer" class="navbar navbar-default navbar-fixed-bottom">
