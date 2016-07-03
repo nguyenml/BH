@@ -1,0 +1,25 @@
+#wrapper{
+  margin-bottom: 15px;
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+}
+body {
+    padding-top: 70px;
+}
+#navbar-footer {
+    padding-bottom: 70px;
+}
+#content {
+  position: relative;
+
+}
+textarea, input {
+  border: none;
+  resize: none;
+  background-color: white;
+  font-size: 30px;
+  font-family: Courier New;
+  outline: none;
+}
