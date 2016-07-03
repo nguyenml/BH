@@ -11,12 +11,13 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
+    <!--
     <script src="https://fb.me/react-15.2.0.js"></script>
     <script src="https://fb.me/react-dom-15.2.0.js"></script>
-
+    !-->
     <link rel="stylesheet" href="bluebook.css">
-</head
+</head>
+
 <body>
     <div id="wrapper">
         <!--
@@ -29,13 +30,20 @@
         </nav>
         !-->
         <div class="content">
-            <textarea form="writing" wrap="soft" autofocus rows="15" cols="80">
+            <textarea id="writing" form="writing" wrap="soft" autofocus rows="30" cols="40">
             </textarea>
         </div>
+        <div id="writing-info">
+            <p id="wordcount">0</p>
+        </div>
+
     </div>
+    <!--
     <footer id="navbar-footer" class="navbar navbar-default navbar-fixed-bottom">
         <p>Copyright 2016</p>
     </footer>
+    !-->
+    <script src="bluebook.js"></script>
 </body>
 
 </html>

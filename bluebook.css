@@ -22,4 +22,5 @@ textarea, input {
   font-size: 30px;
   font-family: Courier New;
   outline: none;
+  overflow-y: hidden;
 }
