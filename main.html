@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<!--
+    <script src="https://fb.me/react-15.2.0.js"></script>
+    <script src="https://fb.me/react-dom-15.2.0.js"></script>
+    !-->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bluebook.css') }}"></script>
+</head>
+
+<!-- Modals -->
+<div id="login-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form name="login-form">
+                    <input type="text" name="username">Username</input>
+                    <input type="password" name="password">Password</input>
+                    <button type="button" class="btn btn-sm">Login</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<body>
+<div id="navigation">
+    <nav>
+
+        <a href="#" class="nav-toggle-btn"></a>
+
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Read</a></li>
+          <li><a href="#">Write</a></li>
+
+          <div class = "nav-btn">
+            <li><button type="button" class="btn" data-toggle="modal" data-target="#login-modal">Login</button></li>
+            <li><button type="button" class="btn navbar-bottom" data-toggle="modal" data-target="#settings-modal">Settings</button></li>
+          </div
+        </ul>
+
+    </nav>
+
+</div>
+<div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <textarea id="writing" form="writing" wrap="soft" autofocus rows="20" cols="40">
+        </textarea>
+    </div>
+    <div class="col-sm-3">
+        <p> Writing information goes here. </p>
+        <p id="wordcount">3 Words</p>
+    </div>
+</div>
+
+
+<script src={{ url_for('static', filename='js/bluebook.js') }}></script>
+</body>
+
+</html>
