@@ -10,3 +10,12 @@ $('#writing').on("input propertychange", function(){
     $('#wordcount').text((wc - 1).toString() + " words");
 
 })
+
+$(function()
+{ var tgl = $('body'),
+    navToggleBtn = tgl.find('.nav-toggle-btn');
+
+navToggleBtn.on('click', function(move) {
+    tgl.toggleClass('active-nav');
+    move.preventDefault();});
+});
