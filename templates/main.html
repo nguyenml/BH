@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<script src="https://code.jquery.com/jquery-3.0.0.slim.min.js" integrity="sha256-Rf4BadfyCtsvHmO89BUZcbYvNNvZvOT08ALfEzvCsD0=" crossorigin="anonymous"></script>
+<script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -18,16 +18,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bluebook.css') }}"></script>
 </head>
 
-<body>
-<div id="navigation">
-    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#login-modal">Login</button>
-
-
-    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#login-modal">Settings</button>
-<!-- Modal -->
+<!-- Modals -->
 <div id="login-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -35,15 +28,23 @@
                 <h4 class="modal-title">Modal Header</h4>
             </div>
             <div class="modal-body">
-                <p>Some text in the modal.</p>
+                <form name="login-form">
+                    <input type="text" name="username">Username</input>
+                    <input type="password" name="password">Password</input>
+                    <button type="button" class="btn btn-sm">Login</button>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
+
+<body>
+<div id="navigation">
+    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#login-modal">Login</button>
+    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#settings-modal">Settings</button>
 
 </div>
 <div class="row">
