@@ -1,12 +1,20 @@
+#navigation {
+    position: fixed;
+    width: 40px;
+    border: line;
+    height: 100%;
+    background-color: #82ABA1;
+}
+
+
 textarea, input {
-  border: none;
-  resize: none;
-  background-color: white;
-  font-size: 30px;
-  font-family: Courier New;
-  outline: none;
-  overflow-y: hidden;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+    border: line;
+    resize: none;
+    font-size: 30px;
+    font-family: Courier New;
+    outline: none;
+    overflow-y: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
