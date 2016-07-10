@@ -1,6 +1,9 @@
 <html>
 
 <head>
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+  <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script>
 
 <!-- Latest compiled and minified CSS -->
@@ -11,11 +14,13 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-<!--
+
     <script src="https://fb.me/react-15.2.0.js"></script>
     <script src="https://fb.me/react-dom-15.2.0.js"></script>
-    !-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/bluebook.css') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/3.0.0/screenfull.js"></script>
 </head>
 
 <!-- Modals -->
@@ -44,9 +49,7 @@
 <body>
 <div id="navigation">
     <nav>
-
-        <a href="#" class="nav-toggle-btn"></a>
-
+      <a href="#" class="nav-toggle-btn"></a>
         <ul>
           <li><a href="#">Home</a></li>
           <li><a href="#">Read</a></li>
@@ -55,20 +58,51 @@
           <div class = "nav-btn">
             <li><button type="button" class="btn" data-toggle="modal" data-target="#login-modal">Login</button></li>
             <li><button type="button" class="btn navbar-bottom" data-toggle="modal" data-target="#settings-modal">Settings</button></li>
+
           </div
         </ul>
 
     </nav>
 
+
 </div>
 <div class="row">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-6">
-        <textarea id="writing" form="writing" wrap="soft" autofocus rows="20" cols="40">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-7">
+      <div class="container">
+
+        <textarea id="writing" form="writing" wrap="soft" autofocus rows="20" cols="60">
         </textarea>
+            <i id = "toggle" class="fa fa-arrows-alt" aria-hidden="true"></i>
     </div>
-    <div class="col-sm-3">
-        <p> Writing information goes here. </p>
+  </div>
+
+    <div class="col-sm-2">
+      <div id="prompt"></div>
+        <script type="text/babel">
+          var Prompt = React.createClass({
+
+            propTypes: {
+              title: React.PropTypes.string.isRequired
+            },
+
+            getDefaultProps: function () {
+              return {
+                title: "Title"
+              }
+            },
+
+            render: function() {
+              return(<h1>{this.props.title}</h1>)
+            }
+          });
+
+          ReactDOM.render(
+            <Prompt title={Title}/>,
+            document.getElementById('prompt'));
+            </script>
+
+
         <p id="wordcount">3 Words</p>
     </div>
 </div>

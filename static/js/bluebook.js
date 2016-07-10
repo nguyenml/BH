@@ -19,3 +19,13 @@ navToggleBtn.on('click', function(move) {
     tgl.toggleClass('active-nav');
     move.preventDefault();});
 });
+
+const target = $('#target')[0]; // Get DOM element from jQuery collection
+
+$('#toggle').click(function () {
+screenfull.toggle($('#container')[0]);
+});
+
+
+
+  var Title = "Instead of Oceans, they are all big forests, that gets taller and darker instead of deeper, with more dangerous animals living further out in the forest. A person decides to cross the Mariana Trench."
