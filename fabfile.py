@@ -1,5 +1,7 @@
 import os
-import src
+import json
+
+from src.app import app
 
 SQL_HOSTNAME = "devdb"
 SQL_USERNAME = "root"
@@ -21,9 +23,19 @@ def get_config():
             config[elem] = env_var
         else:
             config[elem] = DEFAULTS[elem]
-
     return config
 
+def write_config(dict_config):
+    with open("tmp/config.cfg", "wr") as fp:
+        json.dump(dict_config, fp)
+
+def gen_config():
+    write_config(get_config())
+
 def start(host="0.0.0.0", port=5000):
-    from src.app import app
+    if(os.path.isfile('tmp/config.cfg')):
+        pass
+    else:
+        cfg = get_config()
+        write_config(cfg)
     app.run(host, port)

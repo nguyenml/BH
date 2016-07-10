@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, redirect
+
 import os
+
+import models
 
 app = Flask(__name__)
 app.config.update(DEBUG=True)
