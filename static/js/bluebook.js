@@ -1,3 +1,6 @@
+// TODO: Remove this
+var Title = "Instead of Oceans, they are all big forests, that gets taller and darker instead of deeper, with more dangerous animals living further out in the forest. A person decides to cross the Mariana Trench."
+
 $(document).ready(function() {
 
     $('#writing').text("Welcome to BlueBook!");
@@ -13,18 +16,17 @@ $('#writing').on("input propertychange", function() {
 
 $(function() {
     var tgl = $('body'),
-        navToggleBtn = tgl.find('.nav-toggle-btn');
+navToggleBtn = tgl.find('.nav-toggle-btn');
 
-    navToggleBtn.on('click', function(move) {
-        tgl.toggleClass('active-nav');
-        move.preventDefault();
-    });
+navToggleBtn.on('click', function(move) {
+    tgl.toggleClass('active-nav');
+    move.preventDefault();
+});
 });
 
 $('#toggle').click(function() {
     screenfull.toggle($('#container')[0]);
 });
 
-
-
-var Title = "Instead of Oceans, they are all big forests, that gets taller and darker instead of deeper, with more dangerous animals living further out in the forest. A person decides to cross the Mariana Trench."
+$('#login-submit-button').on('click', function() {
+    console.log("hey");})
