@@ -3,14 +3,14 @@ var Title = "Instead of Oceans, they are all big forests, that gets taller and d
 
 $(document).ready(function() {
 
-    $('#writing').text("Welcome to BlueBook!");
+    $('#writing').text();
     $('#writing-info').text("Nothing written!");
 })
 
 $('#writing').on("input propertychange", function() {
     var text = $("#writing").val();
     var wc = text.split(/[\s+, \r+, \n+]+/).length;
-    $('#wordcount').text((wc - 1).toString() + " words");
+    $('#wordcount').text("Word Count: " + (wc - 1).toString() );
 
 })
 
@@ -24,9 +24,24 @@ navToggleBtn.on('click', function(move) {
 });
 });
 
+
 $('#toggle').click(function() {
     screenfull.toggle($('#container')[0]);
+    console.log(click);
 });
 
 $('#login-submit-button').on('click', function() {
     console.log("hey");})
+
+$(document).ready(function(){
+        $('#hideshow').on('click', function(event) {
+             $('.prompt').toggle();
+             $(this).find('i').toggleClass('fa-plus-circle fa-minus-circle')
+        });
+    });
+
+$(document).ready(function(){
+    $('#hideshowwords').on('click', function(event) {
+         $('#wordcount').toggle();
+    });
+});
