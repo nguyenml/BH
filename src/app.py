@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect
+from flask_sqlalchemy import SQLAlchemy
 
 import os
-
-import models
+import requests
 
 app = Flask(__name__)
 app.config.update(DEBUG=True)
+db = SQLAlchemy(app)
 
 @app.route('/')
 def hello_world():
@@ -13,12 +14,54 @@ def hello_world():
 
 @app.route('/login', methods=["POST"])
 def login():
-    print(request.form)
-    print("got a login request")
-    print(request.form.get('email'))
-    print(request.form.get('password'))
     return redirect('/')
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+@app.route('/prompt', defaults={'pid': None}, methods=["GET"])
+@app.route('/prompt/<pid>', methods=["GET"])
+def get_prompt(pid):
+    if(pid == None):
+        return "Random prompt here"
+    prompt = Prompt.query.filter_by(promptid=pid).first()
+    if(not prompt):
+        return "No prompt :-("
+    return str(prompt.prompt)
+
+@app.route('/addprompt', methods=['POST'])
+def add_prompt(text):
+    new_prompt = Prompt(text)
+    db.session.add(new_prompt)
+    db.commit()
+
+@app.route('/signup', methods=['POST'])
+def signup_user():
+    pass
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+    email = db.Column(db.String)
+    password_hash = db.Column(db.String)
+    last_login = db.Column(db.DateTime)
+    is_logged_in = db.Column(db.Boolean)
+
+class Prompt(db.Model):
+    __tablename__ = "prompts"
+    promptid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    prompt = db.Column(db.String)
+
+    def __init__(self, prompt):
+        self.prompt = prompt
+
+try:
+    db.create_all()
+except e:
+    print(e)
+
+tp = lambda x: db.session.add(Prompt(x))
+
+tp("You're not human. Write about it.")
+tp("Testing testing.")
+
+db.session.commit()

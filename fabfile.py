@@ -3,7 +3,7 @@ import json
 
 from src.app import app
 
-SQL_HOSTNAME = "devdb"
+SQL_HOSTNAME = "mysql"
 SQL_USERNAME = "root"
 SQL_PASSWORD = "root"
 
@@ -33,9 +33,7 @@ def gen_config():
     write_config(get_config())
 
 def start(host="0.0.0.0", port=5000):
-    if(os.path.isfile('tmp/config.cfg')):
-        pass
-    else:
-        cfg = get_config()
-        write_config(cfg)
+    app.config['SQL_HOSTNAME'] = SQL_HOSTNAME
+    app.config['SQL_USERNAME'] = SQL_USERNAME
+    app.config['SQL_PASSWORD'] = SQL_PASSWORD
     app.run(host, port)
