@@ -1,5 +1,4 @@
 
-
 section {
 	max-width: 900px;
 	height: 100%;
@@ -162,6 +161,10 @@ nav ul li button {
 .nav-btn {
     margin-top: 100px;
 }
+.btn-form {
+	margin: 1px;
+}
+
 
 /***Icons*/
 .click{
@@ -483,4 +486,16 @@ nav ul li button {
 .login-help{
   font-size: 12px;
 }
+.col-lg-12, .col-md-12, .col-sm-12{
+	padding-left: 35px;
+	padding-right: 35px;
+	padding-bottom: 15px;
+	padding-top: 20px;
+}
+
+.sub-but{
+	margin-left: 35px;
+	padding-top: 10px;
+}
+
 }

@@ -26,21 +26,48 @@
 
 <!-- Modals -->
 <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    	  <div class="modal-dialog">
-				<div class="loginmodal-container">
-					<h1>Login to Your Account</h1><br>
-				  <form>
-					<input type="text" name="user" placeholder="Username">
-					<input type="password" name="pass" placeholder="Password">
-					<input type="submit" name="login" class="login loginmodal-submit" value="Login">
-				  </form>
+    <div class="modal-dialog">
+        <div class="loginmodal-container">
+            <h1>Login to Your Account</h1>
+            <br>
+            <form>
+                <input type="text" name="user" placeholder="Username">
+                <input type="password" name="pass" placeholder="Password">
+                <input type="submit" name="login" class="login loginmodal-submit" value="Login">
+            </form>
 
-				  <div class="login-help">
-					<a href="#">Register</a> - <a href="#">Forgot Password</a>
-				  </div>
-				</div>
-			</div>
-		  </div>
+            <div class="login-help">
+                <a href="#">Register</a> - <a href="#">Forgot Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="modal fade" id="new_prompt" tabindex="-1" role="dialog" aria-labelledby="promptLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="panel-title" id="promptLabel">Suggest a Prompt</h4>
+                    </div>
+                    <form action="#" method="post" accept-charset="utf-8">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <textarea style="resize:vertical;" class="form-control" placeholder="Prompt..." rows="6" name="prompt" required></textarea>
+                                </div>
+                                <div class="sub-but">
+                                  <input type="submit" class="btn" value="Submit">
+                                  <button type="button" class="btn" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <body>
     <nav>
@@ -52,10 +79,13 @@
 
             <div class="nav-btn">
                 <li>
-                    <button type="button" class="btn" data-toggle="modal" data-target="#login-modal">Login</button>
+                    <button type="button" class="btn btn-form" data-toggle="modal" data-target="#login-modal">Login</button>
                 </li>
                 <li>
-                    <button type="button" class="btn navbar-bottom" data-toggle="modal" data-target="#settings-modal">Settings</button>
+                    <button type="button" class="btn btn-form" data-toggle="modal" data-target="#settings-modal">Settings</button>
+                </li>
+                <li>
+                    <button type="button" class="btn btn-form" data-toggle="modal" data-target="#new_prompt">New Prompt</button>
                 </li>
             </div>
     </nav>
