@@ -10,6 +10,7 @@ app.config.update(DEBUG=True)
 @app.route('/')
 def hello_world():
     return render_template("main.html")
+    return render_template("landing.html")
 
 @app.route('/login', methods=["POST"])
 def login():

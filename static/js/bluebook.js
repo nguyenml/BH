@@ -10,38 +10,48 @@ $(document).ready(function() {
 $('#writing').on("input propertychange", function() {
     var text = $("#writing").val();
     var wc = text.split(/[\s+, \r+, \n+]+/).length;
-    $('#wordcount').text("Word Count: " + (wc - 1).toString() );
+    $('#wordcount').text("Word Count: " + (wc - 1).toString());
 
 })
 
 $(function() {
     var tgl = $('body'),
-navToggleBtn = tgl.find('.nav-toggle-btn');
+        navToggleBtn = tgl.find('.nav-toggle-btn');
 
-navToggleBtn.on('click', function(move) {
-    tgl.toggleClass('active-nav');
-    move.preventDefault();
+    navToggleBtn.on('click', function(move) {
+        tgl.toggleClass('active-nav');
+        move.preventDefault();
+    });
 });
+
+$(document).ready(function () {
+    $(document).click(function (move) {
+        var clickover = $(move.target);
+        var _opened = $(".navbar-collapse").hasClass("navbar-collapse in");
+        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
+            $("button.navbar-toggle").click();
+        }
+    });
 });
 
 
 $('#toggle').click(function() {
     screenfull.toggle($('#container')[0]);
-    console.log(click);
 });
 
 $('#login-submit-button').on('click', function() {
-    console.log("hey");})
+    console.log("hey");
+})
 
-$(document).ready(function(){
-        $('#hideshow').on('click', function(event) {
-             $('.prompt').toggle();
-             $(this).find('i').toggleClass('fa-plus-circle fa-minus-circle')
-        });
+$(document).ready(function() {
+    $('#hideshow').on('click', function(event) {
+        $('.prompt').toggle();
+        $(this).find('i').toggleClass('fa-plus-circle fa-minus-circle')
     });
+});
 
-$(document).ready(function(){
+$(document).ready(function() {
     $('#hideshowwords').on('click', function(event) {
-         $('#wordcount').toggle();
+        $('#wordcount').toggle();
     });
 });

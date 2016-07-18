@@ -25,69 +25,56 @@
 </head>
 
 <!-- Modals -->
-<div id="login-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="container">
-                    <form class="form-horizontal" role="form" action="/login" method="post">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="email">Email:</label>
-                            <div class="col-sm-2">
-                                <input type="text" class="form-control" name="email" placeholder="Enter email">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2" for="pwd">Password:</label>
-                            <div class="col-sm-2">
-                                <input type="password" class="form-control" name="password" placeholder="Enter password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button id="login-submit-button" type="submit" class="btn btn-default">Submit</button>
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    	  <div class="modal-dialog">
+				<div class="loginmodal-container">
+					<h1>Login to Your Account</h1><br>
+				  <form>
+					<input type="text" name="user" placeholder="Username">
+					<input type="password" name="pass" placeholder="Password">
+					<input type="submit" name="login" class="login loginmodal-submit" value="Login">
+				  </form>
 
-                                <hr>
-                                <div class=submit>
-                                    <p>Don't have an account?
-                                        <button id="create-account-button" type="submit" class="btn btn-default">Create Account</button>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+				  <div class="login-help">
+					<a href="#">Register</a> - <a href="#">Forgot Password</a>
+				  </div>
+				</div>
+			</div>
+		  </div>
 
 <body>
+    <nav>
+        <a href="#" class="nav-toggle-btn"></a>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Read</a></li>
+            <li><a href="#">Write</a></li>
 
-    <div id="navigation">
-        <nav>
-            <a href="#" class="nav-toggle-btn"></a>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Read</a></li>
-                <li><a href="#">Write</a></li>
-
-                <div class="nav-btn">
-                    <li>
-                        <button type="button" class="btn" data-toggle="modal" data-target="#login-modal">Login</button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn navbar-bottom" data-toggle="modal" data-target="#settings-modal">Settings</button>
-                    </li>
-                </div>
-        </nav>
-    </div>
+            <div class="nav-btn">
+                <li>
+                    <button type="button" class="btn" data-toggle="modal" data-target="#login-modal">Login</button>
+                </li>
+                <li>
+                    <button type="button" class="btn navbar-bottom" data-toggle="modal" data-target="#settings-modal">Settings</button>
+                </li>
+            </div>
+    </nav>
 
     <div class="overlay">
-        <div class="text modal">
+        <div class="text place">
             <textarea id="writing" form="writing" class='hiddentextbox'></textarea>
+        </div>
+    </div>
+
+    <div class="text-options">
+        <div class="options">
+            <span class="no-overflow">
+					<span class="lengthen ui-inputs">
+						<button class="bold">b</button>
+						<button class="italic">i</button>
+						<button class="quote">&rdquo;</button>
+					</span>
+            </span>
         </div>
     </div>
     <div class="click">
@@ -95,10 +82,11 @@
             <li><i id="toggle" class="fa fa-arrows-alt" aria-hidden="true" title="Fullscreen"></i></li>
             <li><i id="hideshow" class="fa fa-sticky-note-o" aria-hidden="true" title="Prompt"></i></li>
             <li><i id="hideshowwords" class="fa fa-hashtag" aria-hidden="true" title="Word Count"></i></li>
+            <li><i class="fa fa-info" aria-hidden="true"></i></li>
         </ul>
     </div>
     <div class="prompt">
-      <p><strong>Prompt</strong></p>
+        <p><strong>Prompt</strong></p>
         <div id="prompt"></div>
     </div>
     <script type="text/babel">
@@ -114,11 +102,15 @@
 
     <section>
 
-        <header contenteditable="true" class="header"></header>
         <article contenteditable="true" class="content"></article>
 
     </section>
     </div>
+    <script src={{ url_for( 'static', filename="js/utils.js" ) }}></script>
+    <script src={{ url_for( 'static', filename="js/editor.js" ) }}></script>
+    <script type="text/javascript">
+        BlueBook.editor.init();
+    </script>
 </body>
 
 </html>
