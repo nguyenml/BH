@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 import os
-import requests
 
 app = Flask(__name__)
 app.config.update(DEBUG=True)
@@ -27,11 +26,13 @@ def get_prompt(pid):
         return "No prompt :-("
     return str(prompt.prompt)
 
-@app.route('/addprompt', methods=['POST'])
-def add_prompt(text):
+@app.route('/addprompt', methods=['GET'])
+def add_prompt():
+    text = request.args.get('prompt')
     new_prompt = Prompt(text)
     db.session.add(new_prompt)
-    db.commit()
+    db.session.commit()
+    return "Thank you for your submission! It will be put under consideration."
 
 @app.route('/signup', methods=['POST'])
 def signup_user():

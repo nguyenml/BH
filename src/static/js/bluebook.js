@@ -39,9 +39,10 @@ $(document).ready(function () {
     });
     $('#prompt-sub').on('click', function(e){
       e.preventDefault();
-      $.ajax({url: "/suggest/", sucess: function(result){
-        $("#suggest-text".html("<p>Thank you for your suggestion</p>"))
-      }})
+      $.ajax({url: "/addprompt", success: function(result){
+        $("#suggest-text").html(result);
+        }
+        })
     });
 });
 
