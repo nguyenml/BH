@@ -39,7 +39,7 @@ $(document).ready(function () {
     });
     $('#prompt-sub').on('click', function(e){
       e.preventDefault();
-      $.ajax({url: "/addprompt", success: function(result){
+      $.ajax({url: "/addprompt/" + $('#add-prompt').val(), success: function(result){
         $("#suggest-text").html(result);
         }
         })

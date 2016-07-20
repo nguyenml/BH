@@ -26,11 +26,9 @@ def get_prompt(pid):
         return "No prompt :-("
     return str(prompt.prompt)
 
-@app.route('/addprompt', methods=['GET'])
-def add_prompt():
-    text = request.args.get('prompt')
-    new_prompt = Prompt(text)
-    db.session.add(new_prompt)
+@app.route('/addprompt/<prompt>', methods=['GET'])
+def add_prompt(prompt):
+    db.session.add(Prompt(prompt))
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."
 
