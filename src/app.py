@@ -5,6 +5,7 @@ import os
 
 app = Flask(__name__)
 app.config.update(DEBUG=True)
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:root@localhost/mysql"
 db = SQLAlchemy(app)
 
 @app.route('/')
@@ -39,29 +40,19 @@ def signup_user():
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    first_name = db.Column(db.String)
-    last_name = db.Column(db.String)
-    email = db.Column(db.String)
-    password_hash = db.Column(db.String)
+    first_name = db.Column(db.String(length=255))
+    last_name = db.Column(db.String(length=255))
+    email = db.Column(db.String(length=255))
+    password_hash = db.Column(db.String(length=255))
     last_login = db.Column(db.DateTime)
     is_logged_in = db.Column(db.Boolean)
 
 class Prompt(db.Model):
     __tablename__ = "prompts"
     promptid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    prompt = db.Column(db.String)
+    prompt = db.Column(db.Text(length=5))
 
     def __init__(self, prompt):
         self.prompt = prompt
 
-try:
-    db.create_all()
-except e:
-    print(e)
-
-tp = lambda x: db.session.add(Prompt(x))
-
-tp("You're not human. Write about it.")
-tp("Testing testing.")
-
-db.session.commit()
+db.create_all()
