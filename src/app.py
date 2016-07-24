@@ -5,13 +5,14 @@ import os
 
 app = Flask(__name__)
 app.config.update(DEBUG=True)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:root@localhost/mysql"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:root@localhost/dev"
 db = SQLAlchemy(app)
 
 @app.route('/')
-def hello_world():
+def root():
+    username = request.cookies.get('username')
+    print(username)
     return render_template("main.html")
-    return render_template("landing.html")
 
 @app.route('/login', methods=["POST"])
 def login():
@@ -29,16 +30,19 @@ def get_prompt(pid):
 
 @app.route('/addprompt/<prompt>', methods=['GET'])
 def add_prompt(prompt):
-    db.session.add(Prompt(prompt))
+    #if(not request.cookies.get('username')):
+    #    print("Rejected!")
+    #    return "Please login to suggest a prompt."
+    db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."
 
 @app.route('/signup', methods=['POST'])
 def signup_user():
-    pass
+    print(request)
 
-class User(db.Model):
-    __tablename__ = 'users'
+class Author(db.Model):
+    __tablename__ = 'author'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(length=255))
     last_name = db.Column(db.String(length=255))
@@ -47,12 +51,32 @@ class User(db.Model):
     last_login = db.Column(db.DateTime)
     is_logged_in = db.Column(db.Boolean)
 
+    writings = db.relationship("Writing", backref='author', lazy='dynamic')
+    suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
+
+class Writing(db.Model):
+    __tablename__ = "writings"
+    writing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    text = db.Column(db.Text(length=5))
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+
 class Prompt(db.Model):
     __tablename__ = "prompts"
-    promptid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    prompt_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     prompt = db.Column(db.Text(length=5))
 
     def __init__(self, prompt):
         self.prompt = prompt
 
-db.create_all()
+class SuggestedPrompt(db.Model):
+    __tablename__ = "suggested_prompts"
+    suggestion_prompt_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    prompt = db.Column(db.Text(length=5))
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+
+    def __init__(self, prompt):
+        self.prompt = prompt
+try:
+    db.create_all()
+except:
+    print("Database creation failed (probably because already exists)")
