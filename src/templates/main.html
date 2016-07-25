@@ -2,26 +2,26 @@
 
 <head>
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+<link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    <script src="https://fb.me/react-15.2.0.js"></script>
-    <script src="https://fb.me/react-dom-15.2.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+<script src="https://fb.me/react-15.2.0.js"></script>
+<script src="https://fb.me/react-dom-15.2.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bluebook.css') }}">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/3.0.0/screenfull.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bluebook.css') }}">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/3.0.0/screenfull.js"></script>
 </head>
 
 <!-- Modals -->
@@ -53,16 +53,16 @@
                         <h4 class="panel-title" id="promptLabel">Suggest a Prompt</h4>
                     </div>
                     <form action="/addprompt" method="post" accept-charset="utf-8">
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <textarea id="add-prompt" style="resize:vertical;" class="form-control" placeholder="Prompt..." rows="6" name="prompt" required></textarea>
-                                </div>
-                                <div class="sub-but">
-                                  <input id= "prompt-sub" type="submit" class="btn" value="Submit">
-                                  <button type="button" class="btn" data-dismiss="modal">Close</button>
-                              </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <textarea id="add-prompt" style="resize:vertical;" class="form-control" placeholder="Prompt..." rows="6" name="prompt" required></textarea>
+                            </div>
+                            <div class="sub-but">
+                                <input id= "prompt-sub" type="submit" class="btn" value="Submit">
+                                <button type="button" class="btn" data-dismiss="modal">Close</button>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,24 +70,24 @@
 </div>
 
 <body>
-    <nav>
-        <a href="#" class="nav-toggle-btn"></a>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Read</a></li>
-            <li><a href="#">Write</a></li>
+<nav>
+    <a href="#" class="nav-toggle-btn"></a>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Read</a></li>
+        <li><a href="#">Write</a></li>
 
-            <div class="nav-btn">
-                <li>
-                    <button type="button" class="btn btn-form" data-toggle="modal" data-target="#login-modal">Login</button>
-                </li>
-                <li>
-                    <button type="button" class="btn btn-form" data-toggle="modal" data-target="#settings-modal">Settings</button>
-                </li>
-                <li>
-                    <button type="button" class="btn btn-form" data-toggle="modal" data-target="#new_prompt">New Prompt</button>
-                </li>
-            </div>
+        <div class="nav-btn">
+            <li>
+            <button type="button" class="btn btn-form" data-toggle="modal" data-target="#login-modal">Login</button>
+            </li>
+            <li>
+            <button type="button" class="btn btn-form" data-toggle="modal" data-target="#settings-modal">Settings</button>
+            </li>
+            <li>
+            <button type="button" class="btn btn-form" data-toggle="modal" data-target="#new_prompt">New Prompt</button>
+            </li>
+        </div>
     </nav>
 
     <div class="overlay">
@@ -99,11 +99,11 @@
     <div class="text-options">
         <div class="options">
             <span class="no-overflow">
-					<span class="lengthen ui-inputs">
-						<button class="bold">b</button>
-						<button class="italic">i</button>
-						<button class="quote">&rdquo;</button>
-					</span>
+                <span class="lengthen ui-inputs">
+                    <button class="bold">b</button>
+                    <button class="italic">i</button>
+                    <button class="quote">&rdquo;</button>
+                </span>
             </span>
         </div>
     </div>
@@ -120,7 +120,7 @@
         <div id="prompt"></div>
     </div>
     <script type="text/babel">
-        var Prompt = React.createClass({ propTypes: { title: React.PropTypes.string.isRequired }, getDefaultProps: function () { return { title: "Title" } }, render: function() { return(
+var Prompt = React.createClass({ propTypes: { title: React.PropTypes.string.isRequired }, getDefaultProps: function () { return { title: "Title" } }, render: function() { return(
         <h1>{this.props.title}</h1>) } }); ReactDOM.render(
         <Prompt title={Title}/>, document.getElementById('prompt'));
     </script>
@@ -135,12 +135,12 @@
         <article contenteditable="true" class="content"></article>
 
     </section>
-    </div>
-    <script src={{ url_for( 'static', filename="js/utils.js" ) }}></script>
-    <script src={{ url_for( 'static', filename="js/editor.js" ) }}></script>
-    <script type="text/javascript">
-        BlueBook.editor.init();
-    </script>
+</div>
+<script src={{ url_for( 'static', filename="js/utils.js" ) }}></script>
+<script src={{ url_for( 'static', filename="js/editor.js" ) }}></script>
+<script type="text/javascript">
+BlueBook.editor.init();
+</script>
 </body>
 
 </html>

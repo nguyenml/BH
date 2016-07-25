@@ -2,287 +2,287 @@
 BlueBook = window.BlueBook || {};
 BlueBook.editor = (function() {
 
-	// Editor elements
-	var headerField, contentField, cleanSlate, lastType, currentNodeList, savedSelection;
+    // Editor elements
+    var headerField, contentField, cleanSlate, lastType, currentNodeList, savedSelection;
 
-	// Editor Bubble elements
-	var textOptions, optionsBox, boldButton, italicButton, quoteButton;
+    // Editor Bubble elements
+    var textOptions, optionsBox, boldButton, italicButton, quoteButton;
 
-	var composing;
+    var composing;
 
-	function init() {
+    function init() {
 
-		composing = false;
-		bindElements();
+        composing = false;
+        bindElements();
 
-		createEventBindings();
+        createEventBindings();
 
-		// Load state if storage is supported
-		if ( BlueBook.util.supportsHtmlStorage() ) {
-			loadState();
-		} else {
-			loadDefault();
-		}
-		// Set cursor position
-		var range = document.createRange();
-		var selection = window.getSelection();
-		range.setStart(headerField, 1);
-		selection.removeAllRanges();
-		selection.addRange(range);
+        // Load state if storage is supported
+        if ( BlueBook.util.supportsHtmlStorage() ) {
+            loadState();
+        } else {
+            loadDefault();
+        }
+        // Set cursor position
+        var range = document.createRange();
+        var selection = window.getSelection();
+        range.setStart(headerField, 1);
+        selection.removeAllRanges();
+        selection.addRange(range);
 
-	}
+    }
 
-	function createEventBindings() {
+    function createEventBindings() {
 
-		// Key up bindings
-		if ( BlueBook.util.supportsHtmlStorage() ) {
+        // Key up bindings
+        if ( BlueBook.util.supportsHtmlStorage() ) {
 
-			document.onkeyup = function( event ) {
-				checkTextHighlighting( event );
-				saveState();
-			}
+            document.onkeyup = function( event ) {
+                checkTextHighlighting( event );
+                saveState();
+            }
 
-		} else {
-			document.onkeyup = checkTextHighlighting;
-		}
+        } else {
+            document.onkeyup = checkTextHighlighting;
+        }
 
-		// Mouse bindings
-		document.onmousedown = checkTextHighlighting;
-		document.onmouseup = function( event ) {
+        // Mouse bindings
+        document.onmousedown = checkTextHighlighting;
+        document.onmouseup = function( event ) {
 
-			setTimeout( function() {
-				checkTextHighlighting( event );
-			}, 1);
-		};
+            setTimeout( function() {
+                checkTextHighlighting( event );
+            }, 1);
+        };
 
-		// Window bindings
-		window.addEventListener( 'resize', function( event ) {
-			updateBubblePosition();
-		});
+        // Window bindings
+        window.addEventListener( 'resize', function( event ) {
+            updateBubblePosition();
+        });
 
 
-		document.body.addEventListener( 'scroll', function() {
+        document.body.addEventListener( 'scroll', function() {
 
-			// TODO: Debounce update bubble position to stop excessive redraws
-			updateBubblePosition();
-		});
+            // TODO: Debounce update bubble position to stop excessive redraws
+            updateBubblePosition();
+        });
 
-		// Composition bindings. We need them to distinguish
-		// IME composition from text selection
-		document.addEventListener( 'compositionstart', onCompositionStart );
-		document.addEventListener( 'compositionend', onCompositionEnd );
-	}
+        // Composition bindings. We need them to distinguish
+        // IME composition from text selection
+        document.addEventListener( 'compositionstart', onCompositionStart );
+        document.addEventListener( 'compositionend', onCompositionEnd );
+    }
 
 
-	function bindElements() {
+    function bindElements() {
 
-		headerField = document.querySelector( '.header' );
-		contentField = document.querySelector( '.content' );
-		textOptions = document.querySelector( '.text-options' );
+        headerField = document.querySelector( '.header' );
+        contentField = document.querySelector( '.content' );
+        textOptions = document.querySelector( '.text-options' );
 
-		optionsBox = textOptions.querySelector( '.options' );
+        optionsBox = textOptions.querySelector( '.options' );
 
-		boldButton = textOptions.querySelector( '.bold' );
-		boldButton.onclick = onBoldClick;
+        boldButton = textOptions.querySelector( '.bold' );
+        boldButton.onclick = onBoldClick;
 
-		italicButton = textOptions.querySelector( '.italic' );
-		italicButton.onclick = onItalicClick;
+        italicButton = textOptions.querySelector( '.italic' );
+        italicButton.onclick = onItalicClick;
 
-		quoteButton = textOptions.querySelector( '.quote' );
-		quoteButton.onclick = onQuoteClick;
+        quoteButton = textOptions.querySelector( '.quote' );
+        quoteButton.onclick = onQuoteClick;
 
-	}
+    }
 
-	function checkTextHighlighting( event ) {
+    function checkTextHighlighting( event ) {
 
-		var selection = window.getSelection();
+        var selection = window.getSelection();
 
 
-		if ( (event.target.className === "url-input" ||
-		    event.target.classList.contains( "url" ) ||
-		    event.target.parentNode.classList.contains( "ui-inputs" ) ) ) {
+        if ( (event.target.className === "url-input" ||
+                    event.target.classList.contains( "url" ) ||
+                    event.target.parentNode.classList.contains( "ui-inputs" ) ) ) {
 
-			currentNodeList = findNodes( selection.focusNode );
-			updateBubbleStates();
-			return;
-		}
+                        currentNodeList = findNodes( selection.focusNode );
+                        updateBubbleStates();
+                        return;
+                    }
 
-		// Check selections exist
-		if ( selection.isCollapsed === true && lastType === false ) {
+        // Check selections exist
+        if ( selection.isCollapsed === true && lastType === false ) {
 
-			onSelectorBlur();
-		}
+            onSelectorBlur();
+        }
 
-		// Text is selected
-		if ( selection.isCollapsed === false && composing === false ) {
+        // Text is selected
+        if ( selection.isCollapsed === false && composing === false ) {
 
-			currentNodeList = findNodes( selection.focusNode );
+            currentNodeList = findNodes( selection.focusNode );
 
-			// Find if highlighting is in the editable area
-			if ( hasNode( currentNodeList, "ARTICLE") ) {
-				updateBubbleStates();
-				updateBubblePosition();
+            // Find if highlighting is in the editable area
+            if ( hasNode( currentNodeList, "ARTICLE") ) {
+                updateBubbleStates();
+                updateBubblePosition();
 
-				// Show the ui bubble
-				textOptions.className = "text-options active";
-			}
-		}
+                // Show the ui bubble
+                textOptions.className = "text-options active";
+            }
+        }
 
-		lastType = selection.isCollapsed;
-	}
+        lastType = selection.isCollapsed;
+    }
 
-	function updateBubblePosition() {
-		var selection = window.getSelection();
-		var range = selection.getRangeAt(0);
-		var boundary = range.getBoundingClientRect();
+    function updateBubblePosition() {
+        var selection = window.getSelection();
+        var range = selection.getRangeAt(0);
+        var boundary = range.getBoundingClientRect();
 
-		textOptions.style.top = boundary.top - 5 + window.pageYOffset + "px";
-		textOptions.style.left = (boundary.left + boundary.right)/2 + "px";
-	}
+        textOptions.style.top = boundary.top - 5 + window.pageYOffset + "px";
+        textOptions.style.left = (boundary.left + boundary.right)/2 + "px";
+    }
 
-	function updateBubbleStates() {
+    function updateBubbleStates() {
 
-		// It would be possible to use classList here, but I feel that the
-		// browser support isn't quite there, and this functionality doesn't
-		// warrent a shim.
+        // It would be possible to use classList here, but I feel that the
+        // browser support isn't quite there, and this functionality doesn't
+        // warrent a shim.
 
-		if ( hasNode( currentNodeList, 'B') ) {
-			boldButton.className = "bold active"
-		} else {
-			boldButton.className = "bold"
-		}
+        if ( hasNode( currentNodeList, 'B') ) {
+            boldButton.className = "bold active"
+        } else {
+            boldButton.className = "bold"
+        }
 
-		if ( hasNode( currentNodeList, 'I') ) {
-			italicButton.className = "italic active"
-		} else {
-			italicButton.className = "italic"
-		}
+        if ( hasNode( currentNodeList, 'I') ) {
+            italicButton.className = "italic active"
+        } else {
+            italicButton.className = "italic"
+        }
 
-		if ( hasNode( currentNodeList, 'BLOCKQUOTE') ) {
-			quoteButton.className = "quote active"
-		} else {
-			quoteButton.className = "quote"
-		}
+        if ( hasNode( currentNodeList, 'BLOCKQUOTE') ) {
+            quoteButton.className = "quote active"
+        } else {
+            quoteButton.className = "quote"
+        }
 
-	}
+    }
 
-	function onSelectorBlur() {
+    function onSelectorBlur() {
 
-		textOptions.className = "text-options fade";
-		setTimeout( function() {
+        textOptions.className = "text-options fade";
+        setTimeout( function() {
 
-			if (textOptions.className == "text-options fade") {
+            if (textOptions.className == "text-options fade") {
 
-				textOptions.className = "text-options";
-				textOptions.style.top = '-999px';
-				textOptions.style.left = '-999px';
-			}
-		}, 260 )
-	}
+                textOptions.className = "text-options";
+                textOptions.style.top = '-999px';
+                textOptions.style.left = '-999px';
+            }
+        }, 260 )
+    }
 
-	function findNodes( element ) {
+    function findNodes( element ) {
 
-		var nodeNames = {};
+        var nodeNames = {};
 
-		// Internal node?
-		var selection = window.getSelection();
+        // Internal node?
+        var selection = window.getSelection();
 
-		// if( selection.containsNode( document.querySelector('b'), false ) ) {
-		// 	nodeNames[ 'B' ] = true;
-		// }
+        // if( selection.containsNode( document.querySelector('b'), false ) ) {
+        // 	nodeNames[ 'B' ] = true;
+        // }
 
-		while ( element.parentNode ) {
+        while ( element.parentNode ) {
 
-			nodeNames[element.nodeName] = true;
-			element = element.parentNode;
+            nodeNames[element.nodeName] = true;
+            element = element.parentNode;
 
-			if ( element.nodeName === 'A' ) {
-				nodeNames.url = element.href;
-			}
-		}
+            if ( element.nodeName === 'A' ) {
+                nodeNames.url = element.href;
+            }
+        }
 
-		return nodeNames;
-	}
+        return nodeNames;
+    }
 
-	function hasNode( nodeList, name ) {
+    function hasNode( nodeList, name ) {
 
-		return !!nodeList[ name ];
-	}
+        return !!nodeList[ name ];
+    }
 
-	function saveState( event ) {
+    function saveState( event ) {
 
-		localStorage[ 'content' ] = contentField.innerHTML;
-	}
+        localStorage[ 'content' ] = contentField.innerHTML;
+    }
 
-	function loadState() {
+    function loadState() {
 
-		if ( localStorage[ 'header' ] ) {
-			headerField.innerHTML = localStorage[ 'header' ];
-		} else {
-		}
+        if ( localStorage[ 'header' ] ) {
+            headerField.innerHTML = localStorage[ 'header' ];
+        } else {
+        }
 
-		if ( localStorage[ 'content' ] ) {
-			contentField.innerHTML = localStorage[ 'content' ];
-		} else {
-			loadDefaultContent()
-		}
-	}
+        if ( localStorage[ 'content' ] ) {
+            contentField.innerHTML = localStorage[ 'content' ];
+        } else {
+            loadDefaultContent()
+        }
+    }
 
-	function loadDefault() {
-		headerField.innerHTML = defaultTitle; // in default.js
-		loadDefaultContent();
-	}
+    function loadDefault() {
+        headerField.innerHTML = defaultTitle; // in default.js
+        loadDefaultContent();
+    }
 
 
 
-	function onBoldClick() {
-		document.execCommand( 'bold', false );
-	}
+    function onBoldClick() {
+        document.execCommand( 'bold', false );
+    }
 
-	function onItalicClick() {
-		document.execCommand( 'italic', false );
-	}
+    function onItalicClick() {
+        document.execCommand( 'italic', false );
+    }
 
-	function onQuoteClick() {
+    function onQuoteClick() {
 
-		var nodeNames = findNodes( window.getSelection().focusNode );
+        var nodeNames = findNodes( window.getSelection().focusNode );
 
-		if ( hasNode( nodeNames, 'BLOCKQUOTE' ) ) {
-			document.execCommand( 'formatBlock', false, 'p' );
-			document.execCommand( 'outdent' );
-		} else {
-			document.execCommand( 'formatBlock', false, 'blockquote' );
-		}
-	}
+        if ( hasNode( nodeNames, 'BLOCKQUOTE' ) ) {
+            document.execCommand( 'formatBlock', false, 'p' );
+            document.execCommand( 'outdent' );
+        } else {
+            document.execCommand( 'formatBlock', false, 'blockquote' );
+        }
+    }
 
-	function rehighlightLastSelection() {
+    function rehighlightLastSelection() {
 
-		window.getSelection().addRange( lastSelection );
-	}
+        window.getSelection().addRange( lastSelection );
+    }
 
-	function getWordCount() {
+    function getWordCount() {
 
-		var text = BlueBook.util.getText( contentField );
+        var text = BlueBook.util.getText( contentField );
 
-		if ( text === "" ) {
-			return 0
-		} else {
-			return text.split(/\s+/).length;
-		}
-	}
+        if ( text === "" ) {
+            return 0
+        } else {
+            return text.split(/\s+/).length;
+        }
+    }
 
-	function onCompositionStart ( event ) {
-		composing = true;
-	}
+    function onCompositionStart ( event ) {
+        composing = true;
+    }
 
-	function onCompositionEnd (event) {
-		composing = false;
-	}
+    function onCompositionEnd (event) {
+        composing = false;
+    }
 
-	return {
-		init: init,
-		saveState: saveState,
-		getWordCount: getWordCount
-	}
+    return {
+        init: init,
+        saveState: saveState,
+        getWordCount: getWordCount
+    }
 
 })();
