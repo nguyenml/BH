@@ -1,13 +1,6 @@
 // TODO: Remove this
 var Title = "Instead of Oceans, they are all big forests, that gets taller and darker instead of deeper, with more dangerous animals living further out in the forest. A person decides to cross the Mariana Trench."
 
-$('#writing').on("input propertychange", function() {
-    var text = $("#writing").val();
-    var wc = text.split(/[\s+, \r+, \n+]+/).length;
-    $('#wordcount').text("Word Count: " + (wc - 1).toString());
-
-})
-
 $(function() {
     var tgl = $('body'),
         navToggleBtn = tgl.find('.nav-toggle-btn');
@@ -44,6 +37,13 @@ $(document).ready(function () {
         }
         })
     });
+
+    $('#text').on('input', function() {
+        var text = this.textContent,
+            count = text.trim().replace(/\s+/g, ' ').split(' ').length;
+
+        $('.wordcount').text(count + " words");
+    });
 });
 
 
@@ -53,4 +53,28 @@ $('#toggle').click(function() {
 
 $('#login-submit-button').on('click', function() {
     console.log("hey");
-})
+});
+
+function wordCount( val ){
+    var wom = val.match(/\S+/g);
+    return {
+        charactersNoSpaces : val.replace(/\s+/g, '').length,
+        characters         : val.length,
+        words              : wom ? wom.length : 0,
+        lines              : val.split(/\r*\n/).length
+    };
+}
+
+
+var text = document.getElementById("text");
+var result   = document.getElementById("result");
+
+text.addEventListener("input", function(){
+  var v = wordCount( this.value );
+  result.innerHTML = (
+      "<br>Characters (no spaces):  "+ v.charactersNoSpaces +
+      "<br>Characters (and spaces): "+ v.characters +
+      "<br>Words: "+ v.words +
+      "<br>Lines: "+ v.lines
+  );
+}, false);

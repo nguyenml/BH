@@ -183,12 +183,16 @@ nav ul li button {
 
 .word {
     position: fixed;
-    padding-right: 40px;
+    padding-right: 56px;
     padding-top: 20px;
     width: 140px;
     top: 0px;
-    right: 0px;
+    right: 10px;
     font-size: 25px;
+}
+
+.wordcount{
+  width: 200px;
 }
 
 /**prompt placement*/

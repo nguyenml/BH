@@ -53,20 +53,20 @@
                         <h4 class="panel-title" id="promptLabel">Suggest a Prompt</h4>
                     </div>
                     <form action="/addprompt" method="post" accept-charset="utf-8">
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <textarea id="add-prompt" style="resize:vertical;" class="form-control" placeholder="Prompt..." rows="6" name="prompt" required></textarea>
-                                </div>
-                                <div class="sub-but">
-                                  <input id= "prompt-sub" type="submit" class="btn" value="Submit">
-                                  <button type="button" class="btn" data-dismiss="modal">Close</button>
-                              </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <textarea id="add-prompt" style="resize:vertical;" class="form-control" placeholder="Prompt..." rows="6" name="prompt" required></textarea>
+                            </div>
+                            <div class="sub-but">
+                                <input id="prompt-sub" type="submit" class="btn" value="Submit">
+                                <button type="button" class="btn" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <body>
@@ -90,20 +90,18 @@
             </div>
     </nav>
 
-    <div class="overlay">
-        <div class="text place">
-            <textarea id="writing" form="writing" class='hiddentextbox'></textarea>
-        </div>
+    <div class="text place">
+        <textarea id="writing" form="writing" class='hiddentextbox'></textarea>
     </div>
 
     <div class="text-options">
         <div class="options">
             <span class="no-overflow">
-					<span class="lengthen ui-inputs">
-						<button class="bold">b</button>
-						<button class="italic">i</button>
-						<button class="quote">&rdquo;</button>
-					</span>
+                <span class="lengthen ui-inputs">
+                    <button class="bold">b</button>
+                    <button class="italic">i</button>
+                    <button class="quote">&rdquo;</button>
+                </span>
             </span>
         </div>
     </div>
@@ -126,15 +124,18 @@
     </script>
 
     <div class="word">
-        <p id="wordcount" class "wordcount"><strong>3 Words</strong></p>
+        <p id="wordcount" class="wordcount"><strong></strong></p>
     </div>
     <script src={{ url_for( 'static', filename='js/bluebook.js' ) }}></script>
 
     <section>
 
-        <article contenteditable="true" class="content"></article>
+        <article id="text" contenteditable="true" class="content"></article>
 
     </section>
+
+    <<<<<<< HEAD=======< /div>
+        >>>>>>> 82e5c1a8bb736eaf3c9c7531dddab0646e2504f7
 </body>
 
 </html>
