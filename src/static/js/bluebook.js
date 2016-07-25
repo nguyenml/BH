@@ -1,12 +1,5 @@
-// TODO: Remove this
-var Title = "Instead of Oceans, they are all big forests, that gets taller and darker instead of deeper, with more dangerous animals living further out in the forest. A person decides to cross the Mariana Trench."
+var Title = "Prompt goes here."
 
-$('#writing').on("input propertychange", function() {
-    var text = $("#writing").val();
-    var wc = text.split(/[\s+, \r+, \n+]+/).length;
-    $('#wordcount').text("Word Count: " + (wc - 1).toString());
-
-})
 
 $(function() {
     var tgl = $('body'),
@@ -27,21 +20,26 @@ $(document).ready(function () {
         }
     });
 
-    $('#writing').text();
-    $('#writing-info').text("Nothing written!");
+    $('#writing').on("input propertychange", function() {
+        var text = $("#writing").val();
+        var wc = text.split(/[\s+, \r+, \n+]+/).length;
+        $('#wordcount').text("Word Count: " + (wc - 1).toString());
+    })
 
     $('#hideshow').on('click', function(event) {
         $('.prompt').toggle();
         $(this).find('i').toggleClass('fa-plus-circle fa-minus-circle')
     });
+
     $('#hideshowwords').on('click', function(event) {
         $('#wordcount').toggle();
     });
+
     $('#prompt-sub').on('click', function(e){
-      e.preventDefault();
-      $.ajax({url: "/addprompt/" + $('#add-prompt').val(), success: function(result){
-        $("#suggest-text").html(result);
-        }
+        e.preventDefault();
+        $.ajax({url: "/addprompt/" + $('#add-prompt').val(), success: function(result){
+            $("#suggest-text").html(result);
+            }
         })
     });
 });
