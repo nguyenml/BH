@@ -27,7 +27,8 @@ html, body {
     width: 300px;
     right: 0px;
     -webkit-perspective: 1000;
-    font: 12px/2 Helvetica Neue, Helvetica, Arial, sans-serif;
+   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+   font-weight: 300;
 }
 #login h2 {
     position: relative;
@@ -218,11 +219,11 @@ html, body {
 }
 @font-face {
     font-family: Typewriter;
-    src: url('l/TravelingTypewriter.otf');
+    src: url('fonts/TravelingTypewriter.otf');
 }
 @font-face {
     font-family: hfont;
-    src: url('l/FanwoodText.otf');
+    src: url('fonts/FanwoodText.otf');
 }
 .front {
     left: 100px;
