@@ -198,7 +198,7 @@ nav ul li button {
 /**prompt placement*/
 
 .prompt {
-    position: absolute;
+    position: fixed;
     width: 450px;
     height: 400px;
     right: 40px;

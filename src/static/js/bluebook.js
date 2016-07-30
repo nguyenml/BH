@@ -1,28 +1,32 @@
 // TODO: Remove this
 var Title = "Instead of Oceans, they are all big forests, that gets taller and darker instead of deeper, with more dangerous animals living further out in the forest. A person decides to cross the Mariana Trench."
 
+
+//This function creates the sideways navbar
 $(function() {
     var tgl = $('body'),
         navToggleBtn = tgl.find('.nav-toggle-btn');
 
     navToggleBtn.on('click', function(move) {
         tgl.toggleClass('active-nav');
-        move.preventDefault();
+        move.preventDefault(move);
     });
 });
 
+
+
 $(document).ready(function () {
+    //Navbar toggle
     $(document).click(function (move) {
         var clickover = $(move.target);
         var _opened = $(".navbar-collapse").hasClass("navbar-collapse in");
-        if (_opened === true && !clickover.hasClass("navbar-toggle")) {
-            $("button.navbar-toggle").click();
-        }
     });
 
-    $('#writing').text();
-    $('#writing-info').text("Nothing written!");
-
+    $('#nav').click(function(move) {
+    move.stopPropagation();
+    $(this).fadeOut(300);
+    });
+    //Toggle the prompts, wordcount
     $('#hideshow').on('click', function(event) {
         $('.prompt').toggle();
         $(this).find('i').toggleClass('fa-plus-circle fa-minus-circle')
@@ -46,7 +50,7 @@ $(document).ready(function () {
     });
 });
 
-
+//Toggle the fullscreen
 $('#toggle').click(function() {
     screenfull.toggle($('#container')[0]);
 });
@@ -64,17 +68,3 @@ function wordCount( val ){
         lines              : val.split(/\r*\n/).length
     };
 }
-
-
-var text = document.getElementById("text");
-var result   = document.getElementById("result");
-
-text.addEventListener("input", function(){
-  var v = wordCount( this.value );
-  result.innerHTML = (
-      "<br>Characters (no spaces):  "+ v.charactersNoSpaces +
-      "<br>Characters (and spaces): "+ v.characters +
-      "<br>Words: "+ v.words +
-      "<br>Lines: "+ v.lines
-  );
-}, false);
