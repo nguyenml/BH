@@ -1,5 +1,7 @@
 .promptOfTheDay{
   text-align: center;
+  font-weight: bold;
+  font-size: 46px;
 }
 
 .selectionBox{
