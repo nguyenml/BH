@@ -238,11 +238,6 @@ p{
   position: absolute;
 }
 
-h1.usn-name{
-    border-left: thin solid #FFF;
-    padding-left: 10px;
-}
-
 .usn-name{
   font-size: 17px;
   color: #FFF;
@@ -251,7 +246,7 @@ h1.usn-name{
 }
 
 li.messages{
-  width: 50px;
+  width: 10px;
   color: white;
   font-size: 20px;
   z-index: 10;
@@ -278,13 +273,18 @@ li.messages{
    min-width:420px;
   }
 
+  ul.user-cc {
+    margin-top: 13px;
+     min-width:200px;
+  }
+
   .notifications-wrapper {
      overflow:auto;
       max-height:250px;
     }
 
  .menu-title {
-     color:#ff7788;
+     color:rgb(56, 151, 240);
      font-size:1.5rem;
       display:inline-block;
       }
@@ -324,8 +324,8 @@ li.messages{
  }
 
 .dropbtn {
-    width: 0px;
-     height: 0px;
+    width: 5px;
+     height: 5px;
     cursor: pointer;
     background-color: #444;
     border: none;
