@@ -23,60 +23,61 @@
 </head>
 
 <body>
-    <div class="nav">
-        <ul>
-            <li class="block" <a class="block" href="#"><img src="../static/images/64x64.png" class="logo"></img>BlueBook</a>
-            </li>
-            <li class="home"><a href="#">Read</a></li>
-            <li class="about"><a class="active" href="#">Write</a></li>
-            <li class="messages">
-                <div class="dropdown">
-                    <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                        <i class="glyphicon glyphicon-bell"></i>
-                    </div>
+  <div class="nav">
+      <ul>
+          <li class="block"<a class="block" href="#"><img src="../static/images/64x64.png" class="logo"></img>BlueBook</a></li>
+          <li class="home"><a class="active" href="#">Read</a></li>
+          <li class="about"><a href="#">Write</a></li>
+          <li class="messages">
+              <div class="dropdown">
+                  <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                      <i class="glyphicon glyphicon-bell"></i>
+                  </div>
 
-                    <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+                  <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
 
-                        <div class="notification-heading">
-                            <h4 class="menu-title">Notifications</h4>
-                            <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                      <div class="notification-heading">
+                          <h4 class="menu-title">Notifications</h4>
+                          <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                      </div>
+                      <li class="divider"></li>
+                      <div class="notifications-wrapper">
+
+                      </div>
+                      <li class="divider"></li>
+                      <div class="notification-footer">
+                          <h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                  </ul>
+
+              </div>
+          </li>
+              <li>
+                  <ul>
+                      <li>
+                        <div class="dropdown user-setting">
+                          <div id="usn" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                              <div id="user-setting"></div>
+                          </div>
+
+                          <ul class="dropdown-menu user-cc" role="menu" aria-labelledby="usn">
+                                  <a class="menu-title" href="#">Profile</a>
+                                  <a class="menu-title" href="#">Settings</a>
+                                  <a class="menu-title" href="#">Sign Out</a>
+                          </ul>
                         </div>
-                        <li class="divider"></li>
-                        <div class="notifications-wrapper">
+                      </li>
+                      <script type="text/babel">
+                          class UserSetting extends React.Component { constructor() { super(); } render(){ var {picture, name} = this.props; return(
+                          <div>
+                              <h1 className="usn-name">{name}</h1>
+                          </div>) } } ReactDOM.render(
 
-                        </div>
-                        <li class="divider"></li>
-                        <div class="notification-footer">
-                            <h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
-                    </ul>
-
-                </div>
-                <li>
-                    <ul>
-                        <li>
-                            <div class="dropdown">
-                                <button class="dropbtn">
-                                    <div id="user-setting"></div>
-                                </button>
-                                <div class="dropdown-content">
-                                    <a href="#">My Page</a>
-                                    <a href="#">Settings</a>
-                                    <a href="#">Logout</a>
-                                </div>
-                            </div>
-                        </li>
-                        <script type="text/babel">
-                            class UserSetting extends React.Component { constructor() { super(); } render(){ var {picture, name} = this.props; return(
-                            <div>
-                                <h1 className="usn-name">{name}</h1>
-                            </div>) } } ReactDOM.render(
-
-                            <UserSetting picture="../static/images/riff.jpg" name="Max" />, document.getElementById('user-setting'));
-                        </script>
-                    </ul>
-                </li>
-        </ul>
-    </div>
+                          <UserSetting picture="../static/images/riff.jpg" name="Max" />, document.getElementById('user-setting'));
+                      </script>
+                  </ul>
+              </li>
+      </ul>
+  </div>
 
     <div class="cover">
         <div class="prompt-choices" id="prompt-selection"></div>
