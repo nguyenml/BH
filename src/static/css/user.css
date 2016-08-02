@@ -58,3 +58,17 @@
   width: 90px;
   height: 20px;
 }
+
+.stories-header{
+  font-size: 15px;
+  text-align: right;
+}
+
+.stories-box{
+  width: 500px;
+  order: 2;
+  top: 20px;
+  flex-grow: 2;
+  display: inline;
+  text-align: center;
+}

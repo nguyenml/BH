@@ -10,6 +10,23 @@ db = SQLAlchemy(app)
 
 from models import Author, Writing, Prompt, SuggestedPrompt
 
+@app.route('/landing')
+@app.route('/landing')
+def hello(name=None):
+    return render_template('landing.html', name=name)
+
+@app.route('/reading')
+def reading():
+    return render_template('reading.html')
+
+@app.route('/prompts')
+def prompts():
+    return render_template('prompts.html')
+
+@app.route('/user')
+def user():
+    return return_template('user.html')
+
 @app.route('/')
 def root():
     username = request.cookies.get('username')
