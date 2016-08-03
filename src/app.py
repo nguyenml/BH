@@ -25,7 +25,7 @@ def prompts():
 
 @app.route('/user')
 def user():
-    return return_template('user.html')
+    return render_template('user.html')
 
 @app.route('/')
 def root():

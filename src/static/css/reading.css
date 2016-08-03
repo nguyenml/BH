@@ -172,7 +172,7 @@ section{
 
 @media screen and (min-width: 600px) {
   .nav li {
-   width: 170px;
+   width: 130px;
    border-bottom: none;
    height: 50px;
    line-height: 50px;
@@ -191,7 +191,6 @@ section{
   height: 50px;
 }
 li.block{
-  margin-right: 180px;
   text-align: center;
   font-weight: bold;
   font-size: 30px;
@@ -354,4 +353,55 @@ h1.usn-name{
 
 .user-setting{
   width: 5px;
+}
+
+input#search{
+  margin-bottom: 30px;
+  width: 220px;
+  height: 35px;
+  background: #2b303b;
+  border: none;
+  font-size: 10pt;
+  color: #63717f;
+  padding-left: 45px;
+  margin-bottom: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  position: absolute;
+}
+.container-1 input#search::-webkit-input-placeholder {
+   color: #65737e;
+}
+
+.container-1 input#search:-moz-placeholder { /* Firefox 18- */
+   color: #65737e;
+}
+
+.container-1 input#search::-moz-placeholder {  /* Firefox 19+ */
+   color: #65737e;
+}
+
+.container-1 input#search:-ms-input-placeholder {
+   color: #65737e;
+}
+
+#search:focus{
+  outline: none !important;
+  border:1px solid #005f5f;
+  box-shadow: 0 0 10px #719ECE;
+}
+
+li.search{
+  width: 235px;
+  bottom: 1px;
+  height: 30px;
+  padding-top: 4px;
+
+}
+
+div.container-1{
+  height: 50px;
+  bottom: 1px;
+  width: 0px;
 }
