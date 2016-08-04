@@ -4,7 +4,6 @@
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
@@ -25,14 +24,14 @@
 <body>
   <div class="nav">
       <ul>
-          <li class="block"<a class="block" href="#"><img src="../static/images/64x64.png" class="logo"></img>BlueBook</a></li>
+          <li class="block"><a href = "reading" class="block" href="#"><img src="../static/images/64x64.png" class="logo"></img>BlueBook</a></li>
           <li class="search">
                 <div class="container-1">
                     <input type="search" id="search" placeholder="Search..." />
                   </div>
               </li>
-          <li class="home"><a class="active" href="#">Read</a></li>
-          <li class="about"><a href="#">Write</a></li>
+          <li class="reading"><a href="reading">Read</a></li>
+          <li class="write"><a class="active"href="prompts">Write</a></li>
           <li class="messages">
               <div class="dropdown">
                   <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
@@ -65,17 +64,24 @@
                           </div>
 
                           <ul class="dropdown-menu user-cc" role="menu" aria-labelledby="usn">
-                                  <a class="menu-title" href="#">Profile</a>
+                                  <a class="menu-title" href="user">Profile</a>
                                   <a class="menu-title" href="#">Settings</a>
                                   <a class="menu-title" href="#">Sign Out</a>
                           </ul>
                         </div>
                       </li>
                       <script type="text/babel">
-                          class UserSetting extends React.Component { constructor() { super(); } render(){ var {picture, name} = this.props; return(
-                          <div>
-                              <h1 className="usn-name">{name}</h1>
-                          </div>) } } ReactDOM.render(
+                          class UserSetting extends React.Component { constructor() { super(); }
+
+                          render(){
+                            var {picture, name} = this.props;
+                             return(
+                                <div>
+                                  <h1 className="usn-name">{name}</h1>
+                                    </div>
+                                  )
+                                  }
+                                } ReactDOM.render(
 
                           <UserSetting picture="../static/images/riff.jpg" name="Max" />, document.getElementById('user-setting'));
                       </script>
@@ -87,7 +93,7 @@
     <div class="cover">
         <div class="prompt-choices" id="prompt-selection"></div>
         <div class ="more">
-          <a class = "more" href="#"><p class="more">More prompts  <i class="fa fa-arrow-right" aria-hidden="true"></i></p></a>
+          <a class = "more" href="prompt"><p class="more">More prompts  <i class="fa fa-arrow-right" aria-hidden="true"></i></p></a>
         </div>
 
     </div>
@@ -97,17 +103,17 @@
             <h1 className="promptOfTheDay">{promptIntro}</h1>
             <div className="selectionBox">
                 <div className="promptInfo">
-                    <div className="p-box">{promptTest}</div>
+                    <a href = {'/'} className = "ph"><div className="p-box">{promptTest}</div></a>
                     <h1 className="genre">{genre}</h1>
                     <h1 className="wordLimit">{word}</h1>
                 </div>
                 <div className="promptInfo">
-                    <div className="p-box">{promptTest}</div>
+                    <a href = {'/'} className = "ph"><div className="p-box">{promptTest}</div></a>
                     <h1 className="genre">{genre}</h1>
                     <h1 className="wordLimit">{word}</h1>
                 </div>
                 <div className="promptInfo">
-                    <div className="p-box">{promptTest}</div>
+                    <a href = {'/'} className = "ph"><div className="p-box">{promptTest}</div></a>
                     <h1 className="genre">{genre}</h1>
                     <h1 className="wordLimit">{word}</h1>
                 </div>

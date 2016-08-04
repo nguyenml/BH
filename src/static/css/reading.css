@@ -185,6 +185,10 @@ section{
     margin-right: -4px;
   }
 
+a.block:hover{
+  background-color: #444;
+
+}
 
 }
 .row{
@@ -241,7 +245,7 @@ li.messages{
 }
 
 h1.usn-name{
-  padding-left: 1px;
+  padding-left: 10px;
   width: 0px;
 }
 
