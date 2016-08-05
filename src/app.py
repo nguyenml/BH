@@ -10,8 +10,7 @@ db = SQLAlchemy(app)
 
 from models import Author, Writing, Prompt, SuggestedPrompt
 
-@app.route('/landing')
-@app.route('/landing')
+@app.route('/')
 def hello(name=None):
     return render_template('landing.html', name=name)
 
@@ -27,7 +26,7 @@ def prompts():
 def user():
     return render_template('user.html')
 
-@app.route('/')
+@app.route('/writing')
 def root():
     username = request.cookies.get('username')
     if(username):
@@ -37,11 +36,28 @@ def root():
 
 
 @app.route('/signup', methods=["POST"])
+def signup():
+    # TODO: Complete this
+    username = request.form["email"]
+    password = request.form["password"]
+    fullname = request.form["fullname"]
+    #valid_signup = register(username, password, fullname)
+    valid_signup = True
+    if(valid_signup):
+        return redirect('/reading')
+    else:
+        return redirect('/')
 
 @app.route('/login', methods=["POST"])
 def login():
-    print(request.form["email"])
-    return redirect('/')
+    # TODO: Validate and auth
+    username = request.form["email"]
+    password = request.form["password"]
+    valid_login = True
+    if(valid_login):
+        return redirect('/writing')
+    else:
+        return redirect('/')
 
 @app.route('/prompt', defaults={'pid': None}, methods=["GET"])
 @app.route('/prompt/<pid>', methods=["GET"])
