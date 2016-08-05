@@ -1,3 +1,6 @@
+from hashlib import md5
+hash = lambda x: md5(x).hexdigest()
+
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
@@ -8,7 +11,7 @@ app.config.update(DEBUG=True)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:root@localhost/dev"
 db = SQLAlchemy(app)
 
-from models import Author, Writing, Prompt, SuggestedPrompt
+from models import Author, Writing, Prompt, SuggestedPrompt, find_user
 
 @app.route('/')
 def hello(name=None):
@@ -34,7 +37,6 @@ def root():
     else:
         return render_template("main.html")
 
-
 @app.route('/signup', methods=["POST"])
 def signup():
     # TODO: Complete this
@@ -50,10 +52,16 @@ def signup():
 
 @app.route('/login', methods=["POST"])
 def login():
-    # TODO: Validate and auth
-    username = request.form["email"]
-    password = request.form["password"]
-    valid_login = True
+    email = request.form["email"]
+    hashed_password = hash(request.form["password"])
+    user_exists = find_user(email) 
+    valid_login = False
+    print(user_exists)
+    print(user_exists.password_hash)
+    print(email)
+    print(hashed_password)
+    if(user_exists and hashed_password == user_exists.password_hash):
+        valid_login = True
     if(valid_login):
         return redirect('/writing')
     else:
@@ -77,7 +85,3 @@ def add_prompt(prompt):
     db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."
-
-@app.route('/signup', methods=['POST'])
-def signup_user():
-    print(request)

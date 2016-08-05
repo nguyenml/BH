@@ -89,3 +89,6 @@ ENV/
 .ropeproject
 node_modules/
 tmp/
+
+# Our stuff
+*.swp

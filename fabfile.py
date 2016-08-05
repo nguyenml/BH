@@ -2,6 +2,7 @@ import os
 import json
 
 from src.app import app
+from src.models import seed_db, reset_authors, init_db
 
 SQL_HOSTNAME = "mysql"
 SQL_USERNAME = "root"
@@ -37,3 +38,4 @@ def start(host="0.0.0.0", port=5000):
     app.config['SQL_USERNAME'] = SQL_USERNAME
     app.config['SQL_PASSWORD'] = SQL_PASSWORD
     app.run(host, port)
+

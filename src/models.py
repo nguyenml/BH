@@ -1,5 +1,25 @@
+import datetime
+
+from hashlib import md5
+hash = lambda x: md5(x).hexdigest()
+
 from app import db
 
+# Helper functions
+def dbcommit(f):
+    def inner(*a, **kw):
+        f(*a, **kw)
+        db.session.commit()
+    return inner
+
+def confirm(f):
+    def inner(*a, **kw):
+        check = raw_input("Are you absolutely sure? Y/N")
+        if(check.lower() in ['y', 'yes']):
+            f(*a, **kw)
+    return inner
+
+# Models
 class Author(db.Model):
     __tablename__ = 'author'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -12,6 +32,14 @@ class Author(db.Model):
 
     writings = db.relationship("Writing", backref='author', lazy='dynamic')
     suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
+
+    def __init__(self, fn, ln, em, pw):
+        self.first_name = fn
+        self.last_name = ln
+        self.email = em
+        self.password_hash = hash(pw)
+        self.last_login = datetime.datetime.now()
+        self.is_logged_in = True
 
 class Writing(db.Model):
     __tablename__ = "writings"
@@ -35,7 +63,40 @@ class SuggestedPrompt(db.Model):
 
     def __init__(self, prompt):
         self.prompt = prompt
-try:
-    db.create_all()
-except:
-    print("Database creation failed (probably because already exists)")
+
+
+def init_db():
+    try:
+        db.create_all()
+    except:
+        print("Database creation failed (probably because already exists)")
+
+@dbcommit
+def seed_db():
+    db.session.add(Author("firstname", "lastname", "firstlast@test.com", "12345"))
+    db.session.add(Prompt("You're a chicken under the sea. Talk about it."))
+
+@confirm
+@dbcommit
+def reset_authors():
+    check = raw_input("Are you absolutely sure? Y/N")
+    if(check.lower() == 'y'):
+        print(Author.query.delete())
+
+@confirm
+@dbcommit
+def reset_writings():
+    print(Writing.query.delete())
+
+@confirm
+@dbcommit
+def reset_prompts():
+    print(Prompt.query.delete())
+
+@confirm
+@dbcommit
+def reset_suggested_prompts():
+    print(SuggestedPrompt.query.delete())
+
+def find_user(email_address):
+    return Author.query.filter_by(email=email_address).first()
