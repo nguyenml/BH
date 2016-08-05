@@ -35,8 +35,12 @@ def root():
     else:
         return render_template("main.html")
 
+
+@app.route('/signup', methods=["POST"])
+
 @app.route('/login', methods=["POST"])
 def login():
+    print(request.form["email"])
     return redirect('/')
 
 @app.route('/prompt', defaults={'pid': None}, methods=["GET"])
