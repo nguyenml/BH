@@ -1,7 +1,7 @@
 from hashlib import md5
 hash = lambda x: md5(x).hexdigest()
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, make_response
 from flask_sqlalchemy import SQLAlchemy
 
 import os
@@ -21,7 +21,9 @@ def hello(name=None):
 
 @app.route('/reading')
 def reading():
-    return render_template('reading.html')
+    first = request.cookies.get('first')
+    last = request.cookies.get('last')
+    return render_template('reading.html', firstname=first, lastname=last)
 
 @app.route('/prompts')
 def prompts():
@@ -29,7 +31,9 @@ def prompts():
 
 @app.route('/user')
 def user():
-    return render_template('user.html')
+    first_name="bob"
+    last_name="bobby"
+    return render_template('user.html', firstname=first_name, lastname=last_name)
 
 @app.route('/writing')
 def root():
@@ -47,8 +51,13 @@ def signup():
     firstname = request.form["firstname"]
     lastname = request.form["lastname"]
     valid_signup = register_author(firstname, lastname, email, password)
+
     if(valid_signup):
-        return redirect('/reading')
+        response = make_response(redirect('/reading'))
+        response.set_cookie("email", email)
+        response.set_cookie("first", firstname)
+        response.set_cookie("last", lastname)
+        return response
     else:
         return redirect('/')
 
@@ -58,14 +67,14 @@ def login():
     hashed_password = hash(request.form["password"])
     user_exists = find_user(email) 
     valid_login = False
-    print(user_exists)
-    print(user_exists.password_hash)
-    print(email)
-    print(hashed_password)
     if(user_exists and hashed_password == user_exists.password_hash):
         valid_login = True
     if(valid_login):
-        return redirect('/writing')
+        response = make_response(redirect('/reading'))
+        response.set_cookie("email", user_exists.email)
+        response.set_cookie("first", user_exists.first_name)
+        response.set_cookie("last", user_exists.last_name)
+        return response
     else:
         return redirect('/')
 
