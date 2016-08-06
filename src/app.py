@@ -12,6 +12,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:root@localhost/dev"
 db = SQLAlchemy(app)
 
 from models import Author, Writing, Prompt, SuggestedPrompt, find_user
+from data import register_author
+
 
 @app.route('/')
 def hello(name=None):
@@ -40,11 +42,11 @@ def root():
 @app.route('/signup', methods=["POST"])
 def signup():
     # TODO: Complete this
-    username = request.form["email"]
+    email = request.form["email"]
     password = request.form["password"]
-    fullname = request.form["fullname"]
-    #valid_signup = register(username, password, fullname)
-    valid_signup = True
+    firstname = request.form["firstname"]
+    lastname = request.form["lastname"]
+    valid_signup = register_author(firstname, lastname, email, password)
     if(valid_signup):
         return redirect('/reading')
     else:

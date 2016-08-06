@@ -64,7 +64,6 @@ class SuggestedPrompt(db.Model):
     def __init__(self, prompt):
         self.prompt = prompt
 
-
 def init_db():
     try:
         db.create_all()
