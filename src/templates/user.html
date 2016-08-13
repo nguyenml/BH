@@ -101,17 +101,12 @@
           }
 
           render(){
-            var {pic, name, desc, age, location,title,prompt} = this.props;
+            var {pic, name, desc,title,prompt} = this.props;
             return(
               <div className="container">
                 <div className = "box">
                   <img className="user-pic" src={pic} height={100}/>
-                  <div className = "easy">
-                    <p className="p-sizing">Age: {age}</p>
-                    <p className="p-sizing">{location}</p>
 
-                  <div className = "follow">Follow</div>
-                  </div>
                 </div>
                 <div className = "basic">
                   <h1 className = "user_name">{name}</h1>
@@ -131,7 +126,7 @@
           }
         }
 
-        ReactDOM.render(<UserProfile prompt = "Some Prompt" title ="Morale Dilemnas" age = "27" location = "California, Los Angelos" pic = "../static/images/riff.jpg" name = "{{firstname}} {{lastname}}" desc = "Avid reader and writer since I could pick up a pen." />, document.getElementById('profile'));
+        ReactDOM.render(<UserProfile prompt = "Some Prompt" title ="Morale Dilemnas" pic = "../static/images/riff.jpg" name = "{{firstname}} {{lastname}}" desc = "Avid reader and writer since I could pick up a pen." />, document.getElementById('profile'));
 
       </script>
 

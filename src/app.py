@@ -8,12 +8,15 @@ import os
 
 app = Flask(__name__)
 app.config.update(DEBUG=True)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:root@localhost/dev"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:pass@localhost/dev"
 db = SQLAlchemy(app)
 
 from models import Author, Writing, Prompt, SuggestedPrompt, find_user
 from data import register_author
 
+@app.route('/prompt')
+def prompt():
+    return render_template('prompt.html')
 
 @app.route('/')
 def hello(name=None):
@@ -27,13 +30,15 @@ def reading():
 
 @app.route('/prompts')
 def prompts():
-    return render_template('prompts.html')
+    first = request.cookies.get('first')
+    last = request.cookies.get('last')
+    return render_template('prompts.html', firstname=first, lastname=last)
 
 @app.route('/user')
 def user():
-    first_name="bob"
-    last_name="bobby"
-    return render_template('user.html', firstname=first_name, lastname=last_name)
+    first = request.cookies.get('first')
+    last = request.cookies.get('last')
+    return render_template('user.html', firstname=first, lastname=last)
 
 @app.route('/writing')
 def root():
@@ -65,7 +70,7 @@ def signup():
 def login():
     email = request.form["email"]
     hashed_password = hash(request.form["password"])
-    user_exists = find_user(email) 
+    user_exists = find_user(email)
     valid_login = False
     if(user_exists and hashed_password == user_exists.password_hash):
         valid_login = True
