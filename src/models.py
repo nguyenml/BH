@@ -33,7 +33,7 @@ class Author(db.Model):
     writings = db.relationship("Writing", backref='author', lazy='dynamic')
     suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
 
-    def __init__(self, fn, ln, em, pw):
+    def __init__(self, fn, ln, em, pw, desc):
         self.first_name = fn
         self.last_name = ln
         self.email = em

@@ -2,7 +2,6 @@
 <html>
 
 <head>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
     <!-- Latest compiled and minified CSS -->
@@ -33,29 +32,6 @@
                 </li>
             <li class="home"><a class="active" href="#">Read</a></li>
             <li class="write"><a href="prompts">Write</a></li>
-            <li class="messages">
-                <div class="dropdown">
-                    <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                        <i class="glyphicon glyphicon-bell"></i>
-                    </div>
-
-                    <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
-
-                        <div class="notification-heading">
-                            <h4 class="menu-title">Notifications</h4>
-                            <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
-                        </div>
-                        <li class="divider"></li>
-                        <div class="notifications-wrapper">
-
-                        </div>
-                        <li class="divider"></li>
-                        <div class="notification-footer">
-                            <h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
-                    </ul>
-
-                </div>
-            </li>
                 <li>
                     <ul>
                         <li>
@@ -77,9 +53,32 @@
                                 <h1 className="usn-name">{name}</h1>
                             </div>) } } ReactDOM.render(
 
-                            <UserSetting picture="../static/images/riff.jpg" name="Max" />, document.getElementById('user-setting'));
+                            <UserSetting picture="../static/images/riff.jpg" name="{{firstname}}" />, document.getElementById('user-setting'));
                         </script>
                     </ul>
+                </li>
+                <li class="messages">
+                    <div class="dropdown">
+                        <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                            <i class="glyphicon glyphicon-bell"></i>
+                        </div>
+
+                        <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+
+                            <div class="notification-heading">
+                                <h4 class="menu-title">Notifications</h4>
+                                <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notifications-wrapper">
+
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notification-footer">
+                                <h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                        </ul>
+
+                    </div>
                 </li>
         </ul>
     </div>
@@ -87,7 +86,7 @@
         <div class="cover">
             <div class="s_art" id="story"></div>
             <script type="text/babel">
-                class Prompt extends React.Component { constructor() { super(); } render() { var {title, pic, author, date, text} = this.props; return(
+                class Entry extends React.Component { constructor() { super(); } render() { var {title, pic, author, date, text} = this.props; return(
                 <div>
                     <h1 className="story_title">{title}</h1>
                     <div className="profile-box">
@@ -99,11 +98,86 @@
                     </div>
 
                     <p className="story_text">{text}</p>
-                </div>) }}; Prompt.propTypes = { title: React.PropTypes.string.isRequired }; Prompt.defaultProps = { title: "Title" }; ReactDOM.render(
+                </div>) }}; Entry.propTypes = { title: React.PropTypes.string.isRequired }; Entry.defaultProps = { title: "Title" };
 
 
-                <Prompt title="The Biggest One" text="He house was filled with tears of sadness, joy and laughter. Long hugs, intense and heartfelt kisses, jokes to cheer up the inevitability of a saddened mood. Chris sat on the couch, surrounded by his friends and his family, and he couldn't but smile. The melancholy of the situation weighed on him, and yet there was this feeling that he couldn't shake off. ''If we have to go, then this is a pretty decent way of going.'' The crash of the two planets had been predicted to happen at 5:55AM EST, 25th October 2015. The planet had come in NASA's sights roughly a month ago, and from that moment on everything changed. "
-                    author="{{firstname}} {{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016" />, document.getElementById('story'));
+
+              class Top_Stories extends React.Component{
+                constructor(){
+                  super ();
+                }
+
+                render (){
+                  return(
+                    <div>
+                    <div className = "top_story_page">
+                      <h1 className="top_story_header">Top Stories Today</h1>
+                      <hr></hr>
+                      </div>
+                      <Entry title="The Second One" text="changed. "
+                        author="{{firstname}} {{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016" />
+                        </div>
+                  )
+                }
+              }
+
+              class DailyPrompt extends React.Component{
+                constructor(){
+                  super();
+                }
+
+                render(){
+                  return(
+                    <div>
+                    <div className = "daily_prompt">
+                      <h1 className = "daily">Prisoners won't try to excape if they don't even know they are in prison.</h1>
+                      <hr></hr>
+                    </div>
+                    <Entry title="The Biggest One" text="He house was filled with tears of sadness, joy and laughter. Long hugs, intense and heartfelt kisses, jokes to cheer up the inevitability of a saddened mood. Chris sat on the couch, surrounded by his friends and his family, and he couldn't but smile. The melancholy of the situation weighed on him, and yet there was this feeling that he couldn't shake off. ''If we have to go, then this is a pretty decent way of going.'' The crash of the two planets had been predicted to happen at 5:55AM EST, 25th October 2015. The planet had come in NASA's sights roughly a month ago, and from that moment on everything changed. He house was filled with tears of sadness, joy and laughter. Long hugs, intense and heartfelt kisses, jokes to cheer up the inevitability of a saddened mood. Chris sat on the couch, surrounded by his friends and his family, and he couldn't but smile. The melancholy of the situation weighed on him, and yet there was this feeling that he couldn't shake off. ''If we have to go, then this is a pretty decent way of going.'' The crash of the two planets had been predicted to happen at 5:55AM EST, 25th October 2015. The planet had come in NASA's sights roughly a month ago, and from that moment on everything changed. He house was filled with tears of sadness, joy and laughter. Long hugs, intense and heartfelt kisses, jokes to cheer up the inevitability of a saddened mood. Chris sat on the couch, surrounded by his friends and his family, and he couldn't but smile. The melancholy of the situation weighed on him, and yet there was this feeling that he couldn't shake off. ''If we have to go, then this is a pretty decent way of going.'' The crash of the two planets had been predicted to happen at 5:55AM EST, 25th October 2015. The planet had come in NASA's sights roughly a month ago, and from that moment on everything changed. "
+                    author="{{firstname}} {{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016" />
+                    </div>
+
+                  )
+                }
+
+              }
+
+              class Story extends React.Component {
+                constructor(){
+                  super();
+                  this.state = {topStories:false};
+                  this.handleStories = this.handleStories.bind(this);
+                }
+
+                handleStories(){
+                  this.setState({topStories: !this.state.topStories});
+                }
+
+                dailyTop(number){
+                  if(number == 1 ){
+                    return(<DailyPrompt/>)
+                  }
+                  else if (number == 0) {
+                    return(
+                      <Top_Stories/>)
+                  }
+                }
+
+                render() {
+                  const textStory = this.state.topStories? 'Top Stories' :'Daily Prompt';
+                  var mode = this.state.topStories? 0 : 1;
+                  return(
+                    <div className = "s-tog">
+                      <div onClick={this.handleStories}>
+                        <a href="#"><h2 className = "s-tog">{textStory}</h2></a>
+                      </div>
+                        {this.dailyTop(mode)}
+                    </div>
+                  )
+                }
+              };
+              ReactDOM.render(<Story/>,document.getElementById('story'))
+
             </script>
           </article>
 
@@ -113,19 +187,123 @@
                 <div id="rct"></div>
                 <script type="text/babel">
 
-                    class LikeButton extends React.Component { constructor() { super(); this.state = { liked: false, follow: false}; this.handleLike = this.handleLike.bind(this); this.handleFollow = this.handleFollow.bind(this); this.handleComment = this.handleComment.bind(this);
-                    } handleLike() { this.setState({liked: !this.state.liked}); } handleFollow() { this.setState({follow: !this.state.follow}); } handleComment(){ this.setState({comment: !this.state.comment}); } render() { const textLike = this.state.liked
-                    ? 'Unlike' : 'Like'; const textFollow= this.state.follow ? 'Unfollow' : 'Follow'; const textComment = "Comment"; return (
+                    class CommentBox extends React.Component {
+                      constructor(){
+                        super();
+                      }
+
+                      getInititalState() {
+                        return {data: []};
+                      }
+
+                      componentDidUpdate(){
+                        return false;
+                      }
+
+                      render(){
+                      return(
+                        <div className="commentBox">
+                        <CommentList data={this.props.data} />
+                        <CommentForm />
+                        </div>
+                      );
+                    }
+                    }
+
+                    class CommentForm extends React.Component{
+                      constructor(){
+                        super();
+                      }
+
+                      render(){
+                        return(
+                          <form className="commentForm">
+                          <div contentEditable="true" className = "commentType" type="text" placeholder="Say something..." />
+                          <input type="submit" value="Post" className = "commentSubmit" />
+                          </form>
+                        )
+                      }
+                    }
+
+                    class CommentList extends React.Component{
+                      constructor(){
+                        super();
+                      }
+
+                      render(){
+                        var commentNodes = this.props.data.map(function(comment){
+                          return(
+                            <Comment author=  {comment.author} key = {comment.id}>
+                              {comment.text}
+                              </Comment>
+                          );
+                        });
+                        return(
+                          <div className="commentList">
+                          {commentNodes}
+                          </div>
+                        );
+                      }
+                    }
+
+                    var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
+
+                    class Comment extends React.Component{
+                      constructor(){
+                        super();
+                      }
+
+                      render(){
+                        return(
+                          <div className="comment">
+                          <h2 className="commentAuthor">
+                            {this.props.author}
+                            </h2>
+                          <h2 className= "commentText">
+                            {this.props.children}
+                            </h2>
+                            <hr></hr>
+                          </div>
+                        )
+                      }
+                    }
+
+                    class LikeButton extends React.Component {
+                       constructor() {
+                         super(); this.state = { liked: false, follow: false};
+                         this.handleLike = this.handleLike.bind(this);
+                          this.handleFollow = this.handleFollow.bind(this);
+                           this.handleComment = this.handleComment.bind(this);
+                    }
+
+                    handleLike() { this.setState({liked: !this.state.liked}); }
+                     handleFollow() { this.setState({follow: !this.state.follow}); }
+                      handleComment(){ this.setState({comment: !this.state.comment}); }
+
+                      commentOn(one){
+                         if( one == 1){
+                           return(
+                           <CommentBox data = {data}/>)
+                           console.log("working");
+                         }
+                        }
+
+                       render() { const textLike = this.state.liked ? 'Unlike' : 'Like';
+                        const textFollow= this.state.follow ? 'Unfollow' : 'Follow';
+                        var commentOnOff = this.state.comment ? 1 : 0;
+                        const textComment = "Comments"; return (
+                          <div>
                     <div className="rct-1">
                         <div onClick={this.handleLike} className="like">
                             {textLike}
                         </div>
-                        <div onClick={this.handleFollow} className="follow">
-                            {textFollow}
-                        </div>
                         <div onClick={this.handleComment} className="comment-opening">
                             {textComment}
                         </div>
+                    </div>
+                    <div>
+                    {this.commentOn(commentOnOff)}
+                    </div>
                     </div>
                     ); } } ReactDOM.render(
                     <LikeButton />, document.getElementById('rct') );

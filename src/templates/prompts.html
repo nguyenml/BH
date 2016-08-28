@@ -30,31 +30,8 @@
                     <input type="search" id="search" placeholder="Search..." />
                   </div>
               </li>
-          <li class="reading"><a href="reading">Read</a></li>
-          <li class="write"><a class="active"href="prompts">Write</a></li>
-          <li class="messages">
-              <div class="dropdown">
-                  <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                      <i class="glyphicon glyphicon-bell"></i>
-                  </div>
-
-                  <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
-
-                      <div class="notification-heading">
-                          <h4 class="menu-title">Notifications</h4>
-                          <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
-                      </div>
-                      <li class="divider"></li>
-                      <div class="notifications-wrapper">
-
-                      </div>
-                      <li class="divider"></li>
-                      <div class="notification-footer">
-                          <h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
-                  </ul>
-
-              </div>
-          </li>
+          <li class="home"><a href="reading">Read</a></li>
+          <li class="write"><a class="active" href="prompts">Write</a></li>
               <li>
                   <ul>
                       <li>
@@ -71,21 +48,37 @@
                         </div>
                       </li>
                       <script type="text/babel">
-                          class UserSetting extends React.Component { constructor() { super(); }
+                          class UserSetting extends React.Component { constructor() { super(); } render(){ var {picture, name} = this.props; return(
+                          <div>
+                              <h1 className="usn-name">{name}</h1>
+                          </div>) } } ReactDOM.render(
 
-                          render(){
-                            var {picture, name} = this.props;
-                             return(
-                                <div>
-                                  <h1 className="usn-name">{name}</h1>
-                                    </div>
-                                  )
-                                  }
-                                } ReactDOM.render(
-
-                          <UserSetting picture="../static/images/riff.jpg" name="Max" />, document.getElementById('user-setting'));
+                          <UserSetting picture="../static/images/riff.jpg" name="{{firstname}}" />, document.getElementById('user-setting'));
                       </script>
                   </ul>
+              </li>
+              <li class="messages">
+                  <div class="dropdown">
+                      <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                          <i class="glyphicon glyphicon-bell"></i>
+                      </div>
+
+                      <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+
+                          <div class="notification-heading">
+                              <h4 class="menu-title">Notifications</h4>
+                              <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                          </div>
+                          <li class="divider"></li>
+                          <div class="notifications-wrapper">
+
+                          </div>
+                          <li class="divider"></li>
+                          <div class="notification-footer">
+                              <h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                      </ul>
+
+                  </div>
               </li>
       </ul>
   </div>
