@@ -3,6 +3,7 @@ Flask-WTF
 Flask-SQLAlchemy
 flask-login
 Fabric
+psycopg2
 
 # ----------------------
 # Testing
