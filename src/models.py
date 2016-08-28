@@ -67,6 +67,7 @@ class SuggestedPrompt(db.Model):
 def init_db():
     try:
         db.create_all()
+        db.session.commit()
     except:
         print("Database creation failed (probably because already exists)")
 
