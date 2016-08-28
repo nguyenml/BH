@@ -101,6 +101,3 @@ def add_prompt(prompt):
     db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."
-
-if __name__ == "__main__":
-    app.run(debug=True)
