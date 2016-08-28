@@ -6,10 +6,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 
-#app = Flask(__name__)
-#app.config.update(DEBUG=True)
-#app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:pass@localhost/dev"
-
 from src import app
 from models import SuggestedPrompt, find_user
 from data import register_author
