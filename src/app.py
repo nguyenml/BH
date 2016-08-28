@@ -68,6 +68,7 @@ def login():
     hashed_password = hash(request.form["password"])
     user_exists = find_user(email)
     valid_login = False
+    print(user_exists)
     if(user_exists and hashed_password == user_exists.password_hash):
         valid_login = True
     if(valid_login):

@@ -33,7 +33,7 @@ class Author(db.Model):
     writings = db.relationship("Writing", backref='author', lazy='dynamic')
     suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
 
-    def __init__(self, fn, ln, em, pw, desc):
+    def __init__(self, fn, ln, em, pw):
         self.first_name = fn
         self.last_name = ln
         self.email = em
@@ -73,8 +73,10 @@ def init_db():
 
 @dbcommit
 def seed_db():
+    print("Beginning data seed...")
     db.session.add(Author("firstname", "lastname", "firstlast@test.com", "12345"))
     db.session.add(Prompt("You're a chicken under the sea. Talk about it."))
+    print("Seeding done.")
 
 @confirm
 @dbcommit
