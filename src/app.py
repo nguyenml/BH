@@ -6,12 +6,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 import os
 
-app = Flask(__name__)
-app.config.update(DEBUG=True)
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:pass@localhost/dev"
-db = SQLAlchemy(app)
+#app = Flask(__name__)
+#app.config.update(DEBUG=True)
+#app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:pass@localhost/dev"
 
-from models import Author, Writing, Prompt, SuggestedPrompt, find_user
+from src import app
+from models import SuggestedPrompt, find_user
 from data import register_author
 
 @app.route('/prompt')
@@ -101,3 +101,6 @@ def add_prompt(prompt):
     db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."
+
+if __name__ == "__main__":
+    app.run(debug=True)

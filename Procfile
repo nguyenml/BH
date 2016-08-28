@@ -1,1 +1,1 @@
-web: fab start
+web:python src/app.py

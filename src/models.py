@@ -3,7 +3,7 @@ import datetime
 from hashlib import md5
 hash = lambda x: md5(x).hexdigest()
 
-from app import db
+from src import db
 
 # Helper functions
 def dbcommit(f):

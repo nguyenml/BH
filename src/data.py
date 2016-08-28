@@ -1,5 +1,7 @@
 from models import db, Author
 
+db = None
+Author = None
 def register_author(firstname, lastname, emai, password):
     print Author.query.filter_by(email=emai).first()
     if(Author.query.filter_by(email=emai).first()):
