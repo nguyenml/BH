@@ -98,3 +98,11 @@ def add_prompt(prompt):
     db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."
+
+@app.errorhandler(404)
+def fourohfour(e):
+    return render_template("404.html")
+
+@app.errorhandler(500)
+def fivehundred(e):
+    return render_template("500.html")
