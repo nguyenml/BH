@@ -189,10 +189,10 @@ html, body {
     z-index: 2;
 }
 .form-login {
-    -webkit-transform: rotateY(180deg);
 }
 .flip.flipped {
     -webkit-transform: rotateY(-180deg);
+    -moz-transform: rotateY(-180deg);
 }
 #login input.login-err, #login input.login-err:focus {
     color: #C4550B;

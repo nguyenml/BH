@@ -34,11 +34,12 @@ def write_config(dict_config):
 def gen_config():
     write_config(get_config())
 
-def start(host="0.0.0.0", port=5000):
+def start():
     call(['heroku', 'local'])
     exit()
-    #app.config['SQL_DATABASE'] = SQL_DATABASE
-    #app.config['SQL_USERNAME'] = SQL_USERNAME
-    #app.config['SQL_PASSWORD'] = SQL_PASSWORD
-    #app.run(host, port)
-
+    
+def safestart(host="0.0.0.0", port=5000):
+    app.config['SQL_DATABASE'] = SQL_DATABASE
+    app.config['SQL_USERNAME'] = SQL_USERNAME
+    app.config['SQL_PASSWORD'] = SQL_PASSWORD
+    app.run(host, port)
