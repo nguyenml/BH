@@ -4,6 +4,7 @@ Flask-SQLAlchemy
 flask-login
 Fabric
 psycopg2
+pycrypto
 
 # ----------------------
 # Testing
