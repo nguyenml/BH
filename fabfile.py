@@ -2,7 +2,8 @@ import os
 import json
 from subprocess import call
 
-from src import app,db
+from src import db
+from src.app import app 
 from src.helpers import dbcommit, confirm
 
 SQL_DATABASE = "mysql"
