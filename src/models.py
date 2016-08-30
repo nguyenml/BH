@@ -4,20 +4,7 @@ from hashlib import md5
 hash = lambda x: md5(x).hexdigest()
 
 from src import db
-
-# Helper functions
-def dbcommit(f):
-    def inner(*a, **kw):
-        f(*a, **kw)
-        db.session.commit()
-    return inner
-
-def confirm(f):
-    def inner(*a, **kw):
-        check = raw_input("Are you absolutely sure? Y/N")
-        if(check.lower() in ['y', 'yes']):
-            f(*a, **kw)
-    return inner
+from helpers import confirm,dbcommit
 
 # Models
 class Author(db.Model):
@@ -44,13 +31,13 @@ class Author(db.Model):
 class Writing(db.Model):
     __tablename__ = "writings"
     writing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    text = db.Column(db.Text(length=5))
+    text = db.Column(db.Text())
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
 
 class Prompt(db.Model):
     __tablename__ = "prompts"
     prompt_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    prompt = db.Column(db.Text(length=5))
+    prompt = db.Column(db.Text())
 
     def __init__(self, prompt):
         self.prompt = prompt
@@ -58,32 +45,11 @@ class Prompt(db.Model):
 class SuggestedPrompt(db.Model):
     __tablename__ = "suggested_prompts"
     suggestion_prompt_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    prompt = db.Column(db.Text(length=5))
+    prompt = db.Column(db.Text())
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
 
     def __init__(self, prompt):
         self.prompt = prompt
-
-def init_db():
-    try:
-        db.create_all()
-        db.session.commit()
-    except:
-        print("Database creation failed (probably because already exists)")
-
-@dbcommit
-def seed_db():
-    print("Beginning data seed...")
-    db.session.add(Author("firstname", "lastname", "firstlast@test.com", "12345"))
-    db.session.add(Prompt("You're a chicken under the sea. Talk about it."))
-    print("Seeding done.")
-
-@confirm
-@dbcommit
-def reset_authors():
-    check = raw_input("Are you absolutely sure? Y/N")
-    if(check.lower() == 'y'):
-        print(Author.query.delete())
 
 @confirm
 @dbcommit
