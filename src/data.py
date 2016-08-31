@@ -8,4 +8,3 @@ def register_author(firstname, lastname, emai, password):
         db.session.add(Author(firstname, lastname, emai, password))
         db.session.commit()
         return True
-

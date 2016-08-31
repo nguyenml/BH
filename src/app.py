@@ -18,23 +18,27 @@ def prompt():
 def hello(name=None):
     return render_template('landing.html', name=name)
 
+@app.route('/tavern')
+def tavern():
+    return render_template('tavern.html')
+
 @app.route('/reading')
 def reading():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
-    return render_template('reading.html', firstname=first, lastname=last)
+    return render_template('dashboard.html', firstname=first, lastname=last)
 
 @app.route('/prompts')
 def prompts():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
-    return render_template('prompts.html', firstname=first, lastname=last)
+    return render_template('storyPage.html', firstname=first, lastname=last)
 
 @app.route('/user')
 def user():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
-    return render_template('user.html', firstname=first, lastname=last)
+    return render_template('myWork.html', firstname=first, lastname=last)
 
 @app.route('/writing')
 def root():

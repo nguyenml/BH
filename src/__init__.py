@@ -10,4 +10,3 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PORT'] = 33507 # TODO: Check if production here
 
 db = SQLAlchemy(app)
-

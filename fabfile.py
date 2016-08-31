@@ -3,7 +3,7 @@ import json
 from subprocess import call
 
 from src import db
-from src.app import app 
+from src.app import app
 from src.helpers import dbcommit, confirm
 
 SQL_DATABASE = "mysql"
@@ -38,7 +38,7 @@ def gen_config():
 def start():
     call(['heroku', 'local'])
     exit()
-    
+
 def safestart(host="0.0.0.0", port=5000):
     app.config['SQL_DATABASE'] = SQL_DATABASE
     app.config['SQL_USERNAME'] = SQL_USERNAME
@@ -72,4 +72,3 @@ def reset_authors():
     check = raw_input("Are you absolutely sure? Y/N")
     if(check.lower() == 'y'):
         print(Author.query.delete())
-
