@@ -3,12 +3,17 @@ hash = lambda x: md5(x).hexdigest()
 
 from flask import Flask, render_template, request, redirect, make_response
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import login_user
 
 import os
 
-from src import app
+from src import app, login_manager
 from models import SuggestedPrompt, find_user
-from data import register_author
+from data import register_author, Author
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Author.get(user_id)
 
 @app.route('/prompt')
 def prompt():
@@ -72,7 +77,6 @@ def login():
     hashed_password = hash(request.form["password"])
     user_exists = find_user(email)
     valid_login = False
-    print(user_exists)
     if(user_exists and hashed_password == user_exists.password_hash):
         valid_login = True
     if(valid_login):

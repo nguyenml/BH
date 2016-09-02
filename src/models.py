@@ -3,7 +3,7 @@ import datetime
 from hashlib import md5
 hash = lambda x: md5(x).hexdigest()
 
-from src import db
+from src import db, login_manager
 from helpers import confirm,dbcommit
 
 # Models
@@ -16,8 +16,10 @@ class Author(db.Model):
     password_hash = db.Column(db.String(length=255))
     last_login = db.Column(db.DateTime)
     is_logged_in = db.Column(db.Boolean)
+    is_verified = db.Column(db.Boolean)
+    is_active = db.Column(db.Boolean)
 
-    writings = db.relationship("Writing", backref='author', lazy='dynamic')
+    pieces = db.relationship("Piece", backref='author', lazy='dynamic')
     suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
 
     def __init__(self, fn, ln, em, pw):
@@ -28,33 +30,72 @@ class Author(db.Model):
         self.last_login = datetime.datetime.now()
         self.is_logged_in = True
 
-class Writing(db.Model):
-    __tablename__ = "writings"
-    writing_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return self.is_active
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
+
+
+class Piece(db.Model):
+    __tablename__ = "pieces"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     text = db.Column(db.Text())
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    is_published = db.Column(db.Boolean)
+    date_started = db.Column(db.DateTime)
+
 
 class Prompt(db.Model):
     __tablename__ = "prompts"
-    prompt_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     prompt = db.Column(db.Text())
 
     def __init__(self, prompt):
         self.prompt = prompt
 
+
 class SuggestedPrompt(db.Model):
     __tablename__ = "suggested_prompts"
-    suggestion_prompt_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     prompt = db.Column(db.Text())
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
 
     def __init__(self, prompt):
         self.prompt = prompt
+
+
+class Feedback(db.Model):
+    __tablename__ = "feedback"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    piece_id = db.Column(db.Integer, db.ForeignKey('pieces.id'))
+
+
+class Groups(db.Model):
+    __tablename__ = "groups"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    date_started = db.Column(db.DateTime)
+    group_name = db.Column(db.String)
+
+
+class Groupings(db.Model):
+    __tablename__ = "groupings"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    role = db.Column(db.Integer) # TODO: Higher is higher authority, etc.
+
 
 @confirm
 @dbcommit
 def reset_writings():
-    print(Writing.query.delete())
+    print(Piece.query.delete())
 
 @confirm
 @dbcommit
