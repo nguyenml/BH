@@ -6,6 +6,7 @@ Fabric
 psycopg2
 pycrypto
 google-api-python-client
+alembic
 
 
 # ----------------------

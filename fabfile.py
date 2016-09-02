@@ -60,7 +60,7 @@ def seed_db():
 
     try:
         print("Beginning data seed...")
-        db.session.add(Author("firstname", "lastname", "firstlast@test.com", "12345"))
+        db.session.add(Author("The Test Dummy", "firstname", "lastname", "firstlast@test.com", "12345"))
         db.session.add(Prompt("You're a chicken under the sea. Talk about it."))
         print("Seeding done.")
     except Exception as e:

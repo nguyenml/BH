@@ -10,6 +10,7 @@ from helpers import confirm,dbcommit
 class Author(db.Model):
     __tablename__ = 'author'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    penname = db.Column(db.String(length=20))
     first_name = db.Column(db.String(length=255))
     last_name = db.Column(db.String(length=255))
     email = db.Column(db.String(length=255))
@@ -22,7 +23,8 @@ class Author(db.Model):
     pieces = db.relationship("Piece", backref='author', lazy='dynamic')
     suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
 
-    def __init__(self, fn, ln, em, pw):
+    def __init__(self, pn, fn, ln, em, pw):
+        self.penname = pn
         self.first_name = fn
         self.last_name = ln
         self.email = em
