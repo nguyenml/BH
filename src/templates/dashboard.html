@@ -90,25 +90,39 @@
     <div class="cover">
       <div id =  "d_board"></div>
       <script type="text/babel">
-      function Front(props) {
+      function Front() {
         return (
           <div className="front">
             <div className= "header">
               <h1>
                 Dashboard
               </h1>
-              <hr></hr>
+              <div className="rectangle">
+              <h1> In Progress </h1>
+              </div>
               <div className =  "current">
                 <div className =  "box">
-                  <h2>in progress</h2>
                   <h1>Project Name</h1>
-                  <h1>Due Date</h1>
-                  <h1> Chapter ?</h1>
+                  <img className="pic" src="../static/images/lion.png" height={100}/>
+                </div>
+                <div className =  "box">
+                  <h1>Project Name</h1>
+                  <img className="pic" src="../static/images/128x128.png" height={100}/>
+                </div>
+                <div className =  "box">
+                  <h1>Project Name</h1>
+                  <img className="pic" src="../static/images/wolf.png" height={100}/>
+                </div>
+                <div className =  "box">
+                  <h1>Project Name</h1>
+                  <img className="pic" src="../static/images/paws.png" height={100}/>
                 </div>
               </div>
             </div>
             <div className= "following">
-            <h1> Watching</h1>
+            <div className="rectangle">
+            <h1> Watching </h1>
+            </div>
             <hr></hr>
               <div className= "story">
               <div className= "info">
@@ -141,7 +155,7 @@
         );
       }
 
-      ReactDOM.render(<Front/>, document.getElementById('d_board'));
+      ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
 
       </script>
 
