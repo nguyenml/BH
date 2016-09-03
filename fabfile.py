@@ -54,6 +54,19 @@ def init_db():
         print("Database creation failed (probably because already exists)")
         print(e)
 
+def reset_db():
+    from src.models import *
+    if(raw_input("Are you positive? (Y)") == 'Y'):
+        try:
+            db.reflect()
+            db.drop_all()
+            db.session.commit()
+        except Exception as e:
+            print("Database reset failed")
+            print(e)
+    else:
+        print("Reset database aborted")
+
 @dbcommit
 def seed_db():
     from src.models import Author, Prompt
