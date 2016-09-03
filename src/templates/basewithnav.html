@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block header %}
+<div class="nav">
+    <ul>
+        <li class="block"><a href = "reading" class="block" href="#"><img src="../static/images/64x64.png" class="logo"></img>BardHop</a></li>
+        <li class="search">
+            <div class="container-1">
+                <input type="search" id="search" placeholder="Search..." />
+            </div>
+        </li>
+        <li class="home"><a class="active" href="dashboard">Dashboard</a></li>
+        <li class="write"><a href="prompts">Stories</a></li>
+        <li class="tavern"><a href="tavern">Tavern</a></li>
+        <li>
+            <ul>
+                <li>
+                    <div class="dropdown user-setting">
+                        <div id="usn" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                        </div>
+                        <ul class="dropdown-menu user-cc" role="menu" aria-labelledby="usn">
+                            <a class="menu-title" href="user">Profile</a>
+                            <a class="menu-title" href="#">Settings</a>
+                            <a class="menu-title" href="#">Sign Out</a>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="messages">
+            <div class="dropdown">
+                <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                    <i class="glyphicon glyphicon-bell"></i>
+                </div>
+                <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+                    <div class="notification-heading">
+                        <h4 class="menu-title">Notifications</h4>
+                        <h4 class="menu-title pull-right">
+                            View all
+                            <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                        </h4>
+                    </div>
+                    <li class="divider"></li>
+                    <li class="divider"></li>
+                    <div class="notification-footer">
+                        <h4 class="menu-title">
+                            View all
+                            <i class="glyphicon glyphicon-circle-arrow-right"></i>
+                        </h4>
+                    </div>
+                </ul>
+
+            </div>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/babel">
+class UserSetting extends React.Component { constructor() { super(); } render(){ var {picture, name} = this.props; return(
+                            <div>
+                                <h1 className="usn-name">{name}</h1>
+                            </div>) } } ReactDOM.render(
+
+                            <UserSetting picture="../static/images/riff.jpg" name="{{firstname}}" />, document.getElementById('user-setting'));
+</script>
+
+{% endblock %}
