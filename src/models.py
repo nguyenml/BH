@@ -23,7 +23,7 @@ class Author(db.Model):
     pieces = db.relationship("Piece", backref='author', lazy='dynamic')
     suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
 
-    def __init__(self, pn, fn, ln, em, pw):
+    def __init__(self, fn, ln, em, pw, pn="Author"):
         self.penname = pn
         self.first_name = fn
         self.last_name = ln
