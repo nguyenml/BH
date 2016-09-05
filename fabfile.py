@@ -67,6 +67,9 @@ def reset_db():
     else:
         print("Reset database aborted")
 
+def run_tests():
+    call(["nosetests", "--nocapture", "test"])
+
 @dbcommit
 def seed_db():
     from src.models import Author, Prompt
