@@ -45,7 +45,7 @@
 
 </div>
 
-<body>
+<body class = "writingpage_body">
     <nav>
         <a href="#" class="nav-toggle-btn"></a>
         <ul>
@@ -67,17 +67,6 @@
         <textarea id="writing" form="writing" class='hiddentextbox'></textarea>
     </div>
 
-    <div class="text-options">
-        <div class="options">
-            <span class="no-overflow">
-                <span class="lengthen ui-inputs">
-                    <button class="bold">b</button>
-                    <button class="italic">i</button>
-                    <button class="quote">&rdquo;</button>
-                </span>
-            </span>
-        </div>
-    </div>
     <div class="click">
         <ul class="icon">
             <li><i id="toggle" class="fa fa-arrows-alt" aria-hidden="true" title="Fullscreen"></i></li>
@@ -101,9 +90,9 @@
     </div>
     <script src={{ url_for( 'static', filename='js/bluebook.js' ) }}></script>
 
-    <section>
+    <section class="writingpage_section">
 
-        <article id="text" contenteditable="true" class="content"></article>
+        <article id="text" contenteditable="true" class="content writingpage_article"></article>
 
     </section>
 </body>
