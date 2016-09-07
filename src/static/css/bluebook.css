@@ -308,6 +308,28 @@ DASHBOARD***********************************************************************
   flex-direction: row;
 }
 
+.daily_box{
+  margin-left: 15px;
+  padding-top: 10px;
+  height: 200px;
+  width: 250px;
+  border: 1px solid rgba(68, 68, 68, .2);
+}
+.daily_box p{
+  text-align: center;
+}
+.readwrite{
+  display: flex;
+  flex-direction: row;
+}
+
+.dash_read{
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+
+}
+
 .box{
   margin-left: 15px;
   padding-top: 10px;
@@ -835,12 +857,16 @@ h2.commentText{
 }
 
 form.commentForm{
-  text-align: right;
+  text-align: left;
   padding-bottom: 8px;
 }
 
 input.commentType{
-  height:
+  text-align: left;
+  height: auto;
+  border: 1px solid rgba(0, 0, 0, .3);
+
+
 }
 
 input.commentSubmit{

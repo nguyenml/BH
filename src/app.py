@@ -17,19 +17,17 @@ def landing(name=None):
 def tavern():
     return render_template('tavern.html')
 
-@app.route('/reading')
-@login_required
-def reading():
+app.route('/dashboard')
+def dashboard():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
     return render_template('dashboard.html', firstname=first, lastname=last)
 
-@app.route('/prompts')
-@login_required
-def prompts():
+app.route('/reading')
+def reading():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
-    return render_template('storyPage.html', firstname=first, lastname=last)
+    return render_template('reading.html', firstname=first, lastname=last)
 
 @app.route('/user')
 @login_required
