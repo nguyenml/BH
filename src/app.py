@@ -2,44 +2,45 @@ import os
 
 from flask import Flask, render_template, request, redirect, make_response
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import login_user
+from flask_login import login_user, login_required
 
 from src import app, login_manager
 from models import SuggestedPrompt, find_user
 from data import register_author, Author
-
-@app.route('/prompt')
-def prompt():
-    return render_template('prompt.html')
 
 @app.route('/')
 def landing(name=None):
     return render_template('landing.html', name=name)
 
 @app.route('/tavern')
+@login_required
 def tavern():
     return render_template('tavern.html')
 
 @app.route('/reading')
+@login_required
 def reading():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
     return render_template('dashboard.html', firstname=first, lastname=last)
 
 @app.route('/prompts')
+@login_required
 def prompts():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
     return render_template('storyPage.html', firstname=first, lastname=last)
 
 @app.route('/user')
-def user():
+@login_required
+def userpage():
     first = request.cookies.get('first')
     last = request.cookies.get('last')
     return render_template('myWork.html', firstname=first, lastname=last)
 
 @app.route('/writing')
-def root():
+@login_required
+def writing():
     username = request.cookies.get('username')
     if(username):
         return render_template("main.html")
@@ -80,6 +81,7 @@ def login():
 
 @app.route('/prompt', defaults={'pid': None}, methods=["GET"])
 @app.route('/prompt/<pid>', methods=["GET"])
+@login_required
 def get_prompt(pid):
     if(pid == None):
         return "Random prompt here"
@@ -89,6 +91,7 @@ def get_prompt(pid):
     return str(prompt.prompt)
 
 @app.route('/addprompt/<prompt>', methods=['GET'])
+@login_required
 def add_prompt(prompt):
     #if(not request.cookies.get('username')):
     #    print("Rejected!")

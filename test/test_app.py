@@ -18,6 +18,16 @@ class TestCase(unittest.TestCase):
     EXISTING_LOGIN = {"email": "firstlast@test.com",
             "password": "12345"}
 
+
+    NEW_USER = {"email": "newguy@new.com",
+            "firstname": "new",
+            "lastname": "guy",
+            "password": "54321",
+            "confirmpassword": "54321"}
+
+    NEW_LOGIN = {"email": "newguy@new.com",
+            "password": "54321"}
+
     def setUp(self):
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://' 
@@ -28,17 +38,34 @@ class TestCase(unittest.TestCase):
         db.session.remove()
         db.drop_all()
 
-    # Routing Tests
+    # Routing Tests (Not Logged In)
 
     def test_landing(self):
         result = self.app.get('/') 
         self.assertEqual(result.status_code, 200)
 
-    def test_signin(self):
-        result = self.app.get('/signin')
-        self.assertEqual(result.status_code, 200)
+    def test_tavern(self):
+        result = self.app.get('/tavern') 
+        self.assertEqual(result.status_code, 401)
+    
+    def test_reading(self):
+        result = self.app.get('/reading') 
+        self.assertEqual(result.status_code, 401)
+
+    def test_prompts(self):
+        result = self.app.get('/prompts') 
+        self.assertEqual(result.status_code, 401)
+
+    def test_user(self):
+        result = self.app.get('/user') 
+        self.assertEqual(result.status_code, 401)
+
+    def test_writing(self):
+        result = self.app.get('/writing') 
+        self.assertEqual(result.status_code, 401)
 
     # Form Tests
+
     def test_not_matching_password_signup(self):
         data = {"email": "testfailpassword@test.com",
                 "firstname": "tester",
