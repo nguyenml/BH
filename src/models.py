@@ -1,10 +1,9 @@
 import datetime
 
-from hashlib import md5
-hash = lambda x: md5(x).hexdigest()
+from passlib.hash import sha256_crypt as crypto
 
 from src import db, login_manager
-from helpers import confirm,dbcommit
+from helpers import confirm, dbcommit
 
 # Models
 class Author(db.Model):
@@ -28,7 +27,7 @@ class Author(db.Model):
         self.first_name = fn
         self.last_name = ln
         self.email = em
-        self.password_hash = hash(pw)
+        self.password_hash = crypto.encrypt(pw)
         self.last_login = datetime.datetime.now()
         self.is_logged_in = True
 
@@ -44,6 +43,12 @@ class Author(db.Model):
     def get_id(self):
         return self.id
 
+    @staticmethod
+    def validate_email(email):
+        return Author.query.filter_by(email=email).first()
+
+    def validate_password(self, password):
+        return crypto.verify(password, self.password_hash)
 
 class Piece(db.Model):
     __tablename__ = "pieces"

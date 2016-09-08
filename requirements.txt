@@ -7,7 +7,7 @@ psycopg2
 pycrypto
 google-api-python-client
 alembic
-
+passlib
 
 # ----------------------
 # Testing

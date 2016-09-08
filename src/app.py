@@ -1,26 +1,19 @@
-from hashlib import md5
-hash = lambda x: md5(x).hexdigest()
+import os
 
 from flask import Flask, render_template, request, redirect, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user
 
-import os
-
 from src import app, login_manager
 from models import SuggestedPrompt, find_user
 from data import register_author, Author
-
-@login_manager.user_loader
-def load_user(user_id):
-    return Author.get(user_id)
 
 @app.route('/prompt')
 def prompt():
     return render_template('prompt.html')
 
 @app.route('/')
-def hello(name=None):
+def landing(name=None):
     return render_template('landing.html', name=name)
 
 @app.route('/tavern')
@@ -53,9 +46,12 @@ def root():
     else:
         return render_template("main.html")
 
+###
+# API
+###
+
 @app.route('/signup', methods=["POST"])
 def signup():
-    # TODO: Complete this
     email = request.form["email"]
     password = request.form["password"]
     firstname = request.form["firstname"]
@@ -63,10 +59,6 @@ def signup():
     valid_signup = register_author(firstname, lastname, email, password)
 
     if(valid_signup):
-        response = make_response(redirect('/reading'))
-        response.set_cookie("email", email)
-        response.set_cookie("first", firstname)
-        response.set_cookie("last", lastname)
         return response
     else:
         return redirect('/')
@@ -74,17 +66,15 @@ def signup():
 @app.route('/login', methods=["POST"])
 def login():
     email = request.form["email"]
-    hashed_password = hash(request.form["password"])
-    user_exists = find_user(email)
-    valid_login = False
-    if(user_exists and hashed_password == user_exists.password_hash):
-        valid_login = True
-    if(valid_login):
-        response = make_response(redirect('/reading'))
-        response.set_cookie("email", user_exists.email)
-        response.set_cookie("first", user_exists.first_name)
-        response.set_cookie("last", user_exists.last_name)
-        return response
+    author = Author.validate_email(email)
+    if(author):
+        if(author.validate_password(request.form["password"])):
+            login_user(author)
+            response = make_response(redirect('/reading'))
+            response.set_cookie("email", author.email)
+            response.set_cookie("first", author.first_name)
+            response.set_cookie("last", author.last_name)
+            return response
     else:
         return redirect('/')
 
@@ -110,6 +100,7 @@ def add_prompt(prompt):
 ###
 # Login Manager
 ###
+
 @app.after_request
 def add_header(response):
     """
@@ -139,6 +130,6 @@ def unauthorized():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Users.query.get(int(user_id))
+    return Author.query.get(int(user_id))
 
 
