@@ -107,6 +107,24 @@ def add_prompt(prompt):
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."
 
+###
+# Login Manager
+###
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=600'
+    return response
+
+
+###
+# Errors
+###
+
 @app.errorhandler(404)
 def fourohfour(e):
     return render_template("404.html")
@@ -114,3 +132,13 @@ def fourohfour(e):
 @app.errorhandler(500)
 def fivehundred(e):
     return render_template("500.html")
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return render_template('401.html'), 401
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Users.query.get(int(user_id))
+
+
