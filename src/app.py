@@ -41,9 +41,9 @@ def userpage():
 def writing():
     username = request.cookies.get('username')
     if(username):
-        return render_template("main.html")
+        return render_template("writing.html")
     else:
-        return render_template("main.html")
+        return render_template("writing.html")
 
 ###
 # API
