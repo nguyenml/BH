@@ -4,7 +4,6 @@ Flask-SQLAlchemy
 flask-login
 Fabric
 psycopg2
-pycrypto
 google-api-python-client
 alembic
 passlib
