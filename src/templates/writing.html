@@ -1,0 +1,50 @@
+{% extends "basewithnav.html" %}
+<!DOCTYPE html>
+<html>
+
+{%block content%}
+
+<article>
+  <div class="cover">
+    <div id =  "writing_page"></div>
+    <div class="prompt">
+        <div id="prompt"></div>
+    </div>
+    <script type="text/babel">
+
+    class Writing extends React.Component{
+      constructor(){
+        super();
+      }
+
+      render(){
+        return(
+          <div>
+          <div className="writing_head">
+          <button className="btn submit">Submit</button>
+          <h1>Prompt</h1>
+          <p>WordCount:</p>
+          </div>
+          <section className="writingpage_section">
+              <article id="text" contentEditable="true" className="content writingpage_article"></article>
+
+          </section>
+          </div>
+
+        )
+      }
+    }
+    var Prompt = React.createClass({
+      propTypes: { title: React.PropTypes.string.isRequired },
+      getDefaultProps: function ()
+      { return { title: "Title" } },
+      render: function() { return(
+    <h1>{this.props.title}</h1>) } }); ReactDOM.render(
+    <Prompt title="ANALYSIS"/>, document.getElementById('prompt'));
+    ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
+    </script>
+
+
+{% endblock %}
+</article>
+</html>

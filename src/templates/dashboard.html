@@ -1,150 +1,81 @@
+{% extends "basewithnav.html" %}
 <!DOCTYPE html>
 <html>
 
-<head>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+{%block content%}
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/css/reading.css">
-    <link rel="stylesheet" href="../static/css/dashboard.css">
-    <title>Home - Bluebook</Title>
-    <script src="https://fb.me/react-15.2.0.js"></script>
-    <script src="https://fb.me/react-dom-15.2.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/3.0.0/screenfull.js"></script>
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-
-</head>
-<body>
-    <div class="nav">
-        <ul>
-            <li class="block"><a href = "reading" class="block" href="#"><img src="../static/images/64x64.png" class="logo"></img>BardHop</a></li>
-            <li class="search">
-                  <div class="container-1">
-                      <input type="search" id="search" placeholder="Search..." />
-                    </div>
-                </li>
-            <li class="home"><a class="active" href="dashboard">Dashboard</a></li>
-            <li class="write"><a href="prompts">Stories</a></li>
-            <li class="tavern"><a href="tavern">Tavern</a></li>
-                <li>
-                    <ul>
-                        <li>
-                          <div class="dropdown user-setting">
-                            <div id="usn" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                                <div id="user-setting"></div>
-                            </div>
-
-                            <ul class="dropdown-menu user-cc" role="menu" aria-labelledby="usn">
-                                    <a class="menu-title" href="user">Profile</a>
-                                    <a class="menu-title" href="#">Settings</a>
-                                    <a class="menu-title" href="#">Sign Out</a>
-                            </ul>
-                          </div>
-                        </li>
-                        <script type="text/babel">
-                            class UserSetting extends React.Component { constructor() { super(); } render(){ var {picture, name} = this.props; return(
-                            <div>
-                                <h1 className="usn-name">{name}</h1>
-                            </div>) } } ReactDOM.render(
-
-                            <UserSetting picture="../static/images/riff.jpg" name="{{firstname}}" />, document.getElementById('user-setting'));
-                        </script>
-                    </ul>
-                </li>
-                <li class="messages">
-                    <div class="dropdown">
-                        <div id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                            <i class="glyphicon glyphicon-bell"></i>
-                        </div>
-
-                        <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
-
-                            <div class="notification-heading">
-                                <h4 class="menu-title">Notifications</h4>
-                                <h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
-                            </div>
-                            <li class="divider"></li>
-                            <div class="notifications-wrapper">
-
-                            </div>
-                            <li class="divider"></li>
-                            <div class="notification-footer">
-                                <h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
-                        </ul>
-
-                    </div>
-                </li>
-        </ul>
-    </div>
-  </body>
 
   <article>
     <div class="cover">
       <div id =  "d_board"></div>
       <script type="text/babel">
-      function Front(props) {
+      function Front() {
         return (
-          <div className="front">
+          <div className="dashboard_front">
             <div className= "header">
               <h1>
                 Dashboard
               </h1>
-              <hr></hr>
+              <div className="rectangle">
+              <h1> In Progress </h1>
+              </div>
               <div className =  "current">
                 <div className =  "box">
-                  <h2>in progress</h2>
                   <h1>Project Name</h1>
-                  <h1>Due Date</h1>
-                  <h1> Chapter ?</h1>
+                  <img className="pic" src="../static/images/lion.png" height={100}/>
+                </div>
+                <div className =  "box">
+                  <h1>Project Name</h1>
+                  <img className="pic" src="../static/images/128x128.png" height={100}/>
+                </div>
+                <div className =  "box">
+                  <h1>Project Name</h1>
+                  <img className="pic" src="../static/images/wolf.png" height={100}/>
+                </div>
+                <div className =  "box">
+                  <h1>Project Name</h1>
+                  <img className="pic" src="../static/images/paws.png" height={100}/>
                 </div>
               </div>
             </div>
             <div className= "following">
-            <h1> Watching</h1>
+            <div className="rectangle">
+            <h1> Daily </h1>
+            </div>
             <hr></hr>
-              <div className= "story">
-              <div className= "info">
-                <h1>Chapter Title in response to Storyline</h1>
+            <div className =  "current">
+              <div className =  "daily_box">
+              <p>Prompt</p>
+              <button className="btn dashboard_read">Read</button>
+              <button className="btn dashboard_read">Write</button>
               </div>
-
-              <div className= "author">
-              <h1> Author Name </h1>
+              <div className =  "daily_box">
+              <p>Prompt</p>
+              <button className="btn dashboard_read">Read</button>
+              <button className="btn dashboard_read">Write</button>
               </div>
-
-              <div className= "s_text">
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
-
-      Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
-      <br></br>
-      <br></br>
-      Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
-
-      Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.
-      <br></br>
-      <br></br>
-      Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate eleifend sapien. Vestibulum purus quam, scelerisque ut, mollis sed, nonummy id, metus. Nullam accumsan lorem in dui. Cras ultricies mi eu turpis hendrerit fringilla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In ac dui quis mi</p>
+              <div className =  "daily_box">
+              <p>Prompt</p>
+              <button className="btn dashboard_read">Read</button>
+              <button className="btn dashboard_read">Write</button>
               </div>
-
-
+              <div className =  "daily_box">
+              <p>Prompt</p>
+              <button className="btn dashboard_read">Read</button>
+              <button className="btn dashboard_read">Write</button>
               </div>
+            </div>
 
             </div>
           </div>
         );
       }
 
-      ReactDOM.render(<Front/>, document.getElementById('d_board'));
+      ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
 
       </script>
 
     </div>
+    {% endblock %}
   </article>
 </html>

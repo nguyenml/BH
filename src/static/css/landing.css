@@ -1,9 +1,4 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    background-color: #fafafa;
-}
-.article {
+.landing_article {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     flex-direction: row;
@@ -264,14 +259,4 @@ footer a:hover {
 footer li {
     display: inline;
     padding-right: 30px;
-}
-.navbar {
-    border-radius: 0px;
-    background: transparent;
-    outline: none;
-    border: none;
-    box-shadow: none;
-}
-.navbar button {
-    border: none;
 }
