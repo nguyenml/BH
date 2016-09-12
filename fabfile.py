@@ -7,18 +7,30 @@ from passlib.hash import sha256_crypt as crypto
 from src import db
 from src.app import app
 from src.helpers import dbcommit, confirm
+from src.models import db, Author, Prompt
 
 SQL_DATABASE = "mysql"
 SQL_USERNAME = "root"
 SQL_PASSWORD = "root"
 
 DEFAULTS = {"db_database": SQL_DATABASE,
-            "db_username": SQL_USERNAME,
-            "db_password": SQL_PASSWORD}
+        "db_username": SQL_USERNAME,
+        "db_password": SQL_PASSWORD}
 
 REQUIRED = ["db_database",
-            "db_username",
-            "db_password"]
+        "db_username",
+        "db_password"]
+
+SEED_PROMPTS = ["Before I was born, that lady was studying.",
+        "I was pretty sure he will be howling, and only I knew that.",
+        "Arianna, a thing of cruelty and knowledge.",
+        "In the early fall, that starship navigator was growing up.",
+        "It will be the season of wisdom, the season of perversion.",
+        "That lady, that person of complete justice.",
+        "Then came the rogue AIs, but the truth isn't quite what some think.",
+        "Oh cruelty . . . time to break.",
+        "Break education as long as you are crying.",
+        "This is a story that concerns education, getting old, and a drought - and it's a story worth repeating."]
 
 def get_config():
     config = {}
@@ -48,7 +60,6 @@ def safestart(host="0.0.0.0", port=5000):
     app.run(host, port)
 
 def init_db():
-    from src.models import *
     try:
         db.create_all()
         db.session.commit()
@@ -57,7 +68,6 @@ def init_db():
         print(e)
 
 def reset_db():
-    from src.models import *
     if(raw_input("Are you positive? (Y)") == 'Y'):
         try:
             db.reflect()
@@ -74,12 +84,11 @@ def run_tests():
 
 @dbcommit
 def seed_db():
-    from src.models import Author, Prompt
-
+    add_prompt = lambda x: db.session.add(Prompt(x)) 
     try:
         print("Beginning data seed...")
         db.session.add(Author("firstname", "lastname", "firstlast@test.com", "12345", "The Test Dummy"))
-        db.session.add(Prompt("You're a chicken under the sea. Talk about it."))
+        map(add_prompt, SEED_PROMPTS) 
         print("Seeding done.")
     except Exception as e:
         print(e)
@@ -90,3 +99,13 @@ def reset_authors():
     check = raw_input("Are you absolutely sure? Y/N")
     if(check.lower() == 'y'):
         print(Author.query.delete())
+
+def new_db():
+    try:
+        db.reflect()
+        db.drop_all()
+        db.create_all()
+        db.session.commit()
+        seed_db()
+    except Exception as e:
+        print(e)
