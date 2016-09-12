@@ -2,14 +2,14 @@
 <!DOCTYPE html>
 <html>
 
-{%block content%}
+    {%block content%}
 
 
     <article>
         <div class="cover">
             <div class="s_art" id="story"></div>
             <script type="text/babel">
-                class Entry extends React.Component { constructor() { super(); } render() { var {title, pic, author, date, text} = this.props; return(
+class Entry extends React.Component { constructor() { super(); } render() { var {title, pic, author, date, text} = this.props; return(
                 <div>
                     <h1 className="story_title">{title}</h1>
                     <div className="profile-box">
@@ -101,15 +101,15 @@
               ReactDOM.render(<Story/>,document.getElementById('story'))
 
             </script>
-          </article>
+    </article>
 
 
-            <section>
-              <div class="cover-comments">
-                <div id="rct"></div>
-                <script type="text/babel">
+    <section>
+        <div class="cover-comments">
+            <div id="rct"></div>
+            <script type="text/babel">
 
-                    class CommentBox extends React.Component {
+class CommentBox extends React.Component {
                       constructor(){
                         super();
                       }
@@ -229,15 +229,15 @@
                     </div>
                     ); } } ReactDOM.render(
                     <LikeButton />, document.getElementById('rct') );
-                </script>
+            </script>
 
-                <div id="content"></div>
-                <script type="text/babel">
+            <div id="content"></div>
+            <script type="text/babel">
 
-                </script>
-              </div>
-              </section>
-{% endblock %}
-</body>
+            </script>
+                          </div>
+    </section>
+    {% endblock %}
+    </body>
 
 </html>

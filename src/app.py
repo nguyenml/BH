@@ -1,49 +1,41 @@
 import os
 
-from flask import Flask, render_template, request, redirect, make_response
+from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import login_user, login_required
+from flask_login import login_user, login_required, current_user
 
 from src import app, login_manager
 from models import SuggestedPrompt, find_user
 from data import register_author, Author
 
 @app.route('/')
-def landing(name=None):
-    return render_template('landing.html', name=name)
+def landing():
+    return render_template('landing.html')
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/writing')
+@login_required
+def writing():
+    return render_template("writing.html")  
 
 @app.route('/tavern')
 @login_required
 def tavern():
     return render_template('tavern.html')
 
-app.route('/dashboard')
-def dashboard():
-    first = request.cookies.get('first')
-    last = request.cookies.get('last')
-    return render_template('dashboard.html', firstname=first, lastname=last)
-
-app.route('/reading')
+@app.route('/reading')
+@login_required
 def reading():
-    first = request.cookies.get('first')
-    last = request.cookies.get('last')
-    return render_template('reading.html', firstname=first, lastname=last)
+    return render_template('reading.html')
 
 @app.route('/user')
 @login_required
 def userpage():
-    first = request.cookies.get('first')
-    last = request.cookies.get('last')
-    return render_template('myWork.html', firstname=first, lastname=last)
-
-@app.route('/writing')
-@login_required
-def writing():
-    username = request.cookies.get('username')
-    if(username):
-        return render_template("writing.html")
-    else:
-        return render_template("writing.html")
+    return render_template('myWork.html')
 
 ###
 # API
@@ -58,7 +50,7 @@ def signup():
     valid_signup = register_author(firstname, lastname, email, password)
 
     if(valid_signup):
-        return response
+        return redirect('/dashboard')
     else:
         return redirect('/')
 
@@ -66,16 +58,12 @@ def signup():
 def login():
     email = request.form["email"]
     author = Author.validate_email(email)
-    if(author):
-        if(author.validate_password(request.form["password"])):
-            login_user(author)
-            response = make_response(redirect('/reading'))
-            response.set_cookie("email", author.email)
-            response.set_cookie("first", author.first_name)
-            response.set_cookie("last", author.last_name)
-            return response
+    if(author and author.validate_password(request.form["password"])):
+        login_user(author)
+        return redirect(url_for("dashboard"))
     else:
-        return redirect('/')
+        flash('Login failed')
+        return redirect(url_for('landing'))
 
 @app.route('/prompt', defaults={'pid': None}, methods=["GET"])
 @app.route('/prompt/<pid>', methods=["GET"])
@@ -91,9 +79,6 @@ def get_prompt(pid):
 @app.route('/addprompt/<prompt>', methods=['GET'])
 @login_required
 def add_prompt(prompt):
-    #if(not request.cookies.get('username')):
-    #    print("Rejected!")
-    #    return "Please login to suggest a prompt."
     db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
     return "Thank you for your submission! It will be put under consideration."

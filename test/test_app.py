@@ -15,18 +15,11 @@ class TestCase(unittest.TestCase):
             "password": "12345",
             "confirmpassword": "12345"}
 
-    EXISTING_LOGIN = {"email": "firstlast@test.com",
-            "password": "12345"}
-
-
     NEW_USER = {"email": "newguy@new.com",
             "firstname": "new",
             "lastname": "guy",
             "password": "54321",
             "confirmpassword": "54321"}
-
-    NEW_LOGIN = {"email": "newguy@new.com",
-            "password": "54321"}
 
     def setUp(self):
         app.config['TESTING'] = True
@@ -37,6 +30,11 @@ class TestCase(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+
+    def login(self, un=EXISTING_USER['email'], pw=EXISTING_USER['password']):
+        return self.app.post('/login', data={'email': un,
+                                            'password': pw},
+                                        follow_redirects=True)
 
     # Routing Tests (Not Logged In)
 
@@ -52,10 +50,6 @@ class TestCase(unittest.TestCase):
         result = self.app.get('/reading') 
         self.assertEqual(result.status_code, 401)
 
-    def test_prompts(self):
-        result = self.app.get('/prompts') 
-        self.assertEqual(result.status_code, 401)
-
     def test_user(self):
         result = self.app.get('/user') 
         self.assertEqual(result.status_code, 401)
@@ -63,6 +57,9 @@ class TestCase(unittest.TestCase):
     def test_writing(self):
         result = self.app.get('/writing') 
         self.assertEqual(result.status_code, 401)
+
+    # Routes (logged in)
+
 
     # Form Tests
 
@@ -95,8 +92,7 @@ class TestCase(unittest.TestCase):
         result = self.app.post('/login', data=data, follow_redirects=True)
 
     def test_login(self):
-        self.app.post('/createaccount', data=TestCase.EXISTING_USER)
-        result = self.app.post('/login', data=TestCase.EXISTING_LOGIN, follow_redirects=True)
+        result = self.login()
         self.assertEqual(result.status_code, 200)
 
     def test_password_change(self):
