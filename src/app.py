@@ -5,8 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
 from src import app, login_manager
-from models import SuggestedPrompt, find_user
-from data import register_author, Author
+from models import Author, SuggestedPrompt
 
 @app.route('/')
 def landing():
@@ -45,11 +44,11 @@ def userpage():
 def signup():
     email = request.form["email"]
     password = request.form["password"]
-    firstname = request.form["firstname"]
-    lastname = request.form["lastname"]
-    valid_signup = register_author(firstname, lastname, email, password)
-
-    if(valid_signup):
+    confirm = request.form["confirmpassword"]
+    penname = request.form["penname"]
+    if(Author.validate_form(request.form)):
+        author = Author.add_new_author(email, password, penname)
+        login_user(author)
         return redirect('/dashboard')
     else:
         return redirect('/')
@@ -57,8 +56,8 @@ def signup():
 @app.route('/login', methods=["POST"])
 def login():
     email = request.form["email"]
-    author = Author.validate_email(email)
-    if(author and author.validate_password(request.form["password"])):
+    password = request.form["password"]
+    if(Author.validate_login(email, password)):
         login_user(author)
         return redirect(url_for("dashboard"))
     else:

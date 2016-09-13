@@ -22,10 +22,10 @@ class Author(db.Model):
     pieces = db.relationship("Piece", backref='author', lazy='dynamic')
     suggested_prompts = db.relationship("SuggestedPrompt", backref='author', lazy='dynamic')
 
-    def __init__(self, fn, ln, em, pw, pn="Author"):
+    def __init__(self, em, pw, pn="Author"):
         self.penname = pn
-        self.first = fn
-        self.last = ln
+        self.first = ""
+        self.last = ""
         self.email = em
         self.password_hash = crypto.encrypt(pw)
         self.last_login = dt.now()
@@ -45,10 +45,49 @@ class Author(db.Model):
 
     @classmethod
     def validate_email(cls, email):
-        return cls.query.filter_by(email=email).first()
+        # TODO: Swap out for WTForms
+        if('@' not in email):   return False
+        return False if cls.has_email(email) else True
+
+    @classmethod
+    def has_email(cls, email):
+        return True if cls.get_by_email(email) else False
+
+    @classmethod
+    def get_by_email(cls, email):
+        return list(cls.query.filter_by(email=email))
 
     def validate_password(self, password):
         return crypto.verify(password, self.password_hash)
+
+    @classmethod
+    def validate_login(cls, email, password):
+        if(not cls.has_email(email)): 
+            return False
+        author = cls.get_by_email(email)
+        if(cls.validate_password(password)):
+            return False
+        return True
+
+    @classmethod
+    def add_author(cls, author):
+        db.session.add(author)
+        db.session.commit()
+
+    @classmethod
+    def add_new_author(cls, em, pw, pn):
+        new_author = Author(em, pw, pn)
+        cls.add_author(new_author)
+        return new_author
+
+    @classmethod
+    def validate_form(cls, di):
+        # TODO: Swap out for WTForms
+        if(di['password'] is not di['confirmpassword']):
+            return False
+        elif(cls.has_email(di['email'])):
+            return False
+        return True
 
 class Piece(db.Model):
     __tablename__ = "pieces"
