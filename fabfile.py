@@ -87,7 +87,7 @@ def seed_db():
     add_prompt = lambda x: db.session.add(Prompt(x)) 
     try:
         print("Beginning data seed...")
-        db.session.add(Author("firstname", "lastname", "firstlast@test.com", "12345", "The Test Dummy"))
+        db.session.add(Author("test@test.com", "1234", "Tester"))
         map(add_prompt, SEED_PROMPTS) 
         print("Seeding done.")
     except Exception as e:

@@ -46,11 +46,18 @@ def signup():
     password = request.form["password"]
     confirm = request.form["confirmpassword"]
     penname = request.form["penname"]
-    if(Author.validate_form(request.form)):
+
+    is_valid = Author.validate_form(request.form)
+    from pdb import set_trace
+    set_trace()
+    print(is_valid)
+    
+    if(is_valid):
         author = Author.add_new_author(email, password, penname)
         login_user(author)
         return redirect('/dashboard')
     else:
+        flash("Signup failed")
         return redirect('/')
 
 @app.route('/login', methods=["POST"])
