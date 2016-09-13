@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime as dt
 
 from passlib.hash import sha256_crypt as crypto
 
@@ -10,8 +10,8 @@ class Author(db.Model):
     __tablename__ = 'author'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     penname = db.Column(db.String(length=20))
-    first_name = db.Column(db.String(length=255))
-    last_name = db.Column(db.String(length=255))
+    first = db.Column(db.String(length=255))
+    last = db.Column(db.String(length=255))
     email = db.Column(db.String(length=255))
     password_hash = db.Column(db.String(length=255))
     last_login = db.Column(db.DateTime)
@@ -24,11 +24,11 @@ class Author(db.Model):
 
     def __init__(self, fn, ln, em, pw, pn="Author"):
         self.penname = pn
-        self.first_name = fn
-        self.last_name = ln
+        self.first = fn
+        self.last = ln
         self.email = em
         self.password_hash = crypto.encrypt(pw)
-        self.last_login = datetime.datetime.now()
+        self.last_login = dt.now()
         self.is_logged_in = True
 
     def is_authenticated(self):
@@ -43,9 +43,9 @@ class Author(db.Model):
     def get_id(self):
         return self.id
 
-    @staticmethod
-    def validate_email(email):
-        return Author.query.filter_by(email=email).first()
+    @classmethod
+    def validate_email(cls, email):
+        return cls.query.filter_by(email=email).first()
 
     def validate_password(self, password):
         return crypto.verify(password, self.password_hash)
@@ -58,6 +58,18 @@ class Piece(db.Model):
     is_published = db.Column(db.Boolean)
     date_started = db.Column(db.DateTime)
 
+    def __init__(self, a_id, text):
+        self.date_started = dt.now()
+        self.is_published = False
+        self.author_id = a_id
+        self.text = text
+
+    def __repr__(self):
+        return "%s-%s:\n%s\n" % (self.id, self.author_id, self.text)
+
+    @classmethod
+    def get_author(cls, self):
+        return cls.query.filter_by(id=self.author_id)
 
 class Prompt(db.Model):
     __tablename__ = "prompts"
