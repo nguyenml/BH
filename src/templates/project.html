@@ -1,16 +1,10 @@
 {% extends "basewithnav.html" %}
-<!DOCTYPE html>
-<html>
-
-{%block content%}
-
-
+    {%block content%}
     <div class = "cover">
-      <div id = "s_main"></div>
+        <div id = "s_main"></div>
         <script type="text/babel">
-
-        function Story() {
-          var text = "You work as a memory soother for the United States military that erases the most horrific memories from traumatized soldiers coming home from war. One of your patients subconscious holds on to a certain memory sequence no matter how hard you try. "
+function Story() {
+          var text = "FILLER TEXT"
           return (
             <div className="story">
 
@@ -108,11 +102,8 @@
             );
           }
         }
-
-
         ReactDOM.render(<Story/>, document.getElementById('s_main'));
         </script>
     </div>
-{% endblock %}
+    {% endblock %}
 
-  </html>
