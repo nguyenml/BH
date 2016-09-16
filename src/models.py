@@ -62,7 +62,7 @@ class Author(db.Model):
 
     @classmethod
     def validate_login(cls, email, password):
-        if(not cls.has_email(email)): 
+        if(not cls.has_email(email)):
             return False
         author = cls.get_by_email(email)
         if(cls.validate_password(password)):

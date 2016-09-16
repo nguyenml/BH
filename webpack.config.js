@@ -2,18 +2,19 @@ module.exports = {
     entry: "./src/static/js/index.js",
     output: {
         path: __dirname,
-        filename: "bundle.js"
+        filename: "bundle.jsx"
     },
     module: {
         loaders: [
           {
-   test: /\.js$/,
-   exclude: /(node_modules|bower_components)/,
-   loader: 'babel', // 'babel-loader' is also a valid name to reference
-   query: {
-     presets: ['es2015']
-   }
- }
+    test: /\.jsx?$/,         // Match both .js and .jsx files
+    exclude: /node_modules/,
+    loader: "babel",
+    query:
+      {
+        presets:['react']
+      }
+}
+}
         ]
-    }
-};
+  };
