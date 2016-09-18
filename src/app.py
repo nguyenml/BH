@@ -48,10 +48,6 @@ def signup():
     penname = request.form["penname"]
 
     is_valid = Author.validate_form(request.form)
-    from pdb import set_trace
-    set_trace()
-    print(is_valid)
-    
     if(is_valid):
         author = Author.add_new_author(email, password, penname)
         login_user(author)
