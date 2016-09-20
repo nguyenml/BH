@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
@@ -42,7 +42,7 @@ def userpage():
 
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
-   return "" 
+    return jsonify(Prompt.get_dailies())
 
 @app.route('/signup', methods=["POST"])
 def signup():

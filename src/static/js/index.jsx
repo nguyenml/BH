@@ -1,4 +1,8 @@
+import React from 'react';
+
 function Front() {
+    console.log($);
+    console.log(document.location.href);
     return (
         <div className="dashboard_front">
             <div className="header">
@@ -205,8 +209,13 @@ var Prompt = React.createClass({
         )
     }
 });
-//ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
-//    ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
-ReactDOM.render(<Story/>,document.getElementById('story'))
 
-//ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
+document.onload = function() {
+    var myLocation = window.location.href.split('/');
+    console.log(myLocation);
+    //ReactDOM.render(<Story/>,document.getElementById('story'));
+    //ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
+    //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
+    ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
+}
+
