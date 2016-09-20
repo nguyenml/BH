@@ -133,6 +133,9 @@ class Prompt(db.Model):
         db.session.add(new_prompt)
         db.session.commit()
 
+    def __repr__(self):
+        return self.prompt
+
 class SuggestedPrompt(db.Model):
     __tablename__ = "suggested_prompts"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

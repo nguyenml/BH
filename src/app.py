@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
 from src import app, login_manager
-from models import Author, SuggestedPrompt
+from models import Author, SuggestedPrompt, Prompt
 
 @app.route('/')
 def landing():
@@ -19,7 +19,7 @@ def dashboard():
 @app.route('/writing')
 @login_required
 def writing():
-    return render_template("writing.html")  
+    return render_template("writing.html")
 
 @app.route('/tavern')
 @login_required
@@ -42,7 +42,7 @@ def userpage():
 
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
-    return jsonify(Prompt.get_dailies())
+    return jsonify(map(lambda x: str(x),Prompt.get_dailies()))
 
 @app.route('/signup', methods=["POST"])
 def signup():
@@ -123,5 +123,3 @@ def unauthorized():
 @login_manager.user_loader
 def load_user(user_id):
     return Author.query.get(int(user_id))
-
-

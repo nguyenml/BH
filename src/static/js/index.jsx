@@ -1,8 +1,20 @@
-import React from 'react';
 
-function Front() {
-    console.log($);
-    console.log(document.location.href);
+//This function creates the front dashboard layout in templaye "dashboard.html"
+class Front extends React.Component {
+  constructor(){
+    super();
+    this.state = {result: []};
+  }
+
+  componentDidMount(){
+   this.serverRequest = $.post("/getprompts", function (result) {
+     this.setState({ result :result});
+     console.log(result)
+     console.log(this.state.result)
+   }.bind(this));
+  }
+
+  render(){
     return (
         <div className="dashboard_front">
             <div className="header">
@@ -42,8 +54,9 @@ function Front() {
                 <hr></hr>
                 <div className="current">
                     <div className="daily_box">
-                        <p>Prompt</p>
-                        <button className="btn dashboard_read">Read</button>
+
+                        <p>{this.state.prompts[0]}</p>
+                          <button className="btn dashboard_read">Read</button>
                         <button className="btn dashboard_read">Write</button>
                     </div>
                     <div className="daily_box">
@@ -56,18 +69,17 @@ function Front() {
                         <button className="btn dashboard_read">Read</button>
                         <button className="btn dashboard_read">Write</button>
                     </div>
-                    <div className="daily_box">
-                        <p>Prompt</p>
-                        <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
+
                 </div>
 
             </div>
         </div>
-    );
-}
+    )
+  }
+};
 
+
+//This function creates the class that renders the template for "reading.html"
 class Entry extends React.Component {
     constructor() {
         super();
@@ -91,12 +103,13 @@ class Entry extends React.Component {
     }
 };
 Entry.propTypes = {
-    title: React.PropTypes.string.isRequired
+    title: React.PropTypes.string.isRequired // Makes Title a property
 };
-Entry.defaultProps = {
+Entry.defaultProps = {  // initialize title
     title: "Title"
 };
 
+//renders the top stories of the particular prompt
 class Top_Stories extends React.Component {
     constructor() {
         super();
@@ -115,6 +128,7 @@ class Top_Stories extends React.Component {
     }
 }
 
+//renders the new entry for the prompt
 class DailyPrompt extends React.Component {
     constructor() {
         super();
@@ -135,6 +149,8 @@ class DailyPrompt extends React.Component {
 
 }
 
+
+//Switches between the top entries and the newest entries
 class Story extends React.Component {
     constructor() {
         super();
@@ -196,6 +212,7 @@ class Writing extends React.Component {
         )
     }
 }
+
 var Prompt = React.createClass({
     propTypes: {
         title: React.PropTypes.string.isRequired
@@ -209,13 +226,8 @@ var Prompt = React.createClass({
         )
     }
 });
+//ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
+//ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
+//ReactDOM.render(<Story/>,document.getElementById('story'))
 
-document.onload = function() {
-    var myLocation = window.location.href.split('/');
-    console.log(myLocation);
-    //ReactDOM.render(<Story/>,document.getElementById('story'));
-    //ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
-    //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
-    ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
-}
-
+ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
