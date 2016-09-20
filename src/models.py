@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from datetime import datetime as dt
 
 from passlib.hash import sha256_crypt as crypto
@@ -114,10 +115,23 @@ class Prompt(db.Model):
     __tablename__ = "prompts"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     prompt = db.Column(db.Text())
+    date_created = db.Column(db.DateTime)
 
     def __init__(self, prompt):
         self.prompt = prompt
+        self.date_created = dt.now()
 
+    @classmethod
+    def get_dailies(cls):
+        today = dt.today()
+        week_ago = today - timedelta(days=7)
+        return filter(lambda x: week_ago < x.date_created, cls.query.all())
+
+    @classmethod
+    def add_new_prompt(cls, prompt):
+        new_prompt = Prompt(prompt)
+        db.session.add(new_prompt)
+        db.session.commit()
 
 class SuggestedPrompt(db.Model):
     __tablename__ = "suggested_prompts"

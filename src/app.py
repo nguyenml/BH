@@ -40,6 +40,10 @@ def userpage():
 # API
 ###
 
+@app.route('/getprompts', methods=["POST"])
+def getprompts():
+   return "" 
+
 @app.route('/signup', methods=["POST"])
 def signup():
     email = request.form["email"]
