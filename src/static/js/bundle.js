@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports) {
 
-
+	
 	//This function creates the front dashboard layout in templaye "dashboard.html"
 	class Front extends React.Component {
 	    constructor() {
@@ -225,7 +225,7 @@
 	                        React.createElement(
 	                            "p",
 	                            null,
-	                            this.state.result[3]
+	                            this.state.result[4]
 	                        ),
 	                        React.createElement(
 	                            "button",
@@ -244,7 +244,26 @@
 	                        React.createElement(
 	                            "p",
 	                            null,
-	                            this.state.result[3]
+	                            this.state.result[5]
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Read"
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Write"
+	                        )
+	                    ),
+	                    React.createElement(
+	                        "div",
+	                        { className: "daily_box" },
+	                        React.createElement(
+	                            "p",
+	                            null,
+	                            this.state.result[6]
 	                        ),
 	                        React.createElement(
 	                            "button",
@@ -453,11 +472,33 @@
 	        );
 	    }
 	});
-	//ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
+
+	var inArray = function (element, array) {
+	    for (var i = array.length - 1; i < array.length; i++) {
+	        if (element.localeCompare(array[i]) === 0) {
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    }
+	};
+
+	//
 	//ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
 	//ReactDOM.render(<Story/>,document.getElementById('story'))
-
-	ReactDOM.render(React.createElement(Front, { pic: "../static/images/lion.jpg" }), document.getElementById('d_board'));
+	console.log(window.location.href.split('/'));
+	window.onload = function () {
+	    var url = window.location.href.split('/');
+	    console.log(inArray('dashboard', url));
+	    if (inArray("dashboard", url)) {
+	        ReactDOM.render(React.createElement(Front, { pic: "../static/images/lion.jpg" }), document.getElementById('d_board'));
+	    } else if (inArray("writing", url)) {
+	        ReactDOM.render(React.createElement(Writing, null), document.getElementById('writing_page'));
+	        ReactDOM.render(React.createElement(Prompt, { title: "ANALYSIS" }), document.getElementById('prompt'));
+	    } else if (inArray("reading", url)) {
+	        ReactDOM.render(React.createElement(Story, null), document.getElementById('story'));
+	    }
+	};
 
 /***/ }
 /******/ ]);

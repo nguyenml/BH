@@ -247,8 +247,33 @@ var Prompt = React.createClass({
         )
     }
 });
-//ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
+
+var inArray = function( element, array) {
+  for(var i = array.length - 1; i < array.length; i++ ){
+    if(element.localeCompare(array[i]) === 0){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
+
+//
 //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
 //ReactDOM.render(<Story/>,document.getElementById('story'))
-
-ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
+console.log(window.location.href.split('/'));
+window.onload = function(){
+  var url = window.location.href.split('/');
+  console.log(inArray('dashboard',url));
+  if(inArray("dashboard",url)){
+    ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
+  }
+  else if(inArray("writing",url)){
+  ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
+  ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
+  }
+  else if(inArray("reading",url)){
+  ReactDOM.render(<Story/>,document.getElementById('story'))
+  }
+};
