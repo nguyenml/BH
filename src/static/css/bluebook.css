@@ -319,8 +319,10 @@ DASHBOARD***********************************************************************
   margin-bottom: 25px;
   padding-top: 1px;
   padding-left: 10px;
-  height: 65px;
+  height: 80px;
   width: auto;
+  margin-left: -20px;
+  margin-right: -20px;
 
   background-color: #C4D1D1;
 }
@@ -329,9 +331,20 @@ DASHBOARD***********************************************************************
   text-align: left;
 }
 
+.progress{
+  display: flex;
+  flex-direction: row;
+  margin-left: -200px;
+  margin-right: -200px;
+  text-align: center;
+}
+
 .current{
   display: flex;
   flex-direction: row;
+  margin-left: -200px;
+  margin-right: -200px;
+  justify-content: center;
 }
 
 .daily_box{

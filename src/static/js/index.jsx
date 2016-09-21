@@ -70,6 +70,26 @@ class Front extends React.Component {
                         <button className="btn dashboard_read">Read</button>
                         <button className="btn dashboard_read">Write</button>
                     </div>
+                    <div className="daily_box">
+                        <p>{this.state.result[3]}</p>
+                        <button className="btn dashboard_read">Read</button>
+                        <button className="btn dashboard_read">Write</button>
+                    </div>
+                    <div className="daily_box">
+                        <p>{this.state.result[4]}</p>
+                        <button className="btn dashboard_read">Read</button>
+                        <button className="btn dashboard_read">Write</button>
+                    </div>
+                    <div className="daily_box">
+                        <p>{this.state.result[5]}</p>
+                        <button className="btn dashboard_read">Read</button>
+                        <button className="btn dashboard_read">Write</button>
+                    </div>
+                    <div className="daily_box">
+                        <p>{this.state.result[6]}</p>
+                        <button className="btn dashboard_read">Read</button>
+                        <button className="btn dashboard_read">Write</button>
+                    </div>
 
                 </div>
 

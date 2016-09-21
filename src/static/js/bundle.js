@@ -199,6 +199,63 @@
 	                            { className: "btn dashboard_read" },
 	                            "Write"
 	                        )
+	                    ),
+	                    React.createElement(
+	                        "div",
+	                        { className: "daily_box" },
+	                        React.createElement(
+	                            "p",
+	                            null,
+	                            this.state.result[3]
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Read"
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Write"
+	                        )
+	                    ),
+	                    React.createElement(
+	                        "div",
+	                        { className: "daily_box" },
+	                        React.createElement(
+	                            "p",
+	                            null,
+	                            this.state.result[3]
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Read"
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Write"
+	                        )
+	                    ),
+	                    React.createElement(
+	                        "div",
+	                        { className: "daily_box" },
+	                        React.createElement(
+	                            "p",
+	                            null,
+	                            this.state.result[3]
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Read"
+	                        ),
+	                        React.createElement(
+	                            "button",
+	                            { className: "btn dashboard_read" },
+	                            "Write"
+	                        )
 	                    )
 	                )
 	            )
