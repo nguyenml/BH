@@ -9,12 +9,13 @@ class Front extends React.Component {
   componentDidMount(){
    this.serverRequest = $.post("/getprompts", function (result) {
      this.setState({ result :result});
-     console.log(result)
-     console.log(this.state.result)
+     console.log(result[0])
    }.bind(this));
   }
 
   render(){
+    this.componentDidMount
+    console.log(this.state.result[0]);
     return (
         <div className="dashboard_front">
             <div className="header">
@@ -55,17 +56,17 @@ class Front extends React.Component {
                 <div className="current">
                     <div className="daily_box">
 
-                        <p>{this.state.prompts[0]}</p>
+                        <p>{this.state.result[0]}</p>
                           <button className="btn dashboard_read">Read</button>
                         <button className="btn dashboard_read">Write</button>
                     </div>
                     <div className="daily_box">
-                        <p>Prompt</p>
+                        <p>{this.state.result[1]}</p>
                         <button className="btn dashboard_read">Read</button>
                         <button className="btn dashboard_read">Write</button>
                     </div>
                     <div className="daily_box">
-                        <p>Prompt</p>
+                        <p>{this.state.result[2]}</p>
                         <button className="btn dashboard_read">Read</button>
                         <button className="btn dashboard_read">Write</button>
                     </div>

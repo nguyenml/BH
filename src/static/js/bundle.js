@@ -53,13 +53,15 @@
 	    }
 
 	    componentDidMount() {
-	        this.serverRequest = $.post("/getprompts", function (response) {
-	            this.setState({ prompts: response });
-	            console.log(response);
+	        this.serverRequest = $.post("/getprompts", function (result) {
+	            this.setState({ result: result });
+	            console.log(result[0]);
 	        }.bind(this));
 	    }
 
 	    render() {
+	        this.componentDidMount;
+	        console.log(this.state.result[0]);
 	        return React.createElement(
 	            "div",
 	            { className: "dashboard_front" },
@@ -147,7 +149,7 @@
 	                        React.createElement(
 	                            "p",
 	                            null,
-	                            this.state.prompts[0]
+	                            this.state.result[0]
 	                        ),
 	                        React.createElement(
 	                            "button",
@@ -166,7 +168,7 @@
 	                        React.createElement(
 	                            "p",
 	                            null,
-	                            "Prompt"
+	                            this.state.result[1]
 	                        ),
 	                        React.createElement(
 	                            "button",
@@ -185,7 +187,7 @@
 	                        React.createElement(
 	                            "p",
 	                            null,
-	                            "Prompt"
+	                            this.state.result[2]
 	                        ),
 	                        React.createElement(
 	                            "button",
