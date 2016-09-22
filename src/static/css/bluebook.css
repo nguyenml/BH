@@ -241,6 +241,92 @@ nav ul li button {
     font-style: normal;
 }
 
+.promptOfTheDay{
+  text-align: center;
+  font-weight: bold;
+  font-size: 46px;
+}
+
+.selectionBox{
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  -webkit-box-pack: center;
+  justify-content: center;
+  margin: 30px auto auto 0;
+  width: 950px;
+  height: auto;
+  padding-bottom: 70px;
+  display: flex;
+}
+
+div.p-box{
+font-size: 20px;
+width: 200px;
+height: 200px;
+text-align: center;
+background-color: rgba(0, 0, 0, 0.7);
+border-radius: 69px 69px 69px 69px;
+color: #FFF;
+order: 1;
+padding: 30px;
+margin: 15px;
+}
+
+.writing_page_prompts{
+  font-size: 20px;
+}
+
+.p-box { -webkit-transition: all .4s ease-in-out; }
+.p-box:hover { -webkit-transform: scale(1.3); }
+
+.genre{
+  width: 300px;
+  padding: 30px;
+  margin: 20px;
+  text-align: center;
+}
+
+.wordLimit{
+  width: 300px;
+  padding: 30px;
+  margin: 20px;
+  text-align: center;
+}
+
+div.more{
+  margin-top: 150px;
+  display: flex;
+  font-size: 32px;
+  text-align: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+
+p.more{
+  padding-right: 8px;
+}
+
+p.more:hover{
+  color: #262626;
+}
+
+a.more{
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+
+.fa-arrow-right{
+  position: relative;
+  top: 3px;
+}
+
+.ph:hover{
+  text-decoration: none;
+}
+
 
 /*************************************************************************************************************************************************************************************************************
 STORYPAGE****************************************************************************************************************************************************************************************************/
@@ -455,20 +541,7 @@ section{
     font-family: hfont;
     src: url('fonts/FanwoodText.otf');
 }
-.s_art {
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  flex-grow: 1;
-  -webkit-box-pack: center;
-  justify-content: center;
-  margin: 30px auto 0;
-  width: 950px;
-  height: auto;
-  padding-bottom:20px;
-    font-family: hfont;
-}
+
 .story_title {
     text-align: center;
     font-size: 30px;
@@ -523,7 +596,10 @@ section{
 
 .daily_prompt{
   text-align: center;
+  display: flex;
+  flex-direction: row;
 }
+
 
 #rct {
     display: flex;
@@ -578,6 +654,15 @@ section{
     height: auto;
     padding-bottom: 70px;
     font-family: hfont;
+}
+
+.prompt_tab{
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left:
 }
 .cover-comments{
   -webkit-box-orient: horizontal;
