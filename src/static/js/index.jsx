@@ -1,3 +1,25 @@
+/* UTILITIES */
+
+var IO = function() {
+  var saveText = function(pid) {
+    var data = {
+      prompt_id: pid,
+      text: $('#text').text(),
+    };
+    $.post('/save',
+      data=data,
+      function(response, status_code, xhr){
+        if(response === 'SUCCESS'){
+        } else {
+          console.log("Save failed.");
+        }
+      });
+  };
+
+  return {
+    saveText: saveText,
+  };
+}();
 
 //This function creates the front dashboard layout in templaye "dashboard.html"
 class Front extends React.Component {
@@ -162,23 +184,24 @@ class Prompts extends React.Component{
     this.prompt = props.prompt;
     this.state = { promptChoice: 0} ;
     this.handleChoice = this.handleChoice.bind(this);
-}
-    handleChoice(){
-      var text = $.post("/getprompts", function (response) {
+  }
+  
+  handleChoice(){
+    var text = $.post("/getprompts", function (response) {
       this.setState({ });
     });
     console.log("test");
-    }
+  }
 
-    render() {
-      return(
+  render() {
+    return(
       <div className="prompt_tab">
         <div onClick ={this.handleChoice} className="daily_box">
               <p>{this.prompt}</p>
         </div>
       </div>
-      )
-    }
+    )
+  }
 }
 
 class PromptsFront extends React.Component{
@@ -210,13 +233,17 @@ class PromptsWriting extends React.Component{
     super(props);
   }
 
-    render() {
-    //  var isShown = this.state.writingArea ? 0: 1;
-      return(
+  render() {
+    return(
       <div>
-      <div className="promptInfo" onClick= {this.props.setPID}>
-            <div className="p-box"><h1 className = "writing_page_prompts">{this.props.prompt}{this.props.pid}</h1></div>
-      </div>
+        <div className="promptInfo" onClick= {this.props.setPID}>
+          <div className="p-box">
+            <h1 className="writing_page_prompts">
+              {this.props.prompt}
+              {this.props.pid}
+            </h1>
+          </div>
+        </div>
       </div>
     );
     }
@@ -282,8 +309,7 @@ class WritingPage extends React.Component{
   }
 
   setPID(pid, event){
-    console.log(pid);
-    return(pid);
+    IO.saveText(pid);
   }
 
   render(){
@@ -357,31 +383,6 @@ var inArray = function( element, array) {
       return false;
     }
   }
-}
-
-var IO = function() {
-    var saveText = function(aid, pid, text) {
-        var data = {
-                    author_id: aid,
-                    piece_id: pid,
-                    text: text
-                    };
-        $.post('/saving',
-                data=data,
-                function(response, status_code, xhr){
-                    if(response === 'success'){
-                       console.log("Saved");
-                    }
-                    else {
-                        console.log("Save failed.");
-                        console.log(response);
-                        console.log(status_code);
-                    }
-                });
-    };
-
-    var autoSave = window.setTimeout(autosave(1,1, ""), 10000);
-
 }
 
 

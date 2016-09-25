@@ -110,7 +110,7 @@ class Piece(db.Model):
         self.prompt_id = pid
 
     def __repr__(self):
-        return "%s-%s:\n%s\n" % (self.id, self.author_id, self.text)
+        return "Prompt#:%s\nAuthor#:%s\nText:%s\n" % (self.prompt_id, self.author_id, self.text)
 
     def update(self, text):
         self.text = text
@@ -118,24 +118,15 @@ class Piece(db.Model):
         db.session.commit()
 
     @classmethod
-    def get_piece(author_id=None, piece_id=None):
-        if(author_id and piece_id):
-            return cls.query.filter_by(author_id=author_id, piece_id=piece_id).first()
-        elif(piece_id):
-            return cls.query.filter_by(piece_id=piece_id).first()
+    def get_piece(cls, author_id=None, prompt_id=None):
+        if(author_id and prompt_id):
+            return cls.query.filter_by(author_id=author_id, prompt_id=prompt_id).first()
+        elif(prompt_id):
+            return cls.query.filter_by(prompt_id=prompt_id).first()
         elif(author_id):
             return cls.query.filter_by(author_id=author_id).first()
         else:
             return []
-
-    @classmethod
-    def get_by_author(cls, self):
-        return cls.query.filter_by(author_id=self.author_id).first()
-
-    @classmethod
-    def get_by_piece(cls, pid):
-        return cls.query.filter_by(id=pid).first()
-
 
 class Prompt(db.Model):
     __tablename__ = "prompts"

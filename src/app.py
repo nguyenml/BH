@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
 from src import app, login_manager
-from models import Author, SuggestedPrompt, Prompt
+from models import Author, SuggestedPrompt, Prompt, Piece
 
 @app.route('/')
 def landing():
@@ -52,18 +52,15 @@ def userpage():
 @app.route("/save", methods=["POST"])
 @login_required
 def save():
-    a_id = request.form['author_id']
-    p_id = request.form['piece_id']
+    p_id = request.form['prompt_id']
     text = request.form['text']
-    print(a_id, p_id, text)
-    piece = Piece.get_piece(author_id=a_id, piece_id=p_id)
+    piece = Piece.get_piece(prompt_id=p_id)
     if(piece):
         piece.update(text)
         print(piece)
-        return "success"
+        return "SUCCESS"
     else:
-        print("fail")
-        return "fail"
+        return "FAIL"
 
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
