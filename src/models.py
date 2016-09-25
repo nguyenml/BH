@@ -118,6 +118,12 @@ class Piece(db.Model):
         db.session.commit()
 
     @classmethod
+    def add_new_piece(cls, a_id, text, p_id):
+        piece = Piece(a_id, text, p_id)
+        db.session.add(piece)
+        db.session.commit()
+
+    @classmethod
     def get_piece(cls, author_id=None, prompt_id=None):
         if(author_id and prompt_id):
             return cls.query.filter_by(author_id=author_id, prompt_id=prompt_id).first()

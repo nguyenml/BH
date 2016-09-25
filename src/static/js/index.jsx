@@ -16,8 +16,37 @@ var IO = function() {
       });
   };
 
+  var loadText = function(pid) {
+    var response = ""
+    var data = {
+      prompt_id: pid,
+    };
+    $.post('/load',
+      data=data,
+      function(text, status_code, xhr){
+        if(status_code === 'success'){
+          response = text;
+          console.log(text);
+        } else {
+          console.log('load fail');
+        }
+      });
+    return response;
+  };
+
+  var autoSave = null;
+  var setAutoSave = function(pid){
+    window.clearInterval(autoSave);
+    autoSave = window.setInterval(function(){
+      console.log(pid);
+    }, 10000);
+    console.log("Autosave set to prompt " + pid);
+  }
+
   return {
     saveText: saveText,
+    loadText: loadText,
+    setAutoSave: setAutoSave,
   };
 }();
 
@@ -299,17 +328,21 @@ class WritingPage extends React.Component{
   constructor(){
     super();
     this.state = { result: [], pid: [] };
+    this.autoSave = null;
   }
 
   componentWillMount(){
    this.serverRequest = $.post("/getprompts", function (result) {
      this.setState({ result:result });
-     console.log(this.state.result);
    }.bind(this));
   }
 
   setPID(pid, event){
-    IO.saveText(pid);
+    var text = IO.loadText(pid);
+    if(text.length > 0){
+      $("#text").text(text);
+    }
+    IO.setAutoSave(pid);
   }
 
   render(){
@@ -337,6 +370,8 @@ class WritingArea extends React.Component {
         this.pid = props.pid;
         this.state = {pid: props.pid}
     }
+
+
 
     render() {
       console.log(this.state.pid);

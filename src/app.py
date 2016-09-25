@@ -52,15 +52,30 @@ def userpage():
 @app.route("/save", methods=["POST"])
 @login_required
 def save():
+    try:
+        p_id = request.form['prompt_id']
+        text = request.form['text']
+        piece = Piece.get_piece(author_id=current_user.id, prompt_id=p_id)
+        if(piece):
+            piece.update(text)
+            print(piece)
+            return "SUCCESS"
+        else:
+            Piece.add_new_piece(current_user.id, text, p_id)
+            return "SUCCESS"
+    except Exception as e:
+        print(e)
+        return "FAILURE"
+
+@app.route("/load", methods=["POST"])
+@login_required
+def load():
     p_id = request.form['prompt_id']
-    text = request.form['text']
-    piece = Piece.get_piece(prompt_id=p_id)
+    piece = Piece.get_piece(author_id=current_user.id, prompt_id=p_id)
     if(piece):
-        piece.update(text)
-        print(piece)
-        return "SUCCESS"
+        return piece.text
     else:
-        return "FAIL"
+        return ""
 
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
