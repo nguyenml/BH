@@ -17,9 +17,18 @@ def dashboard():
     return render_template('dashboard.html')
 
 @app.route('/writing')
+@app.route('/writing/<pid>')
 @login_required
-def writing():
-    return render_template("writing.html")
+def writing(pid=None):
+    if not pid:
+        return render_template("writing.html")
+    else:
+        if(current_user.has_piece_for_pid(pid)):
+            return render_template("writing.html")
+            #TODO: Somehow pass in pid/authorid for ajax save
+        else:
+            new_piece = Piece(current_user.id, "", pid)
+            return render_template("writing.html")
 
 @app.route('/tavern')
 @login_required
@@ -39,6 +48,22 @@ def userpage():
 ###
 # API
 ###
+
+@app.route("/save", methods=["POST"])
+@login_required
+def save():
+    a_id = request.form['author_id']
+    p_id = request.form['piece_id']
+    text = request.form['text']
+    print(a_id, p_id, text)
+    piece = Piece.get_piece(author_id=a_id, piece_id=p_id)
+    if(piece):
+        piece.update(text)
+        print(piece)
+        return "success"
+    else:
+        print("fail")
+        return "fail"
 
 @app.route('/getprompts', methods=["POST"])
 def getprompts():

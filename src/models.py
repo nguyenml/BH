@@ -90,6 +90,9 @@ class Author(db.Model):
             return False
         return True
 
+    def has_piece_for_pid(self, pid):
+        return Piece.query.filter_by(author_id=self.id, id=pid).first()
+
 class Piece(db.Model):
     __tablename__ = "pieces"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -109,10 +112,29 @@ class Piece(db.Model):
     def __repr__(self):
         return "%s-%s:\n%s\n" % (self.id, self.author_id, self.text)
 
-    @classmethod
-    def get_author(cls, self):
-        return cls.query.filter_by(id=self.author_id)
+    def update(self, text):
+        self.text = text
+        db.session.add(self)
+        db.session.commit()
 
+    @classmethod
+    def get_piece(author_id=None, piece_id=None):
+        if(author_id and piece_id):
+            return cls.query.filter_by(author_id=author_id, piece_id=piece_id).first()
+        elif(piece_id):
+            return cls.query.filter_by(piece_id=piece_id).first()
+        elif(author_id):
+            return cls.query.filter_by(author_id=author_id).first()
+        else:
+            return []
+
+    @classmethod
+    def get_by_author(cls, self):
+        return cls.query.filter_by(author_id=self.author_id).first()
+
+    @classmethod
+    def get_by_piece(cls, pid):
+        return cls.query.filter_by(id=pid).first()
 
 
 class Prompt(db.Model):

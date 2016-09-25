@@ -274,6 +274,7 @@ class Writing extends React.Component {
         this.pid = props.pid;
     }
 
+
     render() {
         return (
             <div>
@@ -319,6 +320,31 @@ var inArray = function( element, array) {
     }
   }
 }
+
+var IO = function() {
+    var saveText = function(aid, pid, text) {
+        var data = {
+                    author_id: aid,
+                    piece_id: pid,
+                    text: text
+                    };
+        $.post('/saving',
+                data=data,
+                function(response, status_code, xhr){
+                    if(response === 'success'){
+                       console.log("Saved");
+                    }
+                    else {
+                        console.log("Save failed.");
+                        console.log(response);
+                        console.log(status_code);
+                    } 
+                });
+    };
+    
+    var autoSave = window.setTimeout(autosave(1,1, ""), 10000);
+
+}():
 
 class WritingSelection extends React.Component{
   constructor(){
