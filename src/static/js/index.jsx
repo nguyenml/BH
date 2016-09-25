@@ -267,7 +267,45 @@ class Story extends React.Component {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class Writing extends React.Component {
+
+class WritingPage extends React.Component{
+  constructor(){
+    super();
+    this.state = { result: [], pid: [] };
+  }
+
+  componentWillMount(){
+   this.serverRequest = $.post("/getprompts", function (result) {
+     this.setState({ result:result });
+     console.log(this.state.result);
+   }.bind(this));
+  }
+
+  setPID(pid, event){
+    console.log(pid);
+    return(pid);
+  }
+
+  render(){
+    var tab = [];
+    var writingArea = null;
+    for (var i = 0; i < this.state.result.length; i++){
+      tab.push(<PromptsWriting setPID = {this.setPID.bind(this, this.state.result[i].pid)} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
+      writingArea = <WritingArea pid={this.state.result[i].pid} />
+    }
+    return(
+        <div>
+            <h1 className="promptOfTheDay">PROMPTINFO</h1>
+            <div className="selectionBox">
+                {tab}
+            </div>
+            {writingArea}
+        </div>
+    )
+  }
+}
+
+class WritingArea extends React.Component {
     constructor(props) {
         super(props);
         this.pid = props.pid;
@@ -346,41 +384,7 @@ var IO = function() {
 
 }
 
-class WritingSelection extends React.Component{
-  constructor(){
-    super();
-    this.state = { result: [], pid: []};
-  }
 
-  componentDidMount(){
-   this.serverRequest = $.post("/getprompts", function (result) {
-     this.setState({ result :result});
-     console.log("result");
-   }.bind(this));
-
-  }
-
-  setPID(pid, event){
-    console.log(pid);
-    return(pid);
-  }
-
-  render(){
-    var tab = [];
-    for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsWriting setPID = {this.setPID.bind(this, this.state.result[i].pid)} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
-    }
-    return(
-        <div>
-            <h1 className="promptOfTheDay">PROMPTINFO</h1>
-            <div className="selectionBox" >
-                {tab}
-            </div>
-            <Writing pid = {this.state.result[6].pid} />
-        </div>
-    )
-  }
-}
 
 //
 //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
@@ -391,9 +395,9 @@ window.onload = function(){
     ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
   }
   else if(inArray("writing",url)){
-  ReactDOM.render(<WritingSelection/>, document.getElementById('writing_page'));
+    ReactDOM.render(<WritingPage/>, document.getElementById('writing_page'));
   }
   else if(inArray("reading",url)){
-  ReactDOM.render(<Story/>,document.getElementById('story'))
+    ReactDOM.render(<Story/>,document.getElementById('story'))
   }
 };
