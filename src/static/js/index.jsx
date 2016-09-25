@@ -192,7 +192,6 @@ class PromptsFront extends React.Component{
       var text = $.post("/getprompts", function (response) {
       this.setState({ });
     });
-    console.log("test");
     }
 
     render() {
@@ -209,15 +208,15 @@ class PromptsFront extends React.Component{
 class PromptsWriting extends React.Component{
   constructor(props){
     super(props);
-    this.prompt = props.prompt;
-    this.pid = props.pid;
-}
+  }
 
     render() {
+    //  var isShown = this.state.writingArea ? 0: 1;
       return(
-      <div className="promptInfo">
-          <a href = {'/'} className = "ph">
-            <div className="p-box"><h1 className = "writing_page_prompts">{this.prompt}{this.pid}</h1></div></a>
+      <div>
+      <div className="promptInfo" onClick= {this.props.setPID}>
+            <div className="p-box"><h1 className = "writing_page_prompts">{this.props.prompt}{this.props.pid}</h1></div>
+      </div>
       </div>
     );
     }
@@ -272,10 +271,11 @@ class Writing extends React.Component {
     constructor(props) {
         super(props);
         this.pid = props.pid;
+        this.state = {pid: props.pid}
     }
 
-
     render() {
+      console.log(this.state.pid);
         return (
             <div>
                 <div className="writing_head">
@@ -338,19 +338,18 @@ var IO = function() {
                         console.log("Save failed.");
                         console.log(response);
                         console.log(status_code);
-                    } 
+                    }
                 });
     };
-    
+
     var autoSave = window.setTimeout(autosave(1,1, ""), 10000);
 
-}():
+}
 
 class WritingSelection extends React.Component{
   constructor(){
     super();
     this.state = { result: [], pid: []};
-    this.handleChoice = this.handleChoice.bind(this);
   }
 
   componentDidMount(){
@@ -358,25 +357,27 @@ class WritingSelection extends React.Component{
      this.setState({ result :result});
      console.log("result");
    }.bind(this));
+
   }
 
-  handleChoice(){
-    this.setState({pid:this.state.result.pid})
+  setPID(pid, event){
+    console.log(pid);
+    return(pid);
   }
 
   render(){
     var tab = [];
     for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsWriting prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
+      tab.push(<PromptsWriting setPID = {this.setPID.bind(this, this.state.result[i].pid)} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
     }
     return(
         <div>
             <h1 className="promptOfTheDay">PROMPTINFO</h1>
-            <div className="selectionBox">
+            <div className="selectionBox" >
                 {tab}
-
-                </div>
             </div>
+            <Writing pid = {this.state.result[6].pid} />
+        </div>
     )
   }
 }
