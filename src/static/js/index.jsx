@@ -9,13 +9,14 @@ class Front extends React.Component {
   componentDidMount(){
    this.serverRequest = $.post("/getprompts", function (result) {
      this.setState({ result :result});
-     console.log(result[0])
    }.bind(this));
   }
 
   render(){
-    this.componentDidMount
-    console.log(this.state.result[0]);
+    var tab = [];
+    for (var i = 0; i < this.state.result.length; i++){
+      tab.push(<PromptsFront prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
+    }
     return (
         <div className="dashboard_front">
             <div className="header">
@@ -54,43 +55,7 @@ class Front extends React.Component {
                 </div>
                 <hr></hr>
                 <div className="current">
-                    <div className="daily_box">
-
-                        <p>{this.state.result[0]}</p>
-                          <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
-                    <div className="daily_box">
-                        <p>{this.state.result[1]}</p>
-                        <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
-                    <div className="daily_box">
-                        <p>{this.state.result[2]}</p>
-                        <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
-                    <div className="daily_box">
-                        <p>{this.state.result[3]}</p>
-                        <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
-                    <div className="daily_box">
-                        <p>{this.state.result[4]}</p>
-                        <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
-                    <div className="daily_box">
-                        <p>{this.state.result[5]}</p>
-                        <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
-                    <div className="daily_box">
-                        <p>{this.state.result[6]}</p>
-                        <button className="btn dashboard_read">Read</button>
-                        <button className="btn dashboard_read">Write</button>
-                    </div>
-
+                    {tab}
                 </div>
 
             </div>
@@ -143,7 +108,7 @@ class Top_Stories extends React.Component {
                     <h1 className="top_story_header">Top Stories Today</h1>
                     <hr></hr>
                 </div>
-                <Entry title="The Second One" text=" " author="{{firstname}}{{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016"/>
+                <Entry title="The Second One" text="         asdasdfasdfasfafasdfasdfafafas" author="{{firstname}}{{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016"/>
             </div>
         )
     }
@@ -151,17 +116,38 @@ class Top_Stories extends React.Component {
 
 //renders the new entry for the prompt
 class DailyPrompt extends React.Component {
-    constructor() {
-        super();
-    }
+  constructor(){
+    super();
+    this.state = {
+      prompts: [],
+      promptChoice: 0
+    };
+    this.handleChoice = this.handleChoice.bind(this);
+  }
+
+  handleChoice(){
+    var text = $.post("/getprompts", function (response) {
+    this.setState({"text": text })
+  });
+  console.log(this.state.text);
+  }
+
+  componentDidMount(){
+   this.serverRequest = $.post("/getprompts", function (response) {
+     this.setState({ prompts : response});
+   }.bind(this));
+  }
 
     render() {
+        var tab = [];
+        for (var i = 0; i < this.state.prompts.length; i++){
+          tab.push(<Prompts prompt ={this.state.prompts[i].text} pid ={this.state.prompts[i].pid} />)
+        }
         return (
             <div>
-                <div className="daily_prompt">
-                    <h1 className="daily">Prisoners won't try to excape if they don't even know they are in prison.</h1>
-                    <hr></hr>
-                </div>
+              <div className="daily_prompt">
+                {tab}
+            </div>
                 <Entry title="The Biggest One" text="" author="{{story}} {{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016"/>
             </div>
 
@@ -169,6 +155,74 @@ class DailyPrompt extends React.Component {
     }
 
 }
+
+class Prompts extends React.Component{
+  constructor(props){
+    super(props);
+    this.prompt = props.prompt;
+    this.state = { promptChoice: 0} ;
+    this.handleChoice = this.handleChoice.bind(this);
+}
+    handleChoice(){
+      var text = $.post("/getprompts", function (response) {
+      this.setState({ });
+    });
+    console.log("test");
+    }
+
+    render() {
+      return(
+      <div className="prompt_tab">
+        <div onClick ={this.handleChoice} className="daily_box">
+              <p>{this.prompt}</p>
+        </div>
+      </div>
+      )
+    }
+}
+
+class PromptsFront extends React.Component{
+  constructor(props){
+    super(props);
+    this.prompt = props.prompt;
+    this.state = { promptChoice: 0} ;
+    this.handleChoice = this.handleChoice.bind(this);
+}
+    handleChoice(){
+      var text = $.post("/getprompts", function (response) {
+      this.setState({ });
+    });
+    console.log("test");
+    }
+
+    render() {
+      return(
+      <div className="daily_box">
+          <p>{this.prompt}</p>
+          <button className="btn dashboard_read">Read</button>
+          <button className="btn dashboard_read">Write</button>
+      </div>
+      )
+    }
+}
+
+class PromptsWriting extends React.Component{
+  constructor(props){
+    super(props);
+    this.prompt = props.prompt;
+    this.pid = props.pid;
+}
+
+    render() {
+      return(
+      <div className="promptInfo">
+          <a href = {'/'} className = "ph">
+            <div className="p-box"><h1 className = "writing_page_prompts">{this.prompt}{this.pid}</h1></div></a>
+      </div>
+    );
+    }
+}
+
 
 
 //Switches between the top entries and the newest entries
@@ -210,10 +264,14 @@ class Story extends React.Component {
         )
     }
 };
-/////////////////////////////////////////////
+/////////////////////////////////////////////WRITING//////////////////////////////////////////////////////////------------------------------------------------------------------------------------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Writing extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.pid = props.pid;
     }
 
     render() {
@@ -226,9 +284,10 @@ class Writing extends React.Component {
                 </div>
                 <section className="writingpage_section">
                     <article id="text" contentEditable="true" className="content writingpage_article"></article>
-
                 </section>
-            </div>
+                <Prompt/>
+              </div>
+
 
         )
     }
@@ -243,7 +302,9 @@ var Prompt = React.createClass({
     },
     render: function() {
         return (
-            <h1>{this.props.title}</h1>
+        <div className = "prompt">
+            <h1>ANALYSIS</h1>
+            </div>
         )
     }
 });
@@ -259,19 +320,51 @@ var inArray = function( element, array) {
   }
 }
 
+class WritingSelection extends React.Component{
+  constructor(){
+    super();
+    this.state = { result: [], pid: []};
+    this.handleChoice = this.handleChoice.bind(this);
+  }
+
+  componentDidMount(){
+   this.serverRequest = $.post("/getprompts", function (result) {
+     this.setState({ result :result});
+     console.log("result");
+   }.bind(this));
+  }
+
+  handleChoice(){
+    this.setState({pid:this.state.result.pid})
+  }
+
+  render(){
+    var tab = [];
+    for (var i = 0; i < this.state.result.length; i++){
+      tab.push(<PromptsWriting prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
+    }
+    return(
+        <div>
+            <h1 className="promptOfTheDay">PROMPTINFO</h1>
+            <div className="selectionBox">
+                {tab}
+
+                </div>
+            </div>
+    )
+  }
+}
+
 //
 //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
 //ReactDOM.render(<Story/>,document.getElementById('story'))
-console.log(window.location.href.split('/'));
 window.onload = function(){
   var url = window.location.href.split('/');
-  console.log(inArray('dashboard',url));
   if(inArray("dashboard",url)){
     ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
   }
   else if(inArray("writing",url)){
-  ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
-  ReactDOM.render(<Prompt title = "ANALYSIS" />,document.getElementById('prompt'));
+  ReactDOM.render(<WritingSelection/>, document.getElementById('writing_page'));
   }
   else if(inArray("reading",url)){
   ReactDOM.render(<Story/>,document.getElementById('story'))

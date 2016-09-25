@@ -42,7 +42,7 @@ def userpage():
 
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
-    return jsonify(map(lambda x: str(x),Prompt.get_dailies()))
+    return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),Prompt.get_dailies()))
 
 @app.route('/signup', methods=["POST"])
 def signup():

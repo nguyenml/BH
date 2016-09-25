@@ -97,12 +97,14 @@ class Piece(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     is_published = db.Column(db.Boolean)
     date_started = db.Column(db.DateTime)
+    prompt_id = db.Column(db.Integer, db.ForeignKey('prompts.id'))
 
-    def __init__(self, a_id, text):
+    def __init__(self, a_id, text, pid):
         self.date_started = dt.now()
         self.is_published = False
         self.author_id = a_id
         self.text = text
+        self.prompt_id = pid
 
     def __repr__(self):
         return "%s-%s:\n%s\n" % (self.id, self.author_id, self.text)
@@ -110,6 +112,8 @@ class Piece(db.Model):
     @classmethod
     def get_author(cls, self):
         return cls.query.filter_by(id=self.author_id)
+
+
 
 class Prompt(db.Model):
     __tablename__ = "prompts"
@@ -125,7 +129,7 @@ class Prompt(db.Model):
     def get_dailies(cls):
         today = dt.today()
         week_ago = today - timedelta(days=7)
-        return filter(lambda x: week_ago < x.date_created, cls.query.all())
+        return filter(lambda x: week_ago < x.date_created, cls.query.all())[:7]
 
     @classmethod
     def add_new_prompt(cls, prompt):

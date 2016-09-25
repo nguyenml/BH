@@ -7,7 +7,7 @@ from passlib.hash import sha256_crypt as crypto
 from src import db
 from src.app import app
 from src.helpers import dbcommit, confirm
-from src.models import db, Author, Prompt
+from src.models import db, Author, Prompt, Piece
 
 SQL_DATABASE = "mysql"
 SQL_USERNAME = "root"
@@ -31,6 +31,7 @@ SEED_PROMPTS = ["Before I was born, that lady was studying.",
         "Oh cruelty . . . time to break.",
         "Break education as long as you are crying.",
         "This is a story that concerns education, getting old, and a drought - and it's a story worth repeating."]
+SEED_PIECES = ["ip","sum","es","pot","leo","osc","ter","byt","mot","ret"]
 
 def get_config():
     config = {}
@@ -85,10 +86,13 @@ def run_tests():
 @dbcommit
 def seed_db():
     add_prompt = lambda x: db.session.add(Prompt(x))
+    add_piece = lambda x: db.session.add(Piece(1,x[1],x[0]+1))
     try:
         print("Beginning data seed...")
         db.session.add(Author("test@test.com", "1234", "Tester"))
         map(add_prompt, SEED_PROMPTS)
+        db.session.commit()
+        map(add_piece, enumerate(SEED_PIECES))
         print("Seeding done.")
     except Exception as e:
         print(e)
