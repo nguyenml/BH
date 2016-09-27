@@ -17,7 +17,6 @@ var IO = function() {
   };
 
   var loadText = function(pid) {
-    var response = ""
     var data = {
       prompt_id: pid,
     };
@@ -25,21 +24,19 @@ var IO = function() {
       data=data,
       function(text, status_code, xhr){
         if(status_code === 'success'){
-          response = text;
-          console.log(text);
+          $('#text').text(text);
         } else {
           console.log('load fail');
         }
       });
-    return response;
   };
 
   var autoSave = null;
   var setAutoSave = function(pid){
     window.clearInterval(autoSave);
     autoSave = window.setInterval(function(){
-      console.log(pid);
-    }, 10000);
+      saveText(pid);
+    }, 500);
     console.log("Autosave set to prompt " + pid);
   }
 
@@ -339,9 +336,6 @@ class WritingPage extends React.Component{
 
   setPID(pid, event){
     var text = IO.loadText(pid);
-    if(text.length > 0){
-      $("#text").text(text);
-    }
     IO.setAutoSave(pid);
   }
 
