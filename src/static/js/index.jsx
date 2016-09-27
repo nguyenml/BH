@@ -37,7 +37,6 @@ var IO = function() {
     autoSave = window.setInterval(function(){
       saveText(pid);
     }, 500);
-    console.log("Autosave set to prompt " + pid);
   }
 
   return {
@@ -177,7 +176,6 @@ class DailyPrompt extends React.Component {
     var text = $.post("/getprompts", function (response) {
     this.setState({"text": text })
   });
-  console.log(this.state.text);
   }
 
   componentDidMount(){
@@ -216,7 +214,6 @@ class Prompts extends React.Component{
     var text = $.post("/getprompts", function (response) {
       this.setState({ });
     });
-    console.log("test");
   }
 
   render() {
@@ -368,7 +365,6 @@ class WritingArea extends React.Component {
 
 
     render() {
-      console.log(this.state.pid);
         return (
             <div>
                 <div className="writing_head">

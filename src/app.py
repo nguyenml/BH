@@ -58,7 +58,6 @@ def save():
         piece = Piece.get_piece(author_id=current_user.id, prompt_id=p_id)
         if(piece):
             piece.update(text)
-            print(piece)
             return "SUCCESS"
         else:
             Piece.add_new_piece(current_user.id, text, p_id)
