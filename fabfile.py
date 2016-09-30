@@ -58,7 +58,7 @@ def safestart(host="0.0.0.0", port=5000):
     app.config['SQL_DATABASE'] = SQL_DATABASE
     app.config['SQL_USERNAME'] = SQL_USERNAME
     app.config['SQL_PASSWORD'] = SQL_PASSWORD
-    app.run(host, port)
+    app.run(host, port, threaded=True)
 
 def init_db():
     try:

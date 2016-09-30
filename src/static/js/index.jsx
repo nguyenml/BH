@@ -1,6 +1,8 @@
 /* UTILITIES */
 
 var IO = function() {
+  SAVE_INTERVAL = 2500;
+
   var saveText = function(pid) {
     var data = {
       prompt_id: pid,
@@ -36,7 +38,7 @@ var IO = function() {
     window.clearInterval(autoSave);
     autoSave = window.setInterval(function(){
       saveText(pid);
-    }, 500);
+    }, SAVE_INTERVAL);
   }
 
   return {
@@ -155,7 +157,7 @@ class Top_Stories extends React.Component {
                     <h1 className="top_story_header">Top Stories Today</h1>
                     <hr></hr>
                 </div>
-                <Entry title="The Second One" text="         asdasdfasdfasfafasdfasdfafafas" author="{{firstname}}{{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016"/>
+                <Entry title="The Second One" text="asdasdfasdfasfafasdfasdfafafas" author="{{firstname}}{{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016"/>
             </div>
         )
     }
@@ -263,7 +265,6 @@ class PromptsWriting extends React.Component{
           <div className="p-box">
             <h1 className="writing_page_prompts">
               {this.props.prompt}
-              {this.props.pid}
             </h1>
           </div>
         </div>
@@ -345,7 +346,6 @@ class WritingPage extends React.Component{
     }
     return(
         <div>
-            <h1 className="promptOfTheDay">PROMPTINFO</h1>
             <div className="selectionBox">
                 {tab}
             </div>
@@ -375,29 +375,12 @@ class WritingArea extends React.Component {
                 <section className="writingpage_section">
                     <article id="text" contentEditable="true" className="content writingpage_article"></article>
                 </section>
-                <Prompt/>
               </div>
 
 
         )
     }
 }
-
-var Prompt = React.createClass({
-    propTypes: {
-        title: React.PropTypes.string.isRequired
-    },
-    getDefaultProps: function() {
-        return {title: "Title"}
-    },
-    render: function() {
-        return (
-        <div className = "prompt">
-            <h1>ANALYSIS</h1>
-            </div>
-        )
-    }
-});
 
 var inArray = function( element, array) {
   for(var i = array.length - 1; i < array.length; i++ ){
