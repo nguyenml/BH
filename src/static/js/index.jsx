@@ -1,5 +1,16 @@
 /* UTILITIES */
 
+var inArray = function( element, array) {
+  for(var i = array.length - 1; i < array.length; i++ ){
+    if(element.localeCompare(array[i]) === 0){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+}
+
 var IO = function() {
   SAVE_INTERVAL = 2500;
 
@@ -33,6 +44,21 @@ var IO = function() {
       });
   };
 
+  var loadRandomText = function(pid) {
+    var data = {
+      prompt_id: pid,
+    };
+    $.post('/loadrandom',
+      data=data,
+      function(text, status_code, xhr){
+        if(status_code === 'success'){
+          $('#text').text(text);
+        } else {
+          console.log('load fail');
+        }
+      });
+  };
+
   var autoSave = null;
   var setAutoSave = function(pid){
     window.clearInterval(autoSave);
@@ -44,6 +70,7 @@ var IO = function() {
   return {
     saveText: saveText,
     loadText: loadText,
+    loadRandomText: loadRandomText,
     setAutoSave: setAutoSave,
   };
 }();
@@ -314,10 +341,8 @@ class Story extends React.Component {
         )
     }
 };
-/////////////////////////////////////////////WRITING//////////////////////////////////////////////////////////------------------------------------------------------------------------------------------------------------------------------------
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* WRITING */
 
 class WritingPage extends React.Component{
   constructor(){
@@ -362,8 +387,6 @@ class WritingArea extends React.Component {
         this.state = {pid: props.pid}
     }
 
-
-
     render() {
         return (
             <div>
@@ -376,24 +399,64 @@ class WritingArea extends React.Component {
                     <article id="text" contentEditable="true" className="content writingpage_article"></article>
                 </section>
               </div>
-
-
         )
     }
 }
 
-var inArray = function( element, array) {
-  for(var i = array.length - 1; i < array.length; i++ ){
-    if(element.localeCompare(array[i]) === 0){
-      return true;
+/* READING */
+
+class ReadingPage extends React.Component{
+  constructor(){
+    super();
+    this.state = { result: [], pid: [] };
+  }
+
+  componentWillMount(){
+   this.serverRequest = $.post("/getprompts", function (result) {
+     this.setState({ result:result });
+   }.bind(this));
+  }
+
+  setPID(pid, event){
+    var text = IO.loadRandomText(pid);
+  }
+
+  render(){
+    var tab = [];
+    var writingArea = null;
+    for (var i = 0; i < this.state.result.length; i++){
+      tab.push(<PromptsWriting setPID = {this.setPID.bind(this, this.state.result[i].pid)} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
+      writingArea = <ReadingArea pid={this.state.result[i].pid} />
     }
-    else {
-      return false;
-    }
+    return(
+        <div>
+            <div className="selectionBox">
+                {tab}
+            </div>
+            {writingArea}
+        </div>
+    )
   }
 }
 
+class ReadingArea extends React.Component {
+    
+    constructor(props) {
+        super(props);
+        this.pid = props.pid;
+        this.state = {pid: props.pid}
+    }
 
+    render() {
+        return (
+            <div>
+                <section className="writingpage_section">
+                    <article id="text" contentEditable="false" className="content writingpage_article"></article>
+                </section>
+              </div>
+        )
+    }
+}
 
 //
 //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));
@@ -407,6 +470,7 @@ window.onload = function(){
     ReactDOM.render(<WritingPage/>, document.getElementById('writing_page'));
   }
   else if(inArray("reading",url)){
-    ReactDOM.render(<Story/>,document.getElementById('story'))
+    //ReactDOM.render(<Story/>,document.getElementById('story'))
+    ReactDOM.render(<ReadingPage/>, document.getElementById('reading-page'));
   }
 };

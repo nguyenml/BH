@@ -1,4 +1,5 @@
 import os
+import random
 
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -65,6 +66,20 @@ def save():
     except Exception as e:
         print(e)
         return "FAILURE"
+
+@app.route("/loadrandom", methods=["POST"])
+@login_required
+def load_random():
+    p_id = request.form['prompt_id']
+    pieces = Piece.query.filter_by(prompt_id=p_id).all()
+    pieces = filter(lambda x: x.is_published, pieces)
+    pieces = filter(lambda x: x.author_id != current_user.id)
+    piece = random.choice(pieces)
+
+    if(piece):
+        return piece.text
+    else:
+        return ""
 
 @app.route("/load", methods=["POST"])
 @login_required
