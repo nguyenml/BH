@@ -91,6 +91,22 @@ def load():
     else:
         return ""
 
+@app.route("/publish", methods=["POST"])
+@login_required
+def publish():
+    p_id = request.form['prompt_id']
+    print(p_id)
+    piece = Piece.get_piece(author_id=current_user.id, prompt_id=p_id)
+    print(piece)
+    if(piece and piece.text):
+        piece.is_published = True
+        return "SUCCESS"
+    else:
+        print("publish failed")
+        return "Publish Unsuccessful"
+
+
+
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
     return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),Prompt.get_dailies()))

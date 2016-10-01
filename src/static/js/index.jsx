@@ -11,6 +11,13 @@ var inArray = function( element, array) {
   }
 }
 
+var writingHandlers = function() {
+  console.log("test");
+  $("#publish-button").click(function(e){
+    console.log("test");
+  });
+}
+
 var IO = function() {
   SAVE_INTERVAL = 2500;
 
@@ -25,6 +32,21 @@ var IO = function() {
         if(response === 'SUCCESS'){
         } else {
           console.log("Save failed.");
+        }
+      });
+  };
+
+  var publishText = function(pid) {
+    console.log(pid);
+    var data = {
+      prompt_id: pid,
+    }
+    $.post('/publish',
+      data=data,
+      function(response, status_code, xhr){
+        if(response === 'SUCCESS'){
+        } else {
+          console.log("Published failed");
         }
       });
   };
@@ -72,6 +94,7 @@ var IO = function() {
     loadText: loadText,
     loadRandomText: loadRandomText,
     setAutoSave: setAutoSave,
+    publishText: publishText,
   };
 }();
 
@@ -238,7 +261,7 @@ class Prompts extends React.Component{
     this.state = { promptChoice: 0} ;
     this.handleChoice = this.handleChoice.bind(this);
   }
-  
+
   handleChoice(){
     var text = $.post("/getprompts", function (response) {
       this.setState({ });
@@ -367,8 +390,8 @@ class WritingPage extends React.Component{
     var writingArea = null;
     for (var i = 0; i < this.state.result.length; i++){
       tab.push(<PromptsWriting setPID = {this.setPID.bind(this, this.state.result[i].pid)} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
-      writingArea = <WritingArea pid={this.state.result[i].pid} />
     }
+      writingArea = <WritingArea pid={this.state.result[i].pid} />
     return(
         <div>
             <div className="selectionBox">
@@ -387,11 +410,13 @@ class WritingArea extends React.Component {
         this.state = {pid: props.pid}
     }
 
+
+
     render() {
         return (
             <div>
                 <div className="writing_head">
-                    <button className="btn submit">Submit</button>
+                    <button id="publish-button" onClick={IO.publishText.bind(this, this.pid)} className="btn submit">Submit</button>
                     <h1>Prompt</h1>
                     <p>WordCount:</p>
                 </div>
@@ -432,6 +457,7 @@ class ReadingPage extends React.Component{
         <div>
             <div className="selectionBox">
                 {tab}
+
             </div>
             {writingArea}
         </div>
@@ -440,7 +466,7 @@ class ReadingPage extends React.Component{
 }
 
 class ReadingArea extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.pid = props.pid;
@@ -467,6 +493,7 @@ window.onload = function(){
     ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
   }
   else if(inArray("writing",url)){
+    writingHandlers();
     ReactDOM.render(<WritingPage/>, document.getElementById('writing_page'));
   }
   else if(inArray("reading",url)){
