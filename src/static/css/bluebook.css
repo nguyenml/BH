@@ -1019,6 +1019,13 @@ LANDING*************************************************************************
     height: 900px;
     text-align: center;
 }
+.form-container{
+  padding-top: 100px;
+  padding-left: 15px;
+  position: absolute;
+  right: 0px;
+  width: 50%;
+}
 
 }
 ::-webkit-input-placeholder {
@@ -1174,29 +1181,6 @@ LANDING*************************************************************************
     box-shadow: inset 0 1px 4px rgba(0, 0, 0, .2);
 }
 
-/* flip animation */
-.flip {
-    position: relative;
-    -webkit-transition: 0.6s;
-    -webkit-transform-style: preserve-3d;
-    left: 260px;
-    top: 100px;
-}
-.form-login, .form-signup {
-    position: absolute;
-    top: 0;
-    left: 0;
-    -webkit-backface-visibility: hidden;
-}
-.form-signup {
-    z-index: 2;
-}
-.form-login {
-}
-.flip.flipped {
-    -webkit-transform: rotateY(-180deg);
-    -moz-transform: rotateY(-180deg);
-}
 #login input.login-err, #login input.login-err:focus {
     color: #C4550B;
     background-color: #FFEDD7;
@@ -1229,25 +1213,22 @@ LANDING*************************************************************************
     src: url('fonts/FanwoodText.otf');
 }
 .front {
-    left: 100px;
-    top: 0px;
-    bottom: 0px;
-    position: absolute;
+  position: absolute;
+  left: 0px;
+  width: 50%
 }
 .front h1 {
     font-family: Typewriter, sans-serif;
-    font-size: 100px;
+    font-size: 170px;
     width: 100px;
     margin-left: 420px;
     margin-top: 200px;
-    position: relative;
 }
 .front p {
-    font-family: Typewriter, sans-serif;
-    font-size: 30px;
+    font-family:
+    font-size: 50px;
     width: 385px;
     margin-left: 470px;
-    position: relative;
 }
 footer {
     position: fixed;

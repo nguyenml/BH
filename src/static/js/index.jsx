@@ -213,6 +213,98 @@ class Top_Stories extends React.Component {
     }
 }
 
+class Signup extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+      <div className="form-signup">
+          <h2>Sign Up</h2>
+          <h3>read and write from thousands of prompts.
+              <div className="break"></div></h3>
+          <fieldset>
+              <p className="login-msg">Please include 5 cents for good luck.</p>
+              <form action="/signup" method="POST">
+                  <input type="email" name="email" placeholder="Email" required />
+                  <input type="password" name="password" placeholder="Password" required />
+                  <input type="text" name="penname" placeholder="Pen Name" required />
+                  <input type="submit" value="Sign up" />
+              </form>
+              <a onClick={this.props.handleForm}> Already signed up? Log in.</a>
+          </fieldset>
+      </div>
+  );
+  }
+}
+
+class Login extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+        <div className="form-login">
+            <h1>Log in</h1>
+            <fieldset>
+                <form action="/login" method="POST">
+                    <input type="email" name="email" placeholder="Enter your email address" required />
+                    <input type="password" name="password" placeholder="Enter your password" required />
+                    <input type="submit" value="Log in" />
+                </form>
+                <a onClick={this.props.handleForm}> Not signed up? Create an account.</a><br></br>
+
+                <a href="#">Forgot Password?</a>
+          </fieldset>
+        </div>
+    )
+
+  }
+}
+
+/*LANDING*/
+class Landing extends React.Component{
+  constructor(){
+    super();
+    this.state ={ signupLogin: 1}
+    this.handleForm = this.handleForm.bind(this);
+  }
+
+  handleForm(signupLogin, event){
+    this.setState({signupLogin : !this.state.signupLogin});
+  }
+
+  checkForm(signupLogin){
+    if(signupLogin == 1){
+     return(<Signup  handleForm ={this.handleForm.bind(this,this.state.signupLogin)}/>);
+   }
+    else {
+      return(<Login handleForm ={this.handleForm.bind(this,this.state.signupLogin)}/>);
+    }
+
+  }
+
+  render() {
+    return(
+      <div >
+          <div className="front">
+              <h1>bardhop</h1>
+              <p>a new story everyday</p>
+          </div>
+        <div className = "form-container">
+          <div id="login">
+            {this.checkForm(this.state.signupLogin)}
+          </div>
+        </div>
+
+      </div>
+
+    );
+  }
+}
+
 //renders the new entry for the prompt
 class DailyPrompt extends React.Component {
   constructor(){
@@ -499,5 +591,8 @@ window.onload = function(){
   else if(inArray("reading",url)){
     //ReactDOM.render(<Story/>,document.getElementById('story'))
     ReactDOM.render(<ReadingPage/>, document.getElementById('reading-page'));
+  }
+  else if(inArray("",url)){
+    ReactDOM.render(<Landing/>, document.getElementById('landing-page'));
   }
 };
