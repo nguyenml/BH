@@ -132,6 +132,7 @@ def login():
     email = request.form["email"]
     password = request.form["password"]
     if(Author.validate_login(email, password)):
+        author = Author.get_by_email(email)
         login_user(author)
         return redirect(url_for("dashboard"))
     else:

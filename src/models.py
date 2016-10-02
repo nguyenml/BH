@@ -56,7 +56,7 @@ class Author(db.Model):
 
     @classmethod
     def get_by_email(cls, email):
-        return list(cls.query.filter_by(email=email))
+        return cls.query.filter_by(email=email).first()
 
     def validate_password(self, password):
         return crypto.verify(password, self.password_hash)
@@ -66,7 +66,7 @@ class Author(db.Model):
         if(not cls.has_email(email)):
             return False
         author = cls.get_by_email(email)
-        if(cls.validate_password(password)):
+        if(author.validate_password(password)):
             return False
         return True
 
