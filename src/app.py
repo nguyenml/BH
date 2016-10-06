@@ -116,8 +116,8 @@ def signup():
     email = request.form["email"]
     password = request.form["password"]
     penname = request.form["penname"]
-
     is_valid = Author.validate_form(request.form)
+
     if(is_valid):
         author = Author.add_new_author(email, password, penname)
         login_user(author)

@@ -66,7 +66,7 @@ class Author(db.Model):
         if(not cls.has_email(email)):
             return False
         author = cls.get_by_email(email)
-        if(author.validate_password(password)):
+        if(not author.validate_password(password)):
             return False
         return True
 
@@ -84,9 +84,7 @@ class Author(db.Model):
     @classmethod
     def validate_form(cls, di):
         # TODO: Swap out for WTForms
-        if(di['password'] != di['confirmpassword']):
-            return False
-        elif(cls.has_email(di['email'])):
+        if(cls.has_email(di['email'])):
             return False
         return True
 
