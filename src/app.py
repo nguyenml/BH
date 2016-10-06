@@ -115,7 +115,6 @@ def getprompts():
 def signup():
     email = request.form["email"]
     password = request.form["password"]
-    confirm = request.form["confirmpassword"]
     penname = request.form["penname"]
 
     is_valid = Author.validate_form(request.form)
