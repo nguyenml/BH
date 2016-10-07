@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import random
 
@@ -6,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
 from src import app, login_manager
-from models import Author, SuggestedPrompt, Prompt, Piece
+from models import Author, SuggestedPrompt, Prompt, Piece, db
 
 @app.route('/')
 def landing():
@@ -73,10 +75,10 @@ def load_random():
     p_id = request.form['prompt_id']
     pieces = Piece.query.filter_by(prompt_id=p_id).all()
     pieces = filter(lambda x: x.is_published, pieces)
-    pieces = filter(lambda x: x.author_id != current_user.id)
-    piece = random.choice(pieces)
+    pieces = filter(lambda x: x.author_id != current_user.id, pieces)
 
-    if(piece):
+    if(pieces):
+        piece = random.choice(pieces)
         return piece.text
     else:
         return ""
@@ -95,11 +97,10 @@ def load():
 @login_required
 def publish():
     p_id = request.form['prompt_id']
-    print(p_id)
     piece = Piece.get_piece(author_id=current_user.id, prompt_id=p_id)
-    print(piece)
     if(piece and piece.text):
         piece.is_published = True
+        db.session.commit()
         return "SUCCESS"
     else:
         print("publish failed")
