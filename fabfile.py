@@ -81,7 +81,7 @@ def reset_db():
         print("Reset database aborted")
 
 def run_tests():
-    call(["nosetests", "--nocapture", "test"])
+    call(["nosetests", "--nocapture", "test/"])
 
 @dbcommit
 def seed_db():

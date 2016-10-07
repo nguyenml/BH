@@ -12,6 +12,7 @@ app.config['PORT'] = 33507 # TODO: Check if production here
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'longviet')
 
 db = SQLAlchemy(app)
+app.app_context().push()
 
 login_manager = LoginManager()
 login_manager.init_app(app)

@@ -1,58 +1,52 @@
-import os
-import unittest
-
-from flask import Flask
-
 from src.app import app
-from src.models import db
+from src.models import db, Author
 
-from test import EXISTING_USER
+from test.testcase import BaseTestCase
 
-import unittest 
-
-class TestCase(unittest.TestCase):
-    def setUp(self):
-        app.config['TESTING'] = True
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://' 
-        self.app = app.test_client()
-        db.create_all()
-
-    def tearDown(self):
-        db.session.remove()
-        db.drop_all()
-
-    def login(self, un=EXISTING_USER['email'],
-                    pw=EXISTING_USER['password'],
-                    pn=EXISTING_USER['penname']):
-        return self.app.post('/login', data={'email': un,
-                                            'password': pw,
-                                            'penname': pn },
-                                        follow_redirects=True)
-
+class RoutesTestCase(BaseTestCase):
     # Routing Tests (Not Logged In)
 
     def test_landing(self):
-        result = self.app.get('/') 
+        result = self.app.get('/')
         self.assertEqual(result.status_code, 200)
 
-    def test_tavern(self):
-        result = self.app.get('/tavern') 
-        self.assertEqual(result.status_code, 401)
-    
-    def test_reading(self):
-        result = self.app.get('/reading') 
+    def test_dashboard(self):
+        result = self.app.get('/dashboard')
         self.assertEqual(result.status_code, 401)
 
-    def test_user(self):
-        result = self.app.get('/user') 
+    def test_reading(self):
+        result = self.app.get('/reading')
         self.assertEqual(result.status_code, 401)
 
     def test_writing(self):
-        result = self.app.get('/writing') 
+        result = self.app.get('/writing')
         self.assertEqual(result.status_code, 401)
 
     # Routes (logged in)
 
+    def test_landing_logged_in(self):
+        with self.app:
+            self.login()
+            result = self.app.get('/')
+            self.assertEqual(result.status_code, 200)
+
+    def test_dashboard_logged_in(self):
+        with self.app:
+            self.login()
+            result = self.app.get('/dashboard')
+            self.assertEqual(result.status_code, 200)
+
+    def test_reading_logged_in(self):
+        with self.app:
+            self.login()
+            result = self.app.get('/reading')
+            self.assertEqual(result.status_code, 200)
+
+    def test_writing_logged_in(self):
+        with self.app:
+            self.login()
+            result = self.app.get('/writing')
+            self.assertEqual(result.status_code, 200)
 
     # Form Tests
 
@@ -65,8 +59,7 @@ class TestCase(unittest.TestCase):
         result = self.app.post("/createaccount", data=data, follow_redirects=True)
 
     def test_already_used_email_signup(self):
-        result = self.app.post('/createaccount', data=EXISTING_USER, follow_redirects=True)
-        result = self.app.post('/createaccount', data=EXISTING_USER, follow_redirects=True)
+        result = self.app.post('/createaccount', data=RoutesTestCase.USER, follow_redirects=True)
 
     # Functionality Tests
 
@@ -87,15 +80,6 @@ class TestCase(unittest.TestCase):
     def test_login(self):
         result = self.login()
         self.assertEqual(result.status_code, 200)
-
-    def test_password_change(self):
-        pass
-
-    def test_email_change_to_used_email(self):
-        pass
-
-    def test_email_change(self):
-        pass
 
     # Writing Page Tests
 

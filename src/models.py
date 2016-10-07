@@ -2,9 +2,12 @@ from datetime import date, timedelta
 from datetime import datetime as dt
 
 from passlib.hash import sha256_crypt as crypto
+from flask_sqlalchemy import SQLAlchemy
 
 from src import db, login_manager
 from helpers import confirm, dbcommit
+
+db = SQLAlchemy()
 
 # Models
 class Author(db.Model):
