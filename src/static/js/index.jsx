@@ -21,6 +21,15 @@ var writingHandlers = function() {
 var IO = function() {
   SAVE_INTERVAL = 2500;
 
+  var loginHandler = function(){
+    var data = {};
+    var inputs = $('#login-form :input');
+    console.log(inputs);
+      $('#login-submit').each(function(e){
+        data[e.name] = e.value;
+      });
+  }
+
   var saveText = function(pid) {
     var data = {
       prompt_id: pid,
@@ -95,6 +104,7 @@ var IO = function() {
     loadRandomText: loadRandomText,
     setAutoSave: setAutoSave,
     publishText: publishText,
+    loginHandler: loginHandler,
   };
 }();
 
@@ -249,10 +259,10 @@ class Login extends React.Component{
         <div className="form-login">
             <h1>Log in</h1>
             <fieldset>
-                <form action="/login" method="POST">
+                <form id="login-form" action="/login" method="POST">
                     <input type="email" name="email" placeholder="Enter your email address" required />
                     <input type="password" name="password" placeholder="Enter your password" required />
-                    <input type="submit" value="Log in" />
+                    <input onClick={this.props.loginHandler} id="login-submit" type="submit" value="Log in" />
                 </form>
                 <a onClick={this.props.handleForm}> Not signed up? Create an account.</a><br></br>
 
@@ -276,9 +286,13 @@ class Landing extends React.Component{
     this.setState({signupLogin : !this.state.signupLogin});
   }
 
+  loginHandler(event){
+    var response = IO.loginHandler();
+  }
+
   checkForm(signupLogin){
     if(signupLogin == 1){
-     return(<Signup  handleForm ={this.handleForm.bind(this,this.state.signupLogin)}/>);
+     return(<Signup loginHandler={this.loginHandler.bind(this)} handleForm ={this.handleForm.bind(this,this.state.signupLogin)}/>);
    }
     else {
       return(<Login handleForm ={this.handleForm.bind(this,this.state.signupLogin)}/>);
@@ -462,7 +476,7 @@ class Story extends React.Component {
 class WritingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [] };
+    this.state = { result: [], pid: [], currentPID: 0};
     this.autoSave = null;
   }
 
@@ -474,6 +488,7 @@ class WritingPage extends React.Component{
 
   setPID(pid, event){
     var text = IO.loadText(pid);
+    this.setState({currentPID: pid});
     IO.setAutoSave(pid);
   }
 
@@ -481,17 +496,20 @@ class WritingPage extends React.Component{
     var tab = [];
     var writingArea = null;
     for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsWriting setPID = {this.setPID.bind(this, this.state.result[i].pid)} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
-    }
-      writingArea = <WritingArea pid={this.state.result[i].pid} />
+      tab.push(<PromptsWriting
+        setPID={this.setPID.bind(this, this.state.result[i].pid)}
+        prompt={this.state.result[i].text}
+        pid={this.state.result[i].pid}
+        />)};
     return(
         <div>
             <div className="selectionBox">
                 {tab}
             </div>
-            {writingArea}
+             <WritingArea pid={this.state.currentPID} />
+             <p>{this.state.currentPID}</p>
         </div>
-    )
+      )
   }
 }
 
@@ -508,7 +526,7 @@ class WritingArea extends React.Component {
         return (
             <div>
                 <div className="writing_head">
-                    <button id="publish-button" onClick={IO.publishText.bind(this, this.pid)} className="btn submit">Submit</button>
+                    <button id="publish-button" onClick={IO.publishText.bind(this, this.props.pid)} className="btn submit">Submit</button>
                     <h1>Prompt</h1>
                     <p>WordCount:</p>
                 </div>
