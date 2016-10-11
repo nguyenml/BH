@@ -12,9 +12,7 @@ var inArray = function( element, array) {
 }
 
 var writingHandlers = function() {
-  console.log("test");
   $("#publish-button").click(function(e){
-    console.log("test");
   });
 }
 
@@ -24,7 +22,6 @@ var IO = function() {
   var loginHandler = function(){
     var data = {};
     var inputs = $('#login-form :input');
-    console.log(inputs);
       $('#login-submit').each(function(e){
         data[e.name] = e.value;
       });
@@ -46,7 +43,6 @@ var IO = function() {
   };
 
   var publishText = function(pid) {
-    console.log(pid);
     var data = {
       prompt_id: pid,
     }
