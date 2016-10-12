@@ -118,6 +118,7 @@ class Front extends React.Component {
   }
 
   render(){
+    console.log("test");
     var tab = [];
     for (var i = 0; i < this.state.result.length; i++){
       tab.push(<PromptsFront prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
@@ -410,14 +411,18 @@ class PromptsWriting extends React.Component{
     super(props);
   }
 
+  emphasizePrompt(){
+    
+  }
+
   render() {
     return(
       <div>
-        <div className="promptInfo" onClick= {this.props.setPID}>
+        <div className="promptInfo" onClick= {this.props.clickHandler}>
           <div className="p-box">
-            <h1 className="writing_page_prompts">
+            <p className="writing_page_prompts">
               {this.props.prompt}
-            </h1>
+            </p>
           </div>
         </div>
       </div>
@@ -472,7 +477,7 @@ class Story extends React.Component {
 class WritingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [], currentPID: 0};
+    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: 1};
     this.autoSave = null;
   }
 
@@ -488,12 +493,23 @@ class WritingPage extends React.Component{
     IO.setAutoSave(pid);
   }
 
+  setPrompt(prompt, event){
+    this.setState({currentPrompt: prompt});
+  }
+
+  clickHandler(pid,prompt,event){
+    this.setPID(pid,event);
+    this.setPrompt(prompt,event);
+    console.log("test");
+  }
+
+
   render(){
     var tab = [];
     var writingArea = null;
     for (var i = 0; i < this.state.result.length; i++){
       tab.push(<PromptsWriting
-        setPID={this.setPID.bind(this, this.state.result[i].pid)}
+        clickHandler={this.clickHandler.bind(this,this.state.result[i].pid,this.state.result[i].text)}
         prompt={this.state.result[i].text}
         pid={this.state.result[i].pid}
         />)};
@@ -502,12 +518,13 @@ class WritingPage extends React.Component{
             <div className="selectionBox">
                 {tab}
             </div>
-             <WritingArea pid={this.state.currentPID} />
+             <WritingArea pid={this.state.currentPID} prompt={this.state.currentPrompt}/>
              <p>{this.state.currentPID}</p>
         </div>
       )
   }
 }
+
 
 class WritingArea extends React.Component {
     constructor(props) {
@@ -523,7 +540,7 @@ class WritingArea extends React.Component {
             <div>
                 <div className="writing_head">
                     <button id="publish-button" onClick={IO.publishText.bind(this, this.props.pid)} className="btn submit">Submit</button>
-                    <h1>Prompt</h1>
+                    <h1>{this.props.prompt}</h1>
                     <p>WordCount:</p>
                 </div>
                 <section className="writingpage_section">

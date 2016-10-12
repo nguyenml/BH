@@ -21,8 +21,8 @@ REQUIRED = ["db_database",
         "db_username",
         "db_password"]
 
-SEED_PROMPTS = ["Before I was born, that lady was studying.",
-        "I was pretty sure he will be howling, and only I knew that.",
+SEED_PROMPTS = ["Eye Contact: Write about two people seeing each other for the first time.",
+        "You are a childs imaginary friend. You are fading away as the child grows older. You have one last talk with the child the day before their 18th birthday.",
         "Arianna, a thing of cruelty and knowledge.",
         "In the early fall, that starship navigator was growing up.",
         "It will be the season of wisdom, the season of perversion.",

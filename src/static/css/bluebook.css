@@ -37,10 +37,9 @@
 
 .writing_head{
   margin: 25px;
-  height: 140px;
-  width: auto;
   background-color: #C4D1D1;
   border-radius: 3px;
+  overflow: hidden;
 
 }
 
@@ -273,10 +272,13 @@ color: #FFF;
 order: 1;
 padding: 30px;
 margin: 15px;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
 .writing_page_prompts{
   font-size: 20px;
+  text-overflow: ellipsis;
 }
 
 .p-box { -webkit-transition: all .4s ease-in-out; }
@@ -439,6 +441,7 @@ DASHBOARD***********************************************************************
   height: 200px;
   width: 250px;
   border: 1px solid rgba(68, 68, 68, .2);
+  text-overflow: ellipsis;
 }
 .daily_box p{
   text-align: center;

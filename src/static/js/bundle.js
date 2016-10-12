@@ -57,10 +57,7 @@
 	};
 
 	var writingHandlers = function () {
-	  console.log("test");
-	  $("#publish-button").click(function (e) {
-	    console.log("test");
-	  });
+	  $("#publish-button").click(function (e) {});
 	};
 
 	var IO = function () {
@@ -69,7 +66,6 @@
 	  var loginHandler = function () {
 	    var data = {};
 	    var inputs = $('#login-form :input');
-	    console.log(inputs);
 	    $('#login-submit').each(function (e) {
 	      data[e.name] = e.value;
 	    });
@@ -88,7 +84,6 @@
 	  };
 
 	  var publishText = function (pid) {
-	    console.log(pid);
 	    var data = {
 	      prompt_id: pid
 	    };
@@ -157,91 +152,92 @@
 	  }
 
 	  render() {
+	    console.log("test");
 	    var tab = [];
 	    for (var i = 0; i < this.state.result.length; i++) {
 	      tab.push(React.createElement(PromptsFront, { prompt: this.state.result[i].text, pid: this.state.result[i].pid }));
 	    }
 	    return React.createElement(
-	      "div",
-	      { className: "dashboard_front" },
+	      'div',
+	      { className: 'dashboard_front' },
 	      React.createElement(
-	        "div",
-	        { className: "header" },
+	        'div',
+	        { className: 'header' },
 	        React.createElement(
-	          "h1",
+	          'h1',
 	          null,
-	          "Dashboard"
+	          'Dashboard'
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "rectangle" },
+	          'div',
+	          { className: 'rectangle' },
 	          React.createElement(
-	            "h1",
+	            'h1',
 	            null,
-	            "In Progress"
+	            'In Progress'
 	          )
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "current" },
+	          'div',
+	          { className: 'current' },
 	          React.createElement(
-	            "div",
-	            { className: "box" },
+	            'div',
+	            { className: 'box' },
 	            React.createElement(
-	              "h1",
+	              'h1',
 	              null,
-	              "Project Name"
+	              'Project Name'
 	            ),
-	            React.createElement("img", { className: "pic", src: "../static/images/lion.png", height: 100 })
+	            React.createElement('img', { className: 'pic', src: '../static/images/lion.png', height: 100 })
 	          ),
 	          React.createElement(
-	            "div",
-	            { className: "box" },
+	            'div',
+	            { className: 'box' },
 	            React.createElement(
-	              "h1",
+	              'h1',
 	              null,
-	              "Project Name"
+	              'Project Name'
 	            ),
-	            React.createElement("img", { className: "pic", src: "../static/images/128x128.png", height: 100 })
+	            React.createElement('img', { className: 'pic', src: '../static/images/128x128.png', height: 100 })
 	          ),
 	          React.createElement(
-	            "div",
-	            { className: "box" },
+	            'div',
+	            { className: 'box' },
 	            React.createElement(
-	              "h1",
+	              'h1',
 	              null,
-	              "Project Name"
+	              'Project Name'
 	            ),
-	            React.createElement("img", { className: "pic", src: "../static/images/wolf.png", height: 100 })
+	            React.createElement('img', { className: 'pic', src: '../static/images/wolf.png', height: 100 })
 	          ),
 	          React.createElement(
-	            "div",
-	            { className: "box" },
+	            'div',
+	            { className: 'box' },
 	            React.createElement(
-	              "h1",
+	              'h1',
 	              null,
-	              "Project Name"
+	              'Project Name'
 	            ),
-	            React.createElement("img", { className: "pic", src: "../static/images/paws.png", height: 100 })
+	            React.createElement('img', { className: 'pic', src: '../static/images/paws.png', height: 100 })
 	          )
 	        )
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "following" },
+	        'div',
+	        { className: 'following' },
 	        React.createElement(
-	          "div",
-	          { className: "rectangle" },
+	          'div',
+	          { className: 'rectangle' },
 	          React.createElement(
-	            "h1",
+	            'h1',
 	            null,
-	            "Daily"
+	            'Daily'
 	          )
 	        ),
-	        React.createElement("hr", null),
+	        React.createElement('hr', null),
 	        React.createElement(
-	          "div",
-	          { className: "current" },
+	          'div',
+	          { className: 'current' },
 	          tab
 	        )
 	      )
@@ -257,35 +253,35 @@
 	  render() {
 	    var { title, pic, author, date, text } = this.props;
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "h1",
-	        { className: "story_title" },
+	        'h1',
+	        { className: 'story_title' },
 	        title
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "profile-box" },
-	        React.createElement("img", { className: "author_pic img-circular", src: pic, height: 24 }),
+	        'div',
+	        { className: 'profile-box' },
+	        React.createElement('img', { className: 'author_pic img-circular', src: pic, height: 24 }),
 	        React.createElement(
-	          "div",
-	          { className: "author_info" },
+	          'div',
+	          { className: 'author_info' },
 	          React.createElement(
-	            "h1",
-	            { className: "author_name" },
+	            'h1',
+	            { className: 'author_name' },
 	            author
 	          ),
 	          React.createElement(
-	            "h1",
-	            { className: "date" },
+	            'h1',
+	            { className: 'date' },
 	            date
 	          )
 	        )
 	      ),
 	      React.createElement(
-	        "p",
-	        { className: "story_text" },
+	        'p',
+	        { className: 'story_text' },
 	        text
 	      )
 	    );
@@ -306,19 +302,19 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "top_story_page" },
+	        'div',
+	        { className: 'top_story_page' },
 	        React.createElement(
-	          "h1",
-	          { className: "top_story_header" },
-	          "Top Stories Today"
+	          'h1',
+	          { className: 'top_story_header' },
+	          'Top Stories Today'
 	        ),
-	        React.createElement("hr", null)
+	        React.createElement('hr', null)
 	      ),
-	      React.createElement(Entry, { title: "The Second One", text: "asdasdfasdfasfafasdfasdfafafas", author: "{{firstname}}{{lastname}}", pic: "../static/images/riff.jpg", date: "July 17, 2016" })
+	      React.createElement(Entry, { title: 'The Second One', text: 'asdasdfasdfasfafasdfasdfafafas', author: '{{firstname}}{{lastname}}', pic: '../static/images/riff.jpg', date: 'July 17, 2016' })
 	    );
 	  }
 	}
@@ -330,39 +326,39 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
-	      { className: "form-signup" },
+	      'div',
+	      { className: 'form-signup' },
 	      React.createElement(
-	        "h2",
+	        'h2',
 	        null,
-	        "Sign Up"
+	        'Sign Up'
 	      ),
 	      React.createElement(
-	        "h3",
+	        'h3',
 	        null,
-	        "read and write from thousands of prompts.",
-	        React.createElement("div", { className: "break" })
+	        'read and write from thousands of prompts.',
+	        React.createElement('div', { className: 'break' })
 	      ),
 	      React.createElement(
-	        "fieldset",
+	        'fieldset',
 	        null,
 	        React.createElement(
-	          "p",
-	          { className: "login-msg" },
-	          "Please include 5 cents for good luck."
+	          'p',
+	          { className: 'login-msg' },
+	          'Please include 5 cents for good luck.'
 	        ),
 	        React.createElement(
-	          "form",
-	          { action: "/signup", method: "POST" },
-	          React.createElement("input", { type: "email", name: "email", placeholder: "Email", required: true }),
-	          React.createElement("input", { type: "password", name: "password", placeholder: "Password", required: true }),
-	          React.createElement("input", { type: "text", name: "penname", placeholder: "Pen Name", required: true }),
-	          React.createElement("input", { type: "submit", value: "Sign up" })
+	          'form',
+	          { action: '/signup', method: 'POST' },
+	          React.createElement('input', { type: 'email', name: 'email', placeholder: 'Email', required: true }),
+	          React.createElement('input', { type: 'password', name: 'password', placeholder: 'Password', required: true }),
+	          React.createElement('input', { type: 'text', name: 'penname', placeholder: 'Pen Name', required: true }),
+	          React.createElement('input', { type: 'submit', value: 'Sign up' })
 	        ),
 	        React.createElement(
-	          "a",
+	          'a',
 	          { onClick: this.props.handleForm },
-	          " Already signed up? Log in."
+	          ' Already signed up? Log in.'
 	        )
 	      )
 	    );
@@ -376,38 +372,39 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
-	      { className: "form-login" },
+	      'div',
+	      { className: 'form-login' },
 	      React.createElement(
-	        "h1",
+	        'h1',
 	        null,
-	        "Log in"
+	        'Log in'
 	      ),
 	      React.createElement(
-	        "fieldset",
+	        'fieldset',
 	        null,
 	        React.createElement(
-	          "form",
-	          { id: "login-form", action: "/login", method: "POST" },
-	          React.createElement("input", { type: "email", name: "email", placeholder: "Enter your email address", required: true }),
-	          React.createElement("input", { type: "password", name: "password", placeholder: "Enter your password", required: true }),
-	          React.createElement("input", { onClick: this.props.loginHandler, id: "login-submit", type: "submit", value: "Log in" })
+	          'form',
+	          { id: 'login-form', action: '/login', method: 'POST' },
+	          React.createElement('input', { type: 'email', name: 'email', placeholder: 'Enter your email address', required: true }),
+	          React.createElement('input', { type: 'password', name: 'password', placeholder: 'Enter your password', required: true }),
+	          React.createElement('input', { onClick: this.props.loginHandler, id: 'login-submit', type: 'submit', value: 'Log in' })
 	        ),
 	        React.createElement(
-	          "a",
+	          'a',
 	          { onClick: this.props.handleForm },
-	          " Not signed up? Create an account."
+	          ' Not signed up? Create an account.'
 	        ),
-	        React.createElement("br", null),
+	        React.createElement('br', null),
 	        React.createElement(
-	          "a",
-	          { href: "#" },
-	          "Forgot Password?"
+	          'a',
+	          { href: '#' },
+	          'Forgot Password?'
 	        )
 	      )
 	    );
 	  }
 	}
+
 	/*LANDING*/
 	class Landing extends React.Component {
 	  constructor() {
@@ -434,28 +431,28 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "front" },
+	        'div',
+	        { className: 'front' },
 	        React.createElement(
-	          "h1",
+	          'h1',
 	          null,
-	          "bardhop"
+	          'bardhop'
 	        ),
 	        React.createElement(
-	          "p",
+	          'p',
 	          null,
-	          "a new story everyday"
+	          'a new story everyday'
 	        )
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "form-container" },
+	        'div',
+	        { className: 'form-container' },
 	        React.createElement(
-	          "div",
-	          { id: "login" },
+	          'div',
+	          { id: 'login' },
 	          this.checkForm(this.state.signupLogin)
 	        )
 	      )
@@ -492,14 +489,14 @@
 	      tab.push(React.createElement(Prompts, { prompt: this.state.prompts[i].text, pid: this.state.prompts[i].pid }));
 	    }
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "daily_prompt" },
+	        'div',
+	        { className: 'daily_prompt' },
 	        tab
 	      ),
-	      React.createElement(Entry, { title: "The Biggest One", text: "", author: "{{story}} {{lastname}}", pic: "../static/images/riff.jpg", date: "July 17, 2016" })
+	      React.createElement(Entry, { title: 'The Biggest One', text: '', author: '{{story}} {{lastname}}', pic: '../static/images/riff.jpg', date: 'July 17, 2016' })
 	    );
 	  }
 
@@ -521,13 +518,13 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
-	      { className: "prompt_tab" },
+	      'div',
+	      { className: 'prompt_tab' },
 	      React.createElement(
-	        "div",
-	        { onClick: this.handleChoice, className: "daily_box" },
+	        'div',
+	        { onClick: this.handleChoice, className: 'daily_box' },
 	        React.createElement(
-	          "p",
+	          'p',
 	          null,
 	          this.prompt
 	        )
@@ -551,22 +548,22 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
-	      { className: "daily_box" },
+	      'div',
+	      { className: 'daily_box' },
 	      React.createElement(
-	        "p",
+	        'p',
 	        null,
 	        this.prompt
 	      ),
 	      React.createElement(
-	        "button",
-	        { className: "btn dashboard_read" },
-	        "Read"
+	        'button',
+	        { className: 'btn dashboard_read' },
+	        'Read'
 	      ),
 	      React.createElement(
-	        "button",
-	        { className: "btn dashboard_read" },
-	        "Write"
+	        'button',
+	        { className: 'btn dashboard_read' },
+	        'Write'
 	      )
 	    );
 	  }
@@ -579,17 +576,17 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "promptInfo", onClick: this.props.setPID },
+	        'div',
+	        { className: 'promptInfo', onClick: this.props.clickHandler },
 	        React.createElement(
-	          "div",
-	          { className: "p-box" },
+	          'div',
+	          { className: 'p-box' },
 	          React.createElement(
-	            "h1",
-	            { className: "writing_page_prompts" },
+	            'p',
+	            { className: 'writing_page_prompts' },
 	            this.props.prompt
 	          )
 	        )
@@ -626,9 +623,9 @@
 	    const textStory = this.state.topStories ? 'Top Stories' : 'Daily Prompt';
 	    var mode = this.state.topStories ? 0 : 1;
 	    return React.createElement(
-	      "div",
-	      { className: "s-tog" },
-	      React.createElement("div", { onClick: this.handleStories }),
+	      'div',
+	      { className: 's-tog' },
+	      React.createElement('div', { onClick: this.handleStories }),
 	      this.dailyTop(mode)
 	    );
 	  }
@@ -639,7 +636,7 @@
 	class WritingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [], currentPID: 0 };
+	    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: 1 };
 	    this.autoSave = null;
 	  }
 
@@ -655,27 +652,37 @@
 	    IO.setAutoSave(pid);
 	  }
 
+	  setPrompt(prompt, event) {
+	    this.setState({ currentPrompt: prompt });
+	  }
+
+	  clickHandler(pid, prompt, event) {
+	    this.setPID(pid, event);
+	    this.setPrompt(prompt, event);
+	    console.log("test");
+	  }
+
 	  render() {
 	    var tab = [];
 	    var writingArea = null;
 	    for (var i = 0; i < this.state.result.length; i++) {
 	      tab.push(React.createElement(PromptsWriting, {
-	        setPID: this.setPID.bind(this, this.state.result[i].pid),
+	        clickHandler: this.clickHandler.bind(this, this.state.result[i].pid, this.state.result[i].text),
 	        prompt: this.state.result[i].text,
 	        pid: this.state.result[i].pid
 	      }));
 	    };
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "selectionBox" },
+	        'div',
+	        { className: 'selectionBox' },
 	        tab
 	      ),
-	      React.createElement(WritingArea, { pid: this.state.currentPID }),
+	      React.createElement(WritingArea, { pid: this.state.currentPID, prompt: this.state.currentPrompt }),
 	      React.createElement(
-	        "p",
+	        'p',
 	        null,
 	        this.state.currentPID
 	      )
@@ -692,31 +699,31 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "writing_head" },
+	        'div',
+	        { className: 'writing_head' },
 	        React.createElement(
-	          "button",
-	          { id: "publish-button", onClick: IO.publishText.bind(this, this.props.pid), className: "btn submit" },
-	          "Submit"
+	          'button',
+	          { id: 'publish-button', onClick: IO.publishText.bind(this, this.props.pid), className: 'btn submit' },
+	          'Submit'
 	        ),
 	        React.createElement(
-	          "h1",
+	          'h1',
 	          null,
-	          "Prompt"
+	          this.props.prompt
 	        ),
 	        React.createElement(
-	          "p",
+	          'p',
 	          null,
-	          "WordCount:"
+	          'WordCount:'
 	        )
 	      ),
 	      React.createElement(
-	        "section",
-	        { className: "writingpage_section" },
-	        React.createElement("article", { id: "text", contentEditable: "true", className: "content writingpage_article" })
+	        'section',
+	        { className: 'writingpage_section' },
+	        React.createElement('article', { id: 'text', contentEditable: 'true', className: 'content writingpage_article' })
 	      )
 	    );
 	  }
@@ -748,11 +755,11 @@
 	      writingArea = React.createElement(ReadingArea, { pid: this.state.result[i].pid });
 	    }
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "selectionBox" },
+	        'div',
+	        { className: 'selectionBox' },
 	        tab
 	      ),
 	      writingArea
@@ -770,12 +777,12 @@
 
 	  render() {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "section",
-	        { className: "writingpage_section" },
-	        React.createElement("article", { id: "text", contentEditable: "false", className: "content writingpage_article" })
+	        'section',
+	        { className: 'writingpage_section' },
+	        React.createElement('article', { id: 'text', contentEditable: 'false', className: 'content writingpage_article' })
 	      )
 	    );
 	  }
@@ -787,7 +794,7 @@
 	window.onload = function () {
 	  var url = window.location.href.split('/');
 	  if (inArray("dashboard", url)) {
-	    ReactDOM.render(React.createElement(Front, { pic: "../static/images/lion.jpg" }), document.getElementById('d_board'));
+	    ReactDOM.render(React.createElement(Front, { pic: '../static/images/lion.jpg' }), document.getElementById('d_board'));
 	  } else if (inArray("writing", url)) {
 	    writingHandlers();
 	    ReactDOM.render(React.createElement(WritingPage, null), document.getElementById('writing_page'));
