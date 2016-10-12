@@ -120,12 +120,23 @@
 	    });
 	  };
 
-	  var autoSave = null;
 	  var setAutoSave = function (pid) {
-	    window.clearInterval(autoSave);
-	    autoSave = window.setInterval(function () {
-	      saveText(pid);
-	    }, SAVE_INTERVAL);
+	    console.log("Setting the autosave func");
+	    var savingPID = pid;
+	    var autoSave = null;
+
+	    var autoSaveSetter = function () {
+	      console.log("Resetting the autosave timeout");
+	      autoSave = setTimeout(function () {
+	        saveText(savingPID);
+	      }, SAVE_INTERVAL);
+	    };
+
+	    $("#text").on("input propertychange change", function (e) {
+	      console.log("Saw change in text area and clearing");
+	      clearTimeout(autoSave);
+	      autoSaveSetter();
+	    });
 	  };
 
 	  return {
@@ -672,18 +683,13 @@
 	        pid: this.state.result[i].pid
 	      }));
 	    };
-
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'div',
 	        { className: 'selectionBox' },
-	        React.createElement(
-	          ReactCSSTransitionGroup,
-	          null,
-	          tab
-	        )
+	        tab
 	      ),
 	      React.createElement(WritingArea, { pid: this.state.currentPID, prompt: this.state.currentPrompt }),
 	      React.createElement(

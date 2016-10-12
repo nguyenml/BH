@@ -86,12 +86,21 @@ var IO = function() {
       });
   };
 
-  var autoSave = null;
-  var setAutoSave = function(pid){
-    window.clearInterval(autoSave);
-    autoSave = window.setInterval(function(){
-      saveText(pid);
-    }, SAVE_INTERVAL);
+  
+  var setAutoSave = function(pid) {
+    var savingPID = pid;
+    var autoSave = null;
+      
+    var autoSaveSetter = function() {
+        autoSave = setTimeout(function() {
+          saveText(savingPID);
+        }, SAVE_INTERVAL);
+      }
+      
+      $("#text").on("input propertychange change", function(e) {
+        clearTimeout(autoSave);
+        autoSaveSetter();
+      });
   }
 
   return {
@@ -118,7 +127,6 @@ class Front extends React.Component {
   }
 
   render(){
-    console.log("test");
     var tab = [];
     for (var i = 0; i < this.state.result.length; i++){
       tab.push(<PromptsFront prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
@@ -497,7 +505,6 @@ class WritingPage extends React.Component{
   clickHandler(pid,prompt,event){
     this.setPID(pid,event);
     this.setPrompt(prompt,event);
-    console.log("test");
   }
 
 
