@@ -411,9 +411,6 @@ class PromptsWriting extends React.Component{
     super(props);
   }
 
-  emphasizePrompt(){
-    
-  }
 
   render() {
     return(
@@ -477,7 +474,7 @@ class Story extends React.Component {
 class WritingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: 1};
+    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!"};
     this.autoSave = null;
   }
 

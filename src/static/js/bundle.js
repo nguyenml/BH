@@ -636,7 +636,7 @@
 	class WritingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: 1 };
+	    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!" };
 	    this.autoSave = null;
 	  }
 
@@ -672,13 +672,18 @@
 	        pid: this.state.result[i].pid
 	      }));
 	    };
+
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'div',
 	        { className: 'selectionBox' },
-	        tab
+	        React.createElement(
+	          ReactCSSTransitionGroup,
+	          null,
+	          tab
+	        )
 	      ),
 	      React.createElement(WritingArea, { pid: this.state.currentPID, prompt: this.state.currentPrompt }),
 	      React.createElement(
