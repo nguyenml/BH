@@ -381,24 +381,39 @@ class PromptsWriting extends React.Component{
 
   setHighlight(){
     if(this.props.currentPID === this.props.pid){
-     return(<p>True</p>)
+     return(true);
     }
   }
 
   render() {
+    if(this.setHighlight()){
+      return(
+        <div>
+          <div className="promptInfo" onClick= {this.props.clickHandler}>
+            <div className="p-box-blue">
+              <p className="writing_page_prompts">
+                {this.props.prompt}
+              </p>
+            </div>
+          </div>
+        </div>
+
+      )
+    }
+    else{
     return(
       <div>
         <div className="promptInfo" onClick= {this.props.clickHandler}>
           <div className="p-box">
             <p className="writing_page_prompts">
               {this.props.prompt}
-              {this.setHighlight()}
             </p>
           </div>
         </div>
       </div>
     );
     }
+  }
 }
 
 
@@ -536,7 +551,7 @@ class WritingArea extends React.Component {
 class ReadingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [] };
+    this.state = { result: [], pid: [], currentPID: 0 };
   }
 
   componentWillMount(){
@@ -547,13 +562,18 @@ class ReadingPage extends React.Component{
 
   setPID(pid, event){
     var text = IO.loadRandomText(pid);
+    this.setState({currentPID: pid});
+  }
+
+  clickHandler(pid,event){
+    this.setPID(pid,event);
   }
 
   render(){
     var tab = [];
     var writingArea = null;
     for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsWriting setPID = {this.setPID.bind(this, this.state.result[i].pid)} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
+      tab.push(<PromptsWriting clickHandler = {this.clickHandler.bind(this, this.state.result[i].pid)} currentPID = {this.state.currentPID} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
       writingArea = <ReadingArea pid={this.state.result[i].pid} />
     }
     return(

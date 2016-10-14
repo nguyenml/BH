@@ -541,33 +541,48 @@
 
 	  setHighlight() {
 	    if (this.props.currentPID === this.props.pid) {
-	      return React.createElement(
-	        'p',
-	        null,
-	        'True'
-	      );
+	      return true;
 	    }
 	  }
 
 	  render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
+	    if (this.setHighlight()) {
+	      return React.createElement(
 	        'div',
-	        { className: 'promptInfo', onClick: this.props.clickHandler },
+	        null,
 	        React.createElement(
 	          'div',
-	          { className: 'p-box' },
+	          { className: 'promptInfo', onClick: this.props.clickHandler },
 	          React.createElement(
-	            'p',
-	            { className: 'writing_page_prompts' },
-	            this.props.prompt,
-	            this.setHighlight()
+	            'div',
+	            { className: 'p-box-blue' },
+	            React.createElement(
+	              'p',
+	              { className: 'writing_page_prompts' },
+	              this.props.prompt
+	            )
 	          )
 	        )
-	      )
-	    );
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'promptInfo', onClick: this.props.clickHandler },
+	          React.createElement(
+	            'div',
+	            { className: 'p-box' },
+	            React.createElement(
+	              'p',
+	              { className: 'writing_page_prompts' },
+	              this.props.prompt
+	            )
+	          )
+	        )
+	      );
+	    }
 	  }
 	}
 
@@ -718,7 +733,7 @@
 	class ReadingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [] };
+	    this.state = { result: [], pid: [], currentPID: 0 };
 	  }
 
 	  componentWillMount() {
@@ -729,13 +744,18 @@
 
 	  setPID(pid, event) {
 	    var text = IO.loadRandomText(pid);
+	    this.setState({ currentPID: pid });
+	  }
+
+	  clickHandler(pid, event) {
+	    this.setPID(pid, event);
 	  }
 
 	  render() {
 	    var tab = [];
 	    var writingArea = null;
 	    for (var i = 0; i < this.state.result.length; i++) {
-	      tab.push(React.createElement(PromptsWriting, { setPID: this.setPID.bind(this, this.state.result[i].pid), prompt: this.state.result[i].text, pid: this.state.result[i].pid }));
+	      tab.push(React.createElement(PromptsWriting, { clickHandler: this.clickHandler.bind(this, this.state.result[i].pid), currentPID: this.state.currentPID, prompt: this.state.result[i].text, pid: this.state.result[i].pid }));
 	      writingArea = React.createElement(ReadingArea, { pid: this.state.result[i].pid });
 	    }
 	    return React.createElement(
