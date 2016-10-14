@@ -672,18 +672,13 @@
 	        pid: this.state.result[i].pid
 	      }));
 	    };
-
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'div',
 	        { className: 'selectionBox' },
-	        React.createElement(
-	          ReactCSSTransitionGroup,
-	          null,
-	          tab
-	        )
+	        tab
 	      ),
 	      React.createElement(WritingArea, { pid: this.state.currentPID, prompt: this.state.currentPrompt }),
 	      React.createElement(
