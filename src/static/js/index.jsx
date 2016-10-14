@@ -86,17 +86,17 @@ var IO = function() {
       });
   };
 
-  
+
   var setAutoSave = function(pid) {
     var savingPID = pid;
     var autoSave = null;
-      
+
     var autoSaveSetter = function() {
         autoSave = setTimeout(function() {
           saveText(savingPID);
         }, SAVE_INTERVAL);
       }
-      
+
       $("#text").on("input propertychange change", function(e) {
         clearTimeout(autoSave);
         autoSaveSetter();
@@ -324,46 +324,6 @@ class Landing extends React.Component{
   }
 }
 
-//renders the new entry for the prompt
-class DailyPrompt extends React.Component {
-  constructor(){
-    super();
-    this.state = {
-      prompts: [],
-      promptChoice: 0
-    };
-    this.handleChoice = this.handleChoice.bind(this);
-  }
-
-  handleChoice(){
-    var text = $.post("/getprompts", function (response) {
-    this.setState({"text": text })
-  });
-  }
-
-  componentDidMount(){
-   this.serverRequest = $.post("/getprompts", function (response) {
-     this.setState({ prompts : response});
-   }.bind(this));
-  }
-
-    render() {
-        var tab = [];
-        for (var i = 0; i < this.state.prompts.length; i++){
-          tab.push(<Prompts prompt ={this.state.prompts[i].text} pid ={this.state.prompts[i].pid} />)
-        }
-        return (
-            <div>
-              <div className="daily_prompt">
-                {tab}
-            </div>
-                <Entry title="The Biggest One" text="" author="{{story}} {{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016"/>
-            </div>
-
-        )
-    }
-
-}
 
 class Prompts extends React.Component{
   constructor(props){
@@ -419,6 +379,11 @@ class PromptsWriting extends React.Component{
     super(props);
   }
 
+  setHighlight(){
+    if(this.props.currentPID === this.props.pid){
+     return(<p>True</p>)
+    }
+  }
 
   render() {
     return(
@@ -427,6 +392,7 @@ class PromptsWriting extends React.Component{
           <div className="p-box">
             <p className="writing_page_prompts">
               {this.props.prompt}
+              {this.setHighlight()}
             </p>
           </div>
         </div>
@@ -482,8 +448,9 @@ class Story extends React.Component {
 class WritingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!"};
+    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!", highlight: false};
     this.autoSave = null;
+    this.highlight = this.highlight.bind(this);
   }
 
   componentWillMount(){
@@ -491,6 +458,7 @@ class WritingPage extends React.Component{
      this.setState({ result:result });
    }.bind(this));
   }
+
 
   setPID(pid, event){
     var text = IO.loadText(pid);
@@ -502,9 +470,15 @@ class WritingPage extends React.Component{
     this.setState({currentPrompt: prompt});
   }
 
-  clickHandler(pid,prompt,event){
+  highlight(highlight,event){
+    this.setState({highlight: false})
+    console.log(this.state.highlight);
+  }
+
+  clickHandler(highlight,pid,prompt,event){
     this.setPID(pid,event);
     this.setPrompt(prompt,event);
+    this.highlight(highlight,event);
   }
 
 
@@ -513,9 +487,11 @@ class WritingPage extends React.Component{
     var writingArea = null;
     for (var i = 0; i < this.state.result.length; i++){
       tab.push(<PromptsWriting
-        clickHandler={this.clickHandler.bind(this,this.state.result[i].pid,this.state.result[i].text)}
+        clickHandler={this.clickHandler.bind(this,this.state.highlight,this.state.result[i].pid,this.state.result[i].text)}
         prompt={this.state.result[i].text}
         pid={this.state.result[i].pid}
+        currentPID = {this.state.currentPID}
+        highlight={this.state.highlight}
         />)};
     return(
         <div>
