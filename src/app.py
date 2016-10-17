@@ -7,7 +7,7 @@ from flask import Flask, render_template, request, redirect, flash, url_for, jso
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
-from src import app, login_manager
+from src import app, login_manager, r
 from models import Author, SuggestedPrompt, Prompt, Piece, db
 
 @app.route('/')
@@ -76,9 +76,19 @@ def load_random():
     pieces = Piece.query.filter_by(prompt_id=p_id).all()
     pieces = filter(lambda x: x.is_published, pieces)
     pieces = filter(lambda x: x.author_id != current_user.id, pieces)
+    seen = r.get(str(current_user.id)) # We expect a list of strings of shape 'prompt_id,author_id'
+    if(seen):
+        seen = seen.split(" ")
+        seen = map(lambda x: map(int, x.split("-")), seen[1:])
+    else:
+        seen = []
+    print(seen)
 
     if(pieces):
         piece = random.choice(pieces)
+        seen.append([p_id, piece.author_id])
+        seen = " ".join(map(lambda x: "%s-%s" % (x[0], x[1]), seen))
+        r.set(str(current_user.id), seen)
         return piece.text
     else:
         return ""
@@ -101,6 +111,7 @@ def publish():
     if(piece and piece.text):
         piece.is_published = True
         db.session.commit()
+        db.session.close()
         return "SUCCESS"
     else:
         print("publish failed")
@@ -155,6 +166,7 @@ def get_prompt(pid):
 def add_prompt(prompt):
     db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
+    db.session.close()
     return "Thank you for your submission! It will be put under consideration."
 
 ###
@@ -191,3 +203,4 @@ def unauthorized():
 @login_manager.user_loader
 def load_user(user_id):
     return Author.query.get(int(user_id))
+
