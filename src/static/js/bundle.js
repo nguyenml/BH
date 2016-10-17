@@ -301,31 +301,6 @@
 	  title: "Title"
 	};
 
-	//renders the top stories of the particular prompt
-	class Top_Stories extends React.Component {
-	  constructor() {
-	    super();
-	  }
-
-	  render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'top_story_page' },
-	        React.createElement(
-	          'h1',
-	          { className: 'top_story_header' },
-	          'Top Stories Today'
-	        ),
-	        React.createElement('hr', null)
-	      ),
-	      React.createElement(Entry, { title: 'The Second One', text: 'asdasdfasdfasfafasdfasdfafafas', author: '{{firstname}}{{lastname}}', pic: '../static/images/riff.jpg', date: 'July 17, 2016' })
-	    );
-	  }
-	}
-
 	class Signup extends React.Component {
 	  constructor(props) {
 	    super(props);
@@ -394,6 +369,7 @@
 	          { id: 'login-form', action: '/login', method: 'POST' },
 	          React.createElement('input', { type: 'email', name: 'email', placeholder: 'Enter your email address', required: true }),
 	          React.createElement('input', { type: 'password', name: 'password', placeholder: 'Enter your password', required: true }),
+	          React.createElement('br', null),
 	          React.createElement('input', { onClick: this.props.loginHandler, id: 'login-submit', type: 'submit', value: 'Log in' })
 	        ),
 	        React.createElement(
@@ -442,21 +418,12 @@
 	      null,
 	      React.createElement(
 	        'div',
-	        { className: 'front' },
+	        { className: 'form-container' },
 	        React.createElement(
 	          'h1',
 	          null,
-	          'bardhop'
+	          'BardHop'
 	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'a new story everyday'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'form-container' },
 	        React.createElement(
 	          'div',
 	          { id: 'login' },

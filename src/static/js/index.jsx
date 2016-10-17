@@ -209,24 +209,6 @@ Entry.defaultProps = {  // initialize title
     title: "Title"
 };
 
-//renders the top stories of the particular prompt
-class Top_Stories extends React.Component {
-    constructor() {
-        super();
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="top_story_page">
-                    <h1 className="top_story_header">Top Stories Today</h1>
-                    <hr></hr>
-                </div>
-                <Entry title="The Second One" text="asdasdfasdfasfafasdfasdfafafas" author="{{firstname}}{{lastname}}" pic="../static/images/riff.jpg" date="July 17, 2016"/>
-            </div>
-        )
-    }
-}
 
 class Signup extends React.Component{
   constructor(props){
@@ -267,6 +249,7 @@ class Login extends React.Component{
                 <form id="login-form" action="/login" method="POST">
                     <input type="email" name="email" placeholder="Enter your email address" required />
                     <input type="password" name="password" placeholder="Enter your password" required />
+                    <br />
                     <input onClick={this.props.loginHandler} id="login-submit" type="submit" value="Log in" />
                 </form>
                 <a onClick={this.props.handleForm}> Not signed up? Create an account.</a><br></br>
@@ -307,12 +290,9 @@ class Landing extends React.Component{
 
   render() {
     return(
-      <div >
-          <div className="front">
-              <h1>bardhop</h1>
-              <p>a new story everyday</p>
-          </div>
+      <div>
         <div className = "form-container">
+                <h1>BardHop</h1>
           <div id="login">
             {this.checkForm(this.state.signupLogin)}
           </div>
