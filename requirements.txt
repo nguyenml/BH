@@ -8,6 +8,7 @@ google-api-python-client
 alembic
 passlib
 pycrypto
+redis
 
 # ----------------------
 # Testing
