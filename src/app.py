@@ -76,7 +76,8 @@ def load_random():
     pieces = Piece.query.filter_by(prompt_id=p_id).all()
     pieces = filter(lambda x: x.is_published, pieces)
     pieces = filter(lambda x: x.author_id != current_user.id, pieces)
-    seen = r.get(str(current_user.id)) # We expect a list of strings of shape 'prompt_id,author_id'
+    #seen = r.get(str(current_user.id)) # We expect a list of strings of shape 'prompt_id,author_id'
+    seen = []
     if(seen):
         seen = seen.split(" ")
         seen = map(lambda x: map(int, x.split("-")), seen[1:])
@@ -201,4 +202,3 @@ def unauthorized():
 @login_manager.user_loader
 def load_user(user_id):
     return Author.query.get(int(user_id))
-
