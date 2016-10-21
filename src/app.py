@@ -108,9 +108,8 @@ def publish():
     piece = Piece.get_piece(author_id=current_user.id, prompt_id=p_id)
     if(piece and piece.text):
         piece.is_published = True
-        db.session.commit()
-        db.session.close()
         r.lpush(str(piece.prompt_id), str(piece.id))
+        db.session.commit()
         return "SUCCESS"
     else:
         print("publish failed")

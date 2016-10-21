@@ -18,7 +18,8 @@ var writingHandlers = function() {
 
 var IO = function() {
   SAVE_INTERVAL = 2500;
-  autoSave = null; // Save request object
+  autoSave = null; // Save Timeout object
+  saveObject = null; // Save request object
   loadObject = null; // Load request object
 
   var loginHandler = function(){
@@ -34,7 +35,11 @@ var IO = function() {
       prompt_id: pid,
       text: $('#text').text(),
     };
-    $.post('/save',
+    if(saveObject){
+        saveObject.abort();
+        saveObject = null;
+    }
+    saveObject = $.post('/save',
       data=data,
       function(response, status_code, xhr){
         if(response === 'SUCCESS'){
@@ -95,17 +100,11 @@ var IO = function() {
 
   var setAutoSave = function(pid) {
     $("#text").on("input propertychange change", function(e) {
-      clearAutoSave();
       clearTimeout(autoSave);
       autoSave = setTimeout(function() {
         saveText(pid);
       }, SAVE_INTERVAL);
     });
-  }
-
-  var clearAutoSave = function() {
-    autoSave.abort();
-    autoSave = null;
   }
 
   var clearLoad = function() {
@@ -120,7 +119,6 @@ var IO = function() {
     setAutoSave: setAutoSave,
     publishText: publishText,
     loginHandler: loginHandler,
-    clearAutoSave: clearAutoSave,
     clearLoad: clearLoad,
   };
 }();
@@ -485,11 +483,6 @@ class WritingPage extends React.Component{
     this.setPID(pid,event);
     this.setPrompt(prompt,event);
     this.highlight(highlight,event);
-  }
-
-  componentWillUnmount() {
-    console.log("Canceling last AJAX request.");
-    IO.clearAutoSave();
   }
 
   render(){
