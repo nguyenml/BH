@@ -82,7 +82,6 @@ def load_random():
         seen = map(lambda x: map(int, x.split("-")), seen[1:])
     else:
         seen = []
-    print(seen)
 
     if(pieces):
         piece = random.choice(pieces)

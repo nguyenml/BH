@@ -33,23 +33,6 @@ SEED_PROMPTS = ["Eye Contact: Write about two people seeing each other for the f
         "This is a story that concerns education, getting old, and a drought - and it's a story worth repeating."]
 SEED_PIECES = ["ip","sum","es","pot","leo","osc","ter","byt","mot","ret"]
 
-def get_config():
-    config = {}
-    for elem in REQUIRED:
-        env_var = os.getenv(elem)
-        if(env_var):
-            config[elem] = env_var
-        else:
-            config[elem] = DEFAULTS[elem]
-    return config
-
-def write_config(dict_config):
-    with open("tmp/config.cfg", "wr") as fp:
-        json.dump(dict_config, fp)
-
-def gen_config():
-    write_config(get_config())
-
 def start():
     call(['heroku', 'local'])
     exit()
