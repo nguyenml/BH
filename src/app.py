@@ -87,7 +87,6 @@ def load_random():
         piece = random.choice(pieces)
         seen.append([p_id, piece.author_id])
         seen = " ".join(map(lambda x: "%s-%s" % (x[0], x[1]), seen))
-        r.set(str(current_user.id), seen)
         return piece.text
     else:
         return ""
@@ -111,6 +110,7 @@ def publish():
         piece.is_published = True
         db.session.commit()
         db.session.close()
+        r.lpush(str(piece.prompt_id), str(piece.id))
         return "SUCCESS"
     else:
         print("publish failed")

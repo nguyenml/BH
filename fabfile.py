@@ -73,7 +73,11 @@ def seed_db():
     try:
         print("Beginning data seed...")
         db.session.add(Author("test@test.com", "1234", "Tester"))
+        db.session.add(Author("a@a.com", "a", "A"))
         map(add_prompt, SEED_PROMPTS)
+        for i in range(1, len(SEED_PROMPTS)):
+            Piece.add_new_piece(1, "This is Tester's writing for prompt %s" % i, i, is_published=True)
+            Piece.add_new_piece(2, "This is A's writing for prompt %s" % i, i, is_published=True)
         db.session.commit()
         map(add_piece, enumerate(SEED_PIECES))
         print("Seeding done.")

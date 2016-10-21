@@ -103,9 +103,9 @@ class Piece(db.Model):
     date_started = db.Column(db.DateTime)
     prompt_id = db.Column(db.Integer, db.ForeignKey('prompts.id'))
 
-    def __init__(self, a_id, text, pid):
+    def __init__(self, a_id, text, pid, is_published=False):
         self.date_started = dt.now()
-        self.is_published = False
+        self.is_published = is_published
         self.author_id = a_id
         self.text = text
         self.prompt_id = pid
@@ -119,8 +119,8 @@ class Piece(db.Model):
         db.session.commit()
 
     @classmethod
-    def add_new_piece(cls, a_id, text, p_id):
-        piece = Piece(a_id, text, p_id)
+    def add_new_piece(cls, a_id, text, p_id, **kw):
+        piece = Piece(a_id, text, p_id, **kw)
         db.session.add(piece)
         db.session.commit()
 
