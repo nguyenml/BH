@@ -62,6 +62,8 @@
 
 	var IO = function () {
 	  SAVE_INTERVAL = 2500;
+	  autoSave = null; // Save request object
+	  loadObject = null; // Load request object
 
 	  var loginHandler = function () {
 	    var data = {};
@@ -111,7 +113,11 @@
 	    var data = {
 	      prompt_id: pid
 	    };
-	    $.post('/loadrandom', data = data, function (text, status_code, xhr) {
+	    if (loadObject) {
+	      loadObject.abort();
+	      loadObject = null;
+	    }
+	    loadObject = $.post('/loadrandom', data = data, function (text, status_code, xhr) {
 	      if (status_code === 'success') {
 	        $('#text').text(text);
 	      } else {
@@ -121,19 +127,23 @@
 	  };
 
 	  var setAutoSave = function (pid) {
-	    var savingPID = pid;
-	    var autoSave = null;
-
-	    var autoSaveSetter = function () {
-	      autoSave = setTimeout(function () {
-	        saveText(savingPID);
-	      }, SAVE_INTERVAL);
-	    };
-
 	    $("#text").on("input propertychange change", function (e) {
+	      clearAutoSave();
 	      clearTimeout(autoSave);
-	      autoSaveSetter();
+	      autoSave = setTimeout(function () {
+	        saveText(pid);
+	      }, SAVE_INTERVAL);
 	    });
+	  };
+
+	  var clearAutoSave = function () {
+	    autoSave.abort();
+	    autoSave = null;
+	  };
+
+	  var clearLoad = function () {
+	    loadObject.abort();
+	    loadObject = null;
 	  };
 
 	  return {
@@ -142,7 +152,9 @@
 	    loadRandomText: loadRandomText,
 	    setAutoSave: setAutoSave,
 	    publishText: publishText,
-	    loginHandler: loginHandler
+	    loginHandler: loginHandler,
+	    clearAutoSave: clearAutoSave,
+	    clearLoad: clearLoad
 	  };
 	}();
 
@@ -595,7 +607,6 @@
 	  constructor() {
 	    super();
 	    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!", highlight: false };
-	    this.autoSave = null;
 	    this.highlight = this.highlight.bind(this);
 	  }
 
@@ -624,6 +635,11 @@
 	    this.setPID(pid, event);
 	    this.setPrompt(prompt, event);
 	    this.highlight(highlight, event);
+	  }
+
+	  componentWillUnmount() {
+	    console.log("Canceling last AJAX request.");
+	    IO.clearAutoSave();
 	  }
 
 	  render() {
@@ -707,6 +723,10 @@
 	    this.serverRequest = $.post("/getprompts", function (result) {
 	      this.setState({ result: result });
 	    }.bind(this));
+	  }
+
+	  componentWillUnmount() {
+	    IO.clearLoad();
 	  }
 
 	  setPID(pid, event) {

@@ -18,6 +18,8 @@ var writingHandlers = function() {
 
 var IO = function() {
   SAVE_INTERVAL = 2500;
+  autoSave = null; // Save request object
+  loadObject = null; // Load request object
 
   var loginHandler = function(){
     var data = {};
@@ -75,7 +77,11 @@ var IO = function() {
     var data = {
       prompt_id: pid,
     };
-    $.post('/loadrandom',
+    if(loadObject) {
+        loadObject.abort();
+        loadObject = null;
+    }
+    loadObject = $.post('/loadrandom',
       data=data,
       function(text, status_code, xhr){
         if(status_code === 'success'){
@@ -88,19 +94,23 @@ var IO = function() {
 
 
   var setAutoSave = function(pid) {
-    var savingPID = pid;
-    var autoSave = null;
+    $("#text").on("input propertychange change", function(e) {
+      clearAutoSave();
+      clearTimeout(autoSave);
+      autoSave = setTimeout(function() {
+        saveText(pid);
+      }, SAVE_INTERVAL);
+    });
+  }
 
-    var autoSaveSetter = function() {
-        autoSave = setTimeout(function() {
-          saveText(savingPID);
-        }, SAVE_INTERVAL);
-      }
+  var clearAutoSave = function() {
+    autoSave.abort();
+    autoSave = null;
+  }
 
-      $("#text").on("input propertychange change", function(e) {
-        clearTimeout(autoSave);
-        autoSaveSetter();
-      });
+  var clearLoad = function() {
+    loadObject.abort();
+    loadObject = null;
   }
 
   return {
@@ -110,6 +120,8 @@ var IO = function() {
     setAutoSave: setAutoSave,
     publishText: publishText,
     loginHandler: loginHandler,
+    clearAutoSave: clearAutoSave,
+    clearLoad: clearLoad,
   };
 }();
 
@@ -444,7 +456,6 @@ class WritingPage extends React.Component{
   constructor(){
     super();
     this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!", highlight: false};
-    this.autoSave = null;
     this.highlight = this.highlight.bind(this);
   }
 
@@ -476,6 +487,10 @@ class WritingPage extends React.Component{
     this.highlight(highlight,event);
   }
 
+  componentWillUnmount() {
+    console.log("Canceling last AJAX request.");
+    IO.clearAutoSave();
+  }
 
   render(){
     var tab = [];
@@ -538,6 +553,10 @@ class ReadingPage extends React.Component{
    this.serverRequest = $.post("/getprompts", function (result) {
      this.setState({ result:result });
    }.bind(this));
+  }
+
+  componentWillUnmount() {
+    IO.clearLoad();
   }
 
   setPID(pid, event){
