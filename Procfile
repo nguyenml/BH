@@ -1,1 +1,2 @@
-web: python app.py 
+web: gunicorn -b 127.0.0.1:5000 app:app --log-level debug
+
