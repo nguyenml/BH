@@ -76,18 +76,16 @@ def load_random():
     pieces = Piece.query.filter_by(prompt_id=p_id).all()
     pieces = filter(lambda x: x.is_published, pieces)
     pieces = filter(lambda x: x.author_id != current_user.id, pieces)
-    #seen = r.get(str(current_user.id)) # We expect a list of strings of shape 'prompt_id,author_id'
-    seen = []
+    seen = r.lrange("a" + str(current_user.id), 0, -1) # We expect a list of strings of shape 'prompt_id,author_id'
     if(seen):
-        seen = seen.split(" ")
-        seen = map(lambda x: map(int, x.split("-")), seen[1:])
+        seen = map(int, seen)
+        pieces = filter(lambda x: x.id not in seen, pieces)
     else:
         seen = []
 
     if(pieces):
         piece = random.choice(pieces)
-        seen.append([p_id, piece.author_id])
-        seen = " ".join(map(lambda x: "%s-%s" % (x[0], x[1]), seen))
+        r.lpush("a" + str(current_user.id), str(piece.id))
         return piece.text
     else:
         return ""
@@ -109,7 +107,7 @@ def publish():
     piece = Piece.get_piece(author_id=current_user.id, prompt_id=p_id)
     if(piece and piece.text):
         piece.is_published = True
-        r.lpush(str(piece.prompt_id), str(piece.id))
+        r.lpush("p" + str(piece.prompt_id), str(piece.id))
         db.session.commit()
         return "SUCCESS"
     else:
