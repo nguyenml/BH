@@ -65,6 +65,8 @@
 	  autoSave = null; // Save Timeout object
 	  saveObject = null; // Save request object
 	  loadObject = null; // Load request object
+	  voteObject = null; // Vote
+	  commentObject = null;
 
 	  var loginHandler = function () {
 	    var data = {};
@@ -122,9 +124,10 @@
 	      loadObject.abort();
 	      loadObject = null;
 	    }
-	    loadObject = $.post('/loadrandom', data = data, function (text, status_code, xhr) {
+	    loadObject = $.post('/loadrandom', data = data, function (response, status_code, xhr) {
 	      if (status_code === 'success') {
-	        $('#text').text(text);
+	        console.log(response);
+	        $('#text').text(response["text"]);
 	      } else {
 	        console.log('load fail');
 	      }
@@ -145,6 +148,15 @@
 	    loadObject = null;
 	  };
 
+	  var vote = function () {
+	    var data = { piece_id: 1 };
+	    voteObject = $.post('/vote', data = data, function (response, status_code, xhr) {
+	      if (response === 'SUCCESS') {} else {
+	        console.log("Vote failed");
+	      }
+	    });
+	  };
+
 	  return {
 	    saveText: saveText,
 	    loadText: loadText,
@@ -152,7 +164,8 @@
 	    setAutoSave: setAutoSave,
 	    publishText: publishText,
 	    loginHandler: loginHandler,
-	    clearLoad: clearLoad
+	    clearLoad: clearLoad,
+	    vote: vote
 	  };
 	}();
 
@@ -723,7 +736,9 @@
 	  }
 
 	  setPID(pid, event) {
-	    var text = IO.loadRandomText(pid);
+	    var data = IO.loadRandomText(pid);
+	    //var text = data["text"];
+	    //svar pieceID = data["pieceID"]
 	    this.setState({ currentPID: pid });
 	  }
 
@@ -746,7 +761,16 @@
 	        { className: 'selectionBox' },
 	        tab
 	      ),
-	      writingArea
+	      writingArea,
+	      React.createElement(
+	        'div',
+	        { 'class': 'cover-comments' },
+	        React.createElement(
+	          'div',
+	          { id: 'rct' },
+	          React.createElement(LikeButton, null)
+	        )
+	      )
 	    );
 	  }
 	}
@@ -767,6 +791,144 @@
 	        'section',
 	        { className: 'writingpage_section' },
 	        React.createElement('article', { id: 'text', contentEditable: 'false', className: 'content writingpage_article' })
+	      )
+	    );
+	  }
+	}
+
+	class CommentBox extends React.Component {
+	  constructor() {
+	    super();
+	  }
+
+	  getInititalState() {
+	    return { data: [] };
+	  }
+
+	  componentDidUpdate() {
+	    return false;
+	  }
+
+	  render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'commentBox' },
+	      React.createElement(CommentList, { data: this.props.data }),
+	      React.createElement(CommentForm, null)
+	    );
+	  }
+
+	}
+
+	class CommentForm extends React.Component {
+	  constructor() {
+	    super();
+	  }
+
+	  render() {
+	    return React.createElement(
+	      'form',
+	      { className: 'commentForm' },
+	      React.createElement('div', { contentEditable: 'true', className: 'commentType', type: 'text', placeholder: 'Say something...' }),
+	      React.createElement('input', { type: 'submit', value: 'Post', className: 'commentSubmit' })
+	    );
+	  }
+	}
+
+	class CommentList extends React.Component {
+	  constructor() {
+	    super();
+	  }
+
+	  render() {
+	    var commentNodes = this.props.data.map(function (comment) {
+	      return React.createElement(
+	        Comment,
+	        { author: comment.author, key: comment.id },
+	        comment.text
+	      );
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'commentList' },
+	      commentNodes
+	    );
+	  }
+	}
+
+	var data = [{ id: 1, author: "Pete Hunt", text: "This is one comment" }, { id: 2, author: "Jordan Walke", text: "This is *another* comment" }];
+
+	class Comment extends React.Component {
+	  constructor() {
+	    super();
+	  }
+
+	  render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'comment' },
+	      React.createElement(
+	        'h2',
+	        { className: 'commentAuthor' },
+	        this.props.author
+	      ),
+	      React.createElement(
+	        'h2',
+	        { className: 'commentText' },
+	        this.props.children
+	      ),
+	      React.createElement('hr', null)
+	    );
+	  }
+	}
+
+	class LikeButton extends React.Component {
+	  constructor() {
+	    super();this.state = { liked: false, follow: false };
+	    this.handleLike = this.handleLike.bind(this);
+	    this.handleComment = this.handleComment.bind(this);
+	  }
+
+	  handleLike() {
+	    var like = IO.vote();
+	    this.setState({ liked: !this.state.liked });
+	  }
+	  handleComment() {
+	    this.setState({ comment: !this.state.comment });
+	  }
+
+	  commentOn(one) {
+	    if (one == 1) {
+	      return React.createElement(CommentBox, { data: data });
+	      console.log("working");
+	    }
+	  }
+
+	  render() {
+	    const textLike = this.state.liked ? 'Unlike' : 'Like';
+	    const textFollow = this.state.follow ? 'Unfollow' : 'Follow';
+	    var commentOnOff = this.state.comment ? 1 : 0;
+	    const textComment = "Comments";return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'rct-1' },
+	        React.createElement(
+	          'div',
+	          { onClick: this.handleLike, className: 'like' },
+	          textLike
+	        ),
+	        React.createElement(
+	          'div',
+	          { onClick: this.handleComment, className: 'comment-opening' },
+	          textComment
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        this.commentOn(commentOnOff)
 	      )
 	    );
 	  }

@@ -21,6 +21,8 @@ var IO = function() {
   autoSave = null; // Save Timeout object
   saveObject = null; // Save request object
   loadObject = null; // Load request object
+  voteObject = null; // Vote
+  commentObject = null
 
   var loginHandler = function(){
     var data = {};
@@ -88,9 +90,11 @@ var IO = function() {
     }
     loadObject = $.post('/loadrandom',
       data=data,
-      function(text, status_code, xhr){
+      function(response, status_code, xhr){
         if(status_code === 'success'){
-          $('#text').text(text);
+          console.log(response)
+          $('#text').text(response["text"]);
+
         } else {
           console.log('load fail');
         }
@@ -112,6 +116,18 @@ var IO = function() {
     loadObject = null;
   }
 
+  var vote = function(){
+    var data = {piece_id:1};
+    voteObject = $.post('/vote',
+       data = data,
+       function(response,status_code, xhr){
+         if(response === 'SUCCESS'){
+         } else {
+           console.log("Vote failed");
+         }
+       });
+  };
+
   return {
     saveText: saveText,
     loadText: loadText,
@@ -120,6 +136,7 @@ var IO = function() {
     publishText: publishText,
     loginHandler: loginHandler,
     clearLoad: clearLoad,
+    vote:vote,
   };
 }();
 
@@ -553,7 +570,9 @@ class ReadingPage extends React.Component{
   }
 
   setPID(pid, event){
-    var text = IO.loadRandomText(pid);
+    var data = IO.loadRandomText(pid);
+    //var text = data["text"];
+    //svar pieceID = data["pieceID"]
     this.setState({currentPID: pid});
   }
 
@@ -575,7 +594,13 @@ class ReadingPage extends React.Component{
 
             </div>
             {writingArea}
+            <div class="cover-comments">
+              <div id="rct">
+                <LikeButton />
+              </div>
+            </div>
         </div>
+
     )
   }
 }
@@ -598,6 +623,129 @@ class ReadingArea extends React.Component {
         )
     }
 }
+
+
+class CommentBox extends React.Component {
+    constructor(){
+          super();
+    }
+
+    getInititalState() {
+      return {data: []};
+    }
+
+    componentDidUpdate(){
+      return false;
+    }
+
+    render(){
+    return(
+      <div className="commentBox">
+      <CommentList data={this.props.data} />
+      <CommentForm />
+      </div>
+    );
+  }
+
+  }
+
+  class CommentForm extends React.Component{
+    constructor(){
+      super();
+    }
+
+    render(){
+      return(
+        <form className="commentForm">
+        <div contentEditable="true" className = "commentType" type="text" placeholder="Say something..." />
+        <input type="submit" value="Post" className = "commentSubmit" />
+        </form>
+      )
+    }
+  }
+
+  class CommentList extends React.Component{
+    constructor(){
+      super();
+    }
+
+    render(){
+      var commentNodes = this.props.data.map(function(comment){
+        return(
+          <Comment author=  {comment.author} key = {comment.id}>
+            {comment.text}
+            </Comment>
+        );
+      });
+      return(
+        <div className="commentList">
+        {commentNodes}
+        </div>
+      );
+    }
+  }
+
+  var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
+
+  class Comment extends React.Component{
+    constructor(){
+      super();
+    }
+
+    render(){
+      return(
+        <div className="comment">
+        <h2 className="commentAuthor">
+          {this.props.author}
+          </h2>
+        <h2 className= "commentText">
+          {this.props.children}
+          </h2>
+          <hr></hr>
+        </div>
+      )
+    }
+  }
+
+  class LikeButton extends React.Component {
+     constructor() {
+       super(); this.state = { liked: false, follow: false};
+       this.handleLike = this.handleLike.bind(this);
+         this.handleComment = this.handleComment.bind(this);
+  }
+
+    handleLike() {
+      var like = IO.vote();
+      this.setState({liked: !this.state.liked});
+    }
+    handleComment(){ this.setState({comment: !this.state.comment}); }
+
+    commentOn(one){
+       if( one == 1){
+         return(
+         <CommentBox data = {data}/>)
+         console.log("working");
+       }
+      }
+
+     render() { const textLike = this.state.liked ? 'Unlike' : 'Like';
+      const textFollow= this.state.follow ? 'Unfollow' : 'Follow';
+      var commentOnOff = this.state.comment ? 1 : 0;
+      const textComment = "Comments"; return (
+        <div>
+  <div className="rct-1">
+      <div onClick={this.handleLike} className="like">
+          {textLike}
+      </div>
+      <div onClick={this.handleComment} className="comment-opening">
+          {textComment}
+      </div>
+  </div>
+  <div>
+  {this.commentOn(commentOnOff)}
+  </div>
+  </div>
+  ); } }
 
 //
 //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));

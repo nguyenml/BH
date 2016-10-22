@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
 from src import app, login_manager, r
-from models import Author, SuggestedPrompt, Prompt, Piece, db
+from models import Author, SuggestedPrompt, Prompt, Piece, db, Feedback
 
 @app.route('/')
 def landing():
@@ -86,7 +86,9 @@ def load_random():
     if(pieces):
         piece = random.choice(pieces)
         r.lpush("a" + str(current_user.id), str(piece.id))
-        return piece.text
+        db.session.add(Feedback(piece.id, current_user.id))
+        db.session.commit()
+        return jsonify(dict(piece_id=piece.id, text=piece.text))
     else:
         return ""
 
@@ -119,6 +121,7 @@ def publish():
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
     return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),Prompt.get_dailies()))
+
 
 @app.route('/signup', methods=["POST"])
 def signup():
@@ -165,6 +168,19 @@ def add_prompt(prompt):
     db.session.commit()
     db.session.close()
     return "Thank you for your submission! It will be put under consideration."
+
+@app.route('/vote', methods=['POST'])
+@login_required
+def vote():
+    Feedback.query.filter_by(author_id = current_user.id, piece_id = request.form["piece_id"])
+    print(request.form)
+
+
+@app.route('/comment', methods=['POST'])
+@login_required
+def comment():
+    print(request.form)
+    return ""
 
 ###
 # Login Manager

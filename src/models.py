@@ -174,6 +174,15 @@ class Feedback(db.Model):
     __tablename__ = "feedback"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     piece_id = db.Column(db.Integer, db.ForeignKey('pieces.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    vote = db.Column(db.Integer)
+    comment = db.Column(db.String)
+
+    def __init__(self, piece_id, author_id, vote=0, comment=""):
+        self.piece_id = piece_id
+        self.author_id = author_id
+        self.vote = vote
+        self.comment = comment
 
 
 class Groups(db.Model):
@@ -189,6 +198,8 @@ class Groupings(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     role = db.Column(db.Integer) # TODO: Higher is higher authority, etc.
+
+
 
 
 @confirm

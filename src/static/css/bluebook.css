@@ -1009,7 +1009,7 @@ form.commentForm{
   padding-bottom: 8px;
 }
 
-input.commentType{
+.commentType{
   text-align: left;
   height: auto;
   border: 1px solid rgba(0, 0, 0, .3);
