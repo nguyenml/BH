@@ -98,13 +98,15 @@ var IO = function() {
       data=data,
       function(response, status_code, xhr){
         if(status_code === 'success'){
-          console.log(response)
           $('#text').text(response["text"]);
-
         } else {
-          console.log('load fail');
         }
       });
+    var piece_id = $.when(loadObject).done(function(result) { 
+            console.log(result);
+            return result['piece_id']; 
+        });
+    return piece_id;
   };
 
 
@@ -122,8 +124,8 @@ var IO = function() {
     loadObject = null;
   }
 
-  var vote = function(){
-    var data = {piece_id:1};
+  var vote = function(piece_id){
+    var data = {piece_id: piece_id};
     voteObject = $.post('/vote',
        data = data,
        function(response,status_code, xhr){
@@ -592,10 +594,10 @@ class ReadingPage extends React.Component{
   }
 
   setPID(pid, event){
-    var data = IO.loadRandomText(pid);
-    //var text = data["text"];
-    //svar pieceID = data["pieceID"]
-    this.setState({currentPID: pid});
+    var piece_id = IO.loadRandomText(pid);
+    console.log("This is at loadrandom, we should see a new piece_id printed");
+    console.log(piece_id);
+    this.setState({currentPID: pid, piece_id:piece_id});
   }
 
   clickHandler(pid,event){
@@ -618,7 +620,7 @@ class ReadingPage extends React.Component{
             {writingArea}
             <div class="cover-comments">
               <div id="rct">
-                <LikeButton />
+                <LikeButton piece_id={this.state.piece_id}/>
               </div>
             </div>
         </div>
@@ -730,25 +732,29 @@ class CommentBox extends React.Component {
   }
 
   class LikeButton extends React.Component {
-     constructor() {
-       super(); this.state = { liked: false, follow: false};
+     constructor(props) {
+       super(props); 
+       this.state = { liked: false, follow: false};
        this.handleLike = this.handleLike.bind(this);
-         this.handleComment = this.handleComment.bind(this);
+       this.handleComment = this.handleComment.bind(this);
   }
 
-    handleLike() {
-      var like = IO.vote();
+    handleLike(piece_id, event) {
+      console.log(piece_id)
+      var like = IO.vote(piece_id);
       if(like){
-      this.setState({liked: !this.state.liked});
+        this.setState({liked: !this.state.liked});
       }
     }
-    handleComment(){ this.setState({comment: !this.state.comment}); }
+    
+    handleComment(piece_id, event) { 
+      this.setState({comment: !this.state.comment}); 
+    }
 
     commentOn(one){
        if( one == 1){
          return(
          <CommentBox data = {data}/>)
-         console.log("working");
        }
       }
 
@@ -757,19 +763,21 @@ class CommentBox extends React.Component {
       var commentOnOff = this.state.comment ? 1 : 0;
       const textComment = "Comments"; return (
         <div>
-  <div className="rct-1">
-      <div onClick={this.handleLike} className="like">
-          {textLike}
-      </div>
-      <div onClick={this.handleComment} className="comment-opening">
-          {textComment}
-      </div>
-  </div>
-  <div>
-  {this.commentOn(commentOnOff)}
-  </div>
-  </div>
-  ); } }
+          <div className="rct-1">
+            <div onClick={this.handleLike.bind(this, this.props.piece_id)} className="like">
+              {textLike}
+            </div>
+            <div onClick={this.handleComment.bind(this, this.props.piece_id)} className="comment-opening">
+              {textComment}
+            </div>
+        </div>
+        <div>
+        {this.commentOn(commentOnOff)}
+        </div>
+    </div>
+    ); 
+  } 
+}
 
 //
 //ReactDOM.render(<Writing/>, document.getElementById('writing_page'));

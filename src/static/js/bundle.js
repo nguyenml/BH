@@ -133,12 +133,16 @@
 	    }
 	    loadObject = $.post('/loadrandom', data = data, function (response, status_code, xhr) {
 	      if (status_code === 'success') {
-	        console.log(response);
 	        $('#text').text(response["text"]);
-	      } else {
-	        console.log('load fail');
-	      }
+	      } else {}
 	    });
+	    var piece_id = $.when(loadObject).done(function (result) {
+	      console.log(result);
+	      return result['piece_id'];
+	    });
+	    console.log("the when is done.");
+	    console.log(piece_id);
+	    return piece_id;
 	  };
 
 	  var setAutoSave = function (pid) {
@@ -155,8 +159,8 @@
 	    loadObject = null;
 	  };
 
-	  var vote = function () {
-	    var data = { piece_id: 1 };
+	  var vote = function (piece_id) {
+	    var data = { piece_id: piece_id };
 	    voteObject = $.post('/vote', data = data, function (response, status_code, xhr) {
 	      if (status_code === "success") {
 	        return true;
@@ -762,10 +766,10 @@
 	  }
 
 	  setPID(pid, event) {
-	    var data = IO.loadRandomText(pid);
-	    //var text = data["text"];
-	    //svar pieceID = data["pieceID"]
-	    this.setState({ currentPID: pid });
+	    var piece_id = IO.loadRandomText(pid);
+	    console.log("This is at loadrandom, we should see a new piece_id printed");
+	    console.log(piece_id);
+	    this.setState({ currentPID: pid, piece_id: piece_id });
 	  }
 
 	  clickHandler(pid, event) {
@@ -794,7 +798,7 @@
 	        React.createElement(
 	          'div',
 	          { id: 'rct' },
-	          React.createElement(LikeButton, null)
+	          React.createElement(LikeButton, { piece_id: this.state.piece_id })
 	        )
 	      )
 	    );
@@ -909,27 +913,28 @@
 	}
 
 	class LikeButton extends React.Component {
-	  constructor() {
-	    super();this.state = { liked: false, follow: false };
+	  constructor(props) {
+	    super(props);
+	    this.state = { liked: false, follow: false };
 	    this.handleLike = this.handleLike.bind(this);
 	    this.handleComment = this.handleComment.bind(this);
 	  }
 
-	  handleLike() {
-	    var like = IO.vote();
-	    console.log(like);
+	  handleLike(piece_id, event) {
+	    console.log(piece_id);
+	    var like = IO.vote(piece_id);
 	    if (like) {
 	      this.setState({ liked: !this.state.liked });
 	    }
 	  }
-	  handleComment() {
+
+	  handleComment(piece_id, event) {
 	    this.setState({ comment: !this.state.comment });
 	  }
 
 	  commentOn(one) {
 	    if (one == 1) {
 	      return React.createElement(CommentBox, { data: data });
-	      console.log("working");
 	    }
 	  }
 
@@ -945,12 +950,12 @@
 	        { className: 'rct-1' },
 	        React.createElement(
 	          'div',
-	          { onClick: this.handleLike, className: 'like' },
+	          { onClick: this.handleLike.bind(this, this.props.piece_id), className: 'like' },
 	          textLike
 	        ),
 	        React.createElement(
 	          'div',
-	          { onClick: this.handleComment, className: 'comment-opening' },
+	          { onClick: this.handleComment.bind(this, this.props.piece_id), className: 'comment-opening' },
 	          textComment
 	        )
 	      ),
