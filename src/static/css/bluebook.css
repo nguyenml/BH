@@ -217,6 +217,9 @@ nav ul li button {
 }
 
 /**prompt placement*/
+.no-prompt{
+  padding-bottom: 5px;
+}
 
 .prompt {
     position: fixed;

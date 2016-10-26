@@ -14,6 +14,12 @@ var inArray = function( element, array) {
 var writingHandlers = function() {
   $("#publish-button").click(function(e){
   });
+
+  $('#text').on('input', function () {
+    console.log("Test");
+      var text = this.textContent, count = text.trim().replace(/\s+/g, ' ').split(' ').length;
+      $('.words').text(count);
+  });
 }
 
 var IO = function() {
@@ -472,6 +478,7 @@ class WritingPage extends React.Component{
     super();
     this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!", highlight: false};
     this.highlight = this.highlight.bind(this);
+
   }
 
   componentWillMount(){
@@ -519,7 +526,6 @@ class WritingPage extends React.Component{
                 {tab}
             </div>
              <WritingArea pid={this.state.currentPID} prompt={this.state.currentPrompt}/>
-             <p>{this.state.currentPID}</p>
         </div>
       )
   }
@@ -536,18 +542,32 @@ class WritingArea extends React.Component {
 
 
     render() {
-        return (
+      if(this.props.pid == 0){
+        return(
+            <div>
+                <div className="writing_head">
+                    <button id="publish-button" onClick={IO.publishText.bind(this, this.props.pid)} className="btn submit">Submit</button>
+                    <h1 className="no-prompt">{this.props.prompt}</h1>
+                </div>
+              </div>
+            )
+          }
+          else{
+            return(
             <div>
                 <div className="writing_head">
                     <button id="publish-button" onClick={IO.publishText.bind(this, this.props.pid)} className="btn submit">Submit</button>
                     <h1>{this.props.prompt}</h1>
-                    <p>WordCount:</p>
+                    <p className="words">WordCount:</p>
                 </div>
                 <section className="writingpage_section">
                     <article id="text" contentEditable="true" className="content writingpage_article"></article>
                 </section>
               </div>
-        )
+            )
+            }
+
+
     }
 }
 

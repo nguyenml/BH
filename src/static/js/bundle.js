@@ -58,6 +58,13 @@
 
 	var writingHandlers = function () {
 	  $("#publish-button").click(function (e) {});
+
+	  $('#text').on('input', function () {
+	    console.log("Test");
+	    var text = this.textContent,
+	        count = text.trim().replace(/\s+/g, ' ').split(' ').length;
+	    $('.words').text(count);
+	  });
 	};
 
 	var IO = function () {
@@ -668,12 +675,7 @@
 	        { className: 'selectionBox' },
 	        tab
 	      ),
-	      React.createElement(WritingArea, { pid: this.state.currentPID, prompt: this.state.currentPrompt }),
-	      React.createElement(
-	        'p',
-	        null,
-	        this.state.currentPID
-	      )
+	      React.createElement(WritingArea, { pid: this.state.currentPID, prompt: this.state.currentPrompt })
 	    );
 	  }
 	}
@@ -686,34 +688,55 @@
 	  }
 
 	  render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
+	    if (this.props.pid == 0) {
+	      return React.createElement(
 	        'div',
-	        { className: 'writing_head' },
+	        null,
 	        React.createElement(
-	          'button',
-	          { id: 'publish-button', onClick: IO.publishText.bind(this, this.props.pid), className: 'btn submit' },
-	          'Submit'
-	        ),
-	        React.createElement(
-	          'h1',
-	          null,
-	          this.props.prompt
-	        ),
-	        React.createElement(
-	          'p',
-	          null,
-	          'WordCount:'
+	          'div',
+	          { className: 'writing_head' },
+	          React.createElement(
+	            'button',
+	            { id: 'publish-button', onClick: IO.publishText.bind(this, this.props.pid), className: 'btn submit' },
+	            'Submit'
+	          ),
+	          React.createElement(
+	            'h1',
+	            { className: 'no-prompt' },
+	            this.props.prompt
+	          )
 	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        { className: 'writingpage_section' },
-	        React.createElement('article', { id: 'text', contentEditable: 'true', className: 'content writingpage_article' })
-	      )
-	    );
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'writing_head' },
+	          React.createElement(
+	            'button',
+	            { id: 'publish-button', onClick: IO.publishText.bind(this, this.props.pid), className: 'btn submit' },
+	            'Submit'
+	          ),
+	          React.createElement(
+	            'h1',
+	            null,
+	            this.props.prompt
+	          ),
+	          React.createElement(
+	            'p',
+	            { className: 'words' },
+	            'WordCount:'
+	          )
+	        ),
+	        React.createElement(
+	          'section',
+	          { className: 'writingpage_section' },
+	          React.createElement('article', { id: 'text', contentEditable: 'true', className: 'content writingpage_article' })
+	        )
+	      );
+	    }
 	  }
 	}
 
