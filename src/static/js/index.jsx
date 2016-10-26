@@ -127,11 +127,13 @@ var IO = function() {
     voteObject = $.post('/vote',
        data = data,
        function(response,status_code, xhr){
-         if(response === 'SUCCESS'){
+         if(status_code === "success" ){
+           return true;
          } else {
-           console.log("Vote failed");
+           return false;
          }
        });
+       return voteObject;
   };
 
   return {
@@ -736,7 +738,9 @@ class CommentBox extends React.Component {
 
     handleLike() {
       var like = IO.vote();
+      if(like){
       this.setState({liked: !this.state.liked});
+      }
     }
     handleComment(){ this.setState({comment: !this.state.comment}); }
 

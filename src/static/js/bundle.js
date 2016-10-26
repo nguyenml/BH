@@ -158,10 +158,13 @@
 	  var vote = function () {
 	    var data = { piece_id: 1 };
 	    voteObject = $.post('/vote', data = data, function (response, status_code, xhr) {
-	      if (response === 'SUCCESS') {} else {
-	        console.log("Vote failed");
+	      if (status_code === "success") {
+	        return true;
+	      } else {
+	        return false;
 	      }
 	    });
+	    return voteObject;
 	  };
 
 	  return {
@@ -914,7 +917,10 @@
 
 	  handleLike() {
 	    var like = IO.vote();
-	    this.setState({ liked: !this.state.liked });
+	    console.log(like);
+	    if (like) {
+	      this.setState({ liked: !this.state.liked });
+	    }
 	  }
 	  handleComment() {
 	    this.setState({ comment: !this.state.comment });

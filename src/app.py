@@ -172,8 +172,14 @@ def add_prompt(prompt):
 @app.route('/vote', methods=['POST'])
 @login_required
 def vote():
-    Feedback.query.filter_by(author_id = current_user.id, piece_id = request.form["piece_id"])
-    print(request.form)
+    feedback = Feedback.query.filter_by(author_id = current_user.id, piece_id = request.form["piece_id"]).first()
+    if(not feedback):
+        feedback = Feedback(int(request.form["piece_id"]), current_user.id, 1, "")
+        db.session.add(feedback)
+    else:
+        feedback.vote = not feedback.vote
+    db.session.commit()
+    return "",200
 
 
 @app.route('/comment', methods=['POST'])
