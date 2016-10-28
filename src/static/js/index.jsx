@@ -99,13 +99,10 @@ var IO = function() {
       function(response, status_code, xhr){
         if(status_code === 'success'){
           $('#text').text(response["text"]);
+
         } else {
         }
-      });
-    var piece_id = $.when(loadObject).done(function(result) { 
-            console.log(result);
-            return result['piece_id']; 
-        });
+      })
     return piece_id;
   };
 
@@ -580,7 +577,7 @@ class WritingArea extends React.Component {
 class ReadingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [], currentPID: 0 };
+    this.state = { result: [], pid: [], currentPID: 0, piece_id:-1 };
   }
 
   componentWillMount(){
@@ -594,10 +591,15 @@ class ReadingPage extends React.Component{
   }
 
   setPID(pid, event){
-    var piece_id = IO.loadRandomText(pid);
-    console.log("This is at loadrandom, we should see a new piece_id printed");
-    console.log(piece_id);
-    this.setState({currentPID: pid, piece_id:piece_id});
+    var data = {
+      prompt_id: pid,
+    };
+    $.post('/loadrandom', data=data, (response) => {
+          $('#text').text(response["text"]);
+          this.setState({piece_id: response["piece_id"]})
+        }
+      )
+    this.setState({currentPID: pid});
   }
 
   clickHandler(pid,event){
@@ -733,22 +735,21 @@ class CommentBox extends React.Component {
 
   class LikeButton extends React.Component {
      constructor(props) {
-       super(props); 
+       super(props);
        this.state = { liked: false, follow: false};
        this.handleLike = this.handleLike.bind(this);
        this.handleComment = this.handleComment.bind(this);
   }
 
     handleLike(piece_id, event) {
-      console.log(piece_id)
       var like = IO.vote(piece_id);
       if(like){
         this.setState({liked: !this.state.liked});
       }
     }
-    
-    handleComment(piece_id, event) { 
-      this.setState({comment: !this.state.comment}); 
+
+    handleComment(piece_id, event) {
+      this.setState({comment: !this.state.comment});
     }
 
     commentOn(one){
@@ -775,8 +776,8 @@ class CommentBox extends React.Component {
         {this.commentOn(commentOnOff)}
         </div>
     </div>
-    ); 
-  } 
+    );
+  }
 }
 
 //

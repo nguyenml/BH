@@ -136,12 +136,6 @@
 	        $('#text').text(response["text"]);
 	      } else {}
 	    });
-	    var piece_id = $.when(loadObject).done(function (result) {
-	      console.log(result);
-	      return result['piece_id'];
-	    });
-	    console.log("the when is done.");
-	    console.log(piece_id);
 	    return piece_id;
 	  };
 
@@ -752,7 +746,7 @@
 	class ReadingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [], currentPID: 0 };
+	    this.state = { result: [], pid: [], currentPID: 0, piece_id: -1 };
 	  }
 
 	  componentWillMount() {
@@ -766,10 +760,14 @@
 	  }
 
 	  setPID(pid, event) {
-	    var piece_id = IO.loadRandomText(pid);
-	    console.log("This is at loadrandom, we should see a new piece_id printed");
-	    console.log(piece_id);
-	    this.setState({ currentPID: pid, piece_id: piece_id });
+	    var data = {
+	      prompt_id: pid
+	    };
+	    $.post('/loadrandom', data = data, response => {
+	      $('#text').text(response["text"]);
+	      this.setState({ piece_id: response["piece_id"] });
+	    });
+	    this.setState({ currentPID: pid });
 	  }
 
 	  clickHandler(pid, event) {
@@ -921,7 +919,6 @@
 	  }
 
 	  handleLike(piece_id, event) {
-	    console.log(piece_id);
 	    var like = IO.vote(piece_id);
 	    if (like) {
 	      this.setState({ liked: !this.state.liked });
