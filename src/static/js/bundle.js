@@ -746,7 +746,7 @@
 	class ReadingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [], currentPID: 0, piece_id: -1 };
+	    this.state = { result: [], pid: [], currentPID: 0, piece_id: -1, like: 0 };
 	  }
 
 	  componentWillMount() {
@@ -759,13 +759,25 @@
 	    IO.clearLoad();
 	  }
 
+	  toggleLike(event) {
+	    var data = {
+	      piece_id: this.state.piece_id
+	    };
+	    $.post('/vote', data = data, response => {
+	      this.setState({ like: response["like"] });
+	    });
+	  }
+
 	  setPID(pid, event) {
 	    var data = {
 	      prompt_id: pid
 	    };
 	    $.post('/loadrandom', data = data, response => {
 	      $('#text').text(response["text"]);
+	      console.log(response["piece_id"]);
 	      this.setState({ piece_id: response["piece_id"] });
+	      this.setState({ like: response["like"] });
+	      console.log(response);
 	    });
 	    this.setState({ currentPID: pid });
 	  }
@@ -796,7 +808,7 @@
 	        React.createElement(
 	          'div',
 	          { id: 'rct' },
-	          React.createElement(LikeButton, { piece_id: this.state.piece_id })
+	          React.createElement(LikeButton, { piece_id: this.state.piece_id, onClick: this.toggleLike.bind(this), likeState: this.state.like })
 	        )
 	      )
 	    );
@@ -913,16 +925,8 @@
 	class LikeButton extends React.Component {
 	  constructor(props) {
 	    super(props);
-	    this.state = { liked: false, follow: false };
-	    this.handleLike = this.handleLike.bind(this);
+	    this.state = { comment: 0 };
 	    this.handleComment = this.handleComment.bind(this);
-	  }
-
-	  handleLike(piece_id, event) {
-	    var like = IO.vote(piece_id);
-	    if (like) {
-	      this.setState({ liked: !this.state.liked });
-	    }
 	  }
 
 	  handleComment(piece_id, event) {
@@ -936,8 +940,7 @@
 	  }
 
 	  render() {
-	    const textLike = this.state.liked ? 'Unlike' : 'Like';
-	    const textFollow = this.state.follow ? 'Unfollow' : 'Follow';
+	    const textLike = this.props.likeState ? 'Unlike' : 'Like';
 	    var commentOnOff = this.state.comment ? 1 : 0;
 	    const textComment = "Comments";return React.createElement(
 	      'div',
@@ -947,7 +950,7 @@
 	        { className: 'rct-1' },
 	        React.createElement(
 	          'div',
-	          { onClick: this.handleLike.bind(this, this.props.piece_id), className: 'like' },
+	          { onClick: this.props.onClick, className: 'like' },
 	          textLike
 	        ),
 	        React.createElement(

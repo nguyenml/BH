@@ -88,7 +88,7 @@ def load_random():
         r.lpush("a" + str(current_user.id), str(piece.id))
         db.session.add(Feedback(piece.id, current_user.id))
         db.session.commit()
-        return jsonify(dict(piece_id=piece.id, text=piece.text))
+        return jsonify(dict(piece_id=piece.id, text=piece.text, like=0))
     else:
         return ""
 
@@ -180,7 +180,7 @@ def vote():
     else:
         feedback.vote = 0 if feedback.vote else 1
     db.session.commit()
-    return "",200
+    return jsonify({"like":feedback.vote}),200
 
 
 @app.route('/comment', methods=['POST'])
