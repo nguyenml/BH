@@ -746,7 +746,7 @@
 	class ReadingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [], currentPID: 0, piece_id: -1, like: 0 };
+	    this.state = { result: [], pid: [], currentPID: 0, piece_id: -1, like: 0, comment: 0 };
 	  }
 
 	  componentWillMount() {
@@ -759,12 +759,22 @@
 	    IO.clearLoad();
 	  }
 
+	  toggleComment(event) {
+	    var data = {
+	      piece_id: this.state.piece_id
+	    };
+	    $.post('/comment', data = data, response => {
+	      console.log(response);
+	    });
+	  }
+
 	  toggleLike(event) {
 	    var data = {
 	      piece_id: this.state.piece_id
 	    };
 	    $.post('/vote', data = data, response => {
 	      this.setState({ like: response["like"] });
+	      console.log(response["like"]);
 	    });
 	  }
 
@@ -808,7 +818,7 @@
 	        React.createElement(
 	          'div',
 	          { id: 'rct' },
-	          React.createElement(LikeButton, { piece_id: this.state.piece_id, onClick: this.toggleLike.bind(this), likeState: this.state.like })
+	          React.createElement(LikeButton, { piece_id: this.state.piece_id, onClickComment: this.toggleComment.bind(this), onClick: this.toggleLike.bind(this), likeState: this.state.like })
 	        )
 	      )
 	    );
@@ -955,7 +965,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { onClick: this.handleComment.bind(this, this.props.piece_id), className: 'comment-opening' },
+	          { onClick: this.props.onClickComment, className: 'comment-opening' },
 	          textComment
 	        )
 	      ),

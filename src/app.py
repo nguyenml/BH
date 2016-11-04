@@ -176,20 +176,28 @@ def add_prompt(prompt):
 def vote():
     print(request.form)
     feedback = Feedback.query.filter_by(author_id=current_user.id, piece_id=int(request.form["piece_id"])).first()
+    value = int(feedback.vote)
     if(not feedback):
         feedback = Feedback(int(request.form["piece_id"]), current_user.id, 1, "")
         db.session.add(feedback)
     else:
         feedback.vote = 0 if feedback.vote else 1
+        value = int(feedback.vote)
+        print(feedback.vote)
     db.session.commit()
-    return jsonify({"like":feedback.vote}),200
+    return jsonify({"like":value}),200
 
 
 @app.route('/comment', methods=['POST'])
 @login_required
 def comment():
-    print(request.form)
-    return ""
+    feedbacks = Feedback.query.filter_by(piece_id=int(request.form["piece_id"])).all()
+    feedbacks = map(lambda o:(o.author_id, o.comment), feedbacks)
+    data = []
+    for e in feedbacks:
+        name = Author.query.filter_by(id=e[0]).first().penname
+        data.append(dict(name = name, comment = e[1]))
+    return jsonify(data),200
 
 ###
 # Login Manager
