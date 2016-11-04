@@ -7,8 +7,10 @@ from flask import Flask, render_template, request, redirect, flash, url_for, jso
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
-from src import app, login_manager, r
-from models import Author, SuggestedPrompt, Prompt, Piece, db, Feedback
+from src import app, login_manager, r, db
+from models import Author, SuggestedPrompt, Prompt, Piece, Feedback
+
+app.app_context().push()
 
 @app.route('/')
 def landing():

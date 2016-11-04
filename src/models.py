@@ -4,8 +4,6 @@ from datetime import datetime as dt
 from passlib.hash import sha256_crypt as crypto
 from flask_sqlalchemy import SQLAlchemy
 
-from src import db, login_manager
-from helpers import confirm, dbcommit
 
 db = SQLAlchemy()
 
@@ -198,24 +196,6 @@ class Groupings(db.Model):
     group_id = db.Column(db.Integer, db.ForeignKey('groups.id'))
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
     role = db.Column(db.Integer) # TODO: Higher is higher authority, etc.
-
-
-
-
-@confirm
-@dbcommit
-def reset_writings():
-    print(Piece.query.delete())
-
-@confirm
-@dbcommit
-def reset_prompts():
-    print(Prompt.query.delete())
-
-@confirm
-@dbcommit
-def reset_suggested_prompts():
-    print(SuggestedPrompt.query.delete())
 
 def find_user(email_address):
     return Author.query.filter_by(email=email_address).first()

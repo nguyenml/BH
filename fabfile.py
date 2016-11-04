@@ -6,7 +6,6 @@ from passlib.hash import sha256_crypt as crypto
 
 from src import db
 from src.app import app
-from src.helpers import dbcommit, confirm
 from src.models import db, Author, Prompt, Piece
 
 SQL_DATABASE = "mysql"
@@ -66,7 +65,6 @@ def reset_db():
 def run_tests():
     call(["nosetests", "--nocapture", "test/"])
 
-@dbcommit
 def seed_db():
     add_prompt = lambda x: db.session.add(Prompt(x))
     add_piece = lambda x: db.session.add(Piece(1,x[1],x[0]+1))
@@ -84,12 +82,9 @@ def seed_db():
     except Exception as e:
         print(e)
 
-@confirm
-@dbcommit
 def reset_authors():
-    check = raw_input("Are you absolutely sure? Y/N")
-    if(check.lower() == 'y'):
-        print(Author.query.delete())
+    print(Author.query.delete())
+    db.session.commit()
 
 def new_db():
     try:
