@@ -577,12 +577,12 @@ class WritingArea extends React.Component {
 class ReadingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [], currentPID: 0, piece_id:-1, like: 0, comment:0};
+    this.state = { prompts: [], currentPromptID: 0, pieceID:-1, like: 0, showCommentBox:0};
   }
 
   componentWillMount(){
    this.serverRequest = $.post("/getprompts", function (result) {
-     this.setState({ result:result });
+     this.setState({ prompts: result });
    }.bind(this));
   }
 
@@ -592,7 +592,7 @@ class ReadingPage extends React.Component{
 
   toggleComment(event){
     var data = {
-    piece_id: this.state.piece_id
+        piece_id: this.state.pieceID
     };
     $.post('/comment',data=data, (response) => {
       console.log(response);
@@ -601,7 +601,7 @@ class ReadingPage extends React.Component{
 
   toggleLike(event) {
     var data = {
-      piece_id: this.state.piece_id,
+      piece_id: this.state.pieceID,
     };
     $.post('/vote',data=data, (response) => {
       this.setState({like: response["like"]})
@@ -616,25 +616,23 @@ class ReadingPage extends React.Component{
     };
     $.post('/loadrandom', data=data, (response) => {
           $('#text').text(response["text"]);
-          console.log(response["piece_id"])
-          this.setState({piece_id: response["piece_id"]})
+          this.setState({pieceID: response["piece_id"]})
           this.setState({like: response["like"]})
-          console.log(response);
         }
       )
-    this.setState({currentPID: pid});
+    this.setState({currentPromptID: pid});
   }
 
-  clickHandler(pid,event){
-    this.setPID(pid,event);
+  clickHandler(pid, event){
+    this.setPID(pid, event);
   }
 
   render(){
     var tab = [];
     var writingArea = null;
-    for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsWriting clickHandler = {this.clickHandler.bind(this, this.state.result[i].pid)} currentPID = {this.state.currentPID} prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
-      writingArea = <ReadingArea pid={this.state.result[i].pid} />
+    for (var i = 0; i < this.state.prompts.length; i++){
+      tab.push(<PromptsWriting clickHandler = {this.clickHandler.bind(this, this.state.prompts[i].pid)} currentPID = {this.state.currentPromptID} prompt ={this.state.prompts[i].text} pid ={this.state.prompts[i].pid} />)
+      writingArea = <ReadingArea pid={this.state.prompts[i].pid} />
     }
     return(
         <div>
@@ -645,7 +643,7 @@ class ReadingPage extends React.Component{
             {writingArea}
             <div class="cover-comments">
               <div id="rct">
-                <LikeButton piece_id={this.state.piece_id} onClickComment={this.toggleComment.bind(this)} onClick={this.toggleLike.bind(this)} likeState={this.state.like}/>
+                <Feedback piece_id={this.state.pieceID} onClickComment={this.toggleComment.bind(this)} onClick={this.toggleLike.bind(this)} likeState={this.state.like}/>
               </div>
             </div>
         </div>
@@ -714,7 +712,8 @@ class CommentBox extends React.Component {
   }
 
   class CommentList extends React.Component{
-    constructor(){
+    // Comment aggregation [(author, text)]
+      constructor(){
       super();
     }
 
@@ -737,7 +736,8 @@ class CommentBox extends React.Component {
   var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
 
   class Comment extends React.Component{
-    constructor(){
+    // Comment data (author, text)
+      constructor(){
       super();
     }
 
@@ -756,7 +756,7 @@ class CommentBox extends React.Component {
     }
   }
 
-  class LikeButton extends React.Component {
+  class Feedback extends React.Component {
      constructor(props) {
        super(props);
        this.state= {comment: 0}
