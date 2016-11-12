@@ -170,9 +170,9 @@ class SuggestedPrompt(db.Model):
 
 class Feedback(db.Model):
     __tablename__ = "feedback"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    piece_id = db.Column(db.Integer, db.ForeignKey('pieces.id'))
-    author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
+    id = db.Column(db.Integer, unique=True, autoincrement=True)
+    piece_id = db.Column(db.Integer, db.ForeignKey('pieces.id'), primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'), primary_key=True)
     vote = db.Column(db.Integer)
     comment = db.Column(db.String)
 
