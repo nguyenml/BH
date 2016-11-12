@@ -88,8 +88,10 @@ def load_random():
     if(pieces):
         piece = random.choice(pieces)
         r.lpush("a" + str(current_user.id), str(piece.id))
-        db.session.add(Feedback(piece.id, current_user.id))
-        db.session.commit()
+        feedback = Feedback.query.filter_by(piece_id=piece.id, author_id=current_user.id).first()
+        if(not feedback):
+            db.session.add(Feedback(piece.id, current_user.id))
+            db.session.commit()
         return jsonify(dict(piece_id=piece.id, text=piece.text, like=0))
     else:
         return ""

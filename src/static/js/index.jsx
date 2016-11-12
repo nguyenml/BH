@@ -577,7 +577,7 @@ class WritingArea extends React.Component {
 class ReadingPage extends React.Component{
   constructor(){
     super();
-    this.state = { prompts: [], currentPromptID: 0, pieceID:-1, like: 0, showCommentBox:0};
+    this.state = { prompts: [], currentPromptID: 0, pieceID:-1, like: 0, showCommentBox:0, comments: []};
   }
 
   componentWillMount(){
@@ -591,21 +591,24 @@ class ReadingPage extends React.Component{
   }
 
   toggleComment(event){
-    var data = {
-        piece_id: this.state.pieceID
-    };
-    $.post('/comment',data=data, (response) => {
-      console.log(response);
-    })
+    if(this.state.showCommentBox === 0) {
+        this.setState({ showCommentBox: 1 })
+        var data = {
+            piece_id: this.state.pieceID
+        };
+        $.post('/comment',data=data, (response) => {
+            this.setState({ comments: response })
+        })
+    } else {
+        this.setState({ showCommentBox: 0 })
+    }
   }
-
   toggleLike(event) {
     var data = {
       piece_id: this.state.pieceID,
     };
     $.post('/vote',data=data, (response) => {
       this.setState({like: response["like"]})
-      console.log(response["like"]);
     })
 
   }
@@ -631,8 +634,12 @@ class ReadingPage extends React.Component{
     var tab = [];
     var writingArea = null;
     for (var i = 0; i < this.state.prompts.length; i++){
-      tab.push(<PromptsWriting clickHandler = {this.clickHandler.bind(this, this.state.prompts[i].pid)} currentPID = {this.state.currentPromptID} prompt ={this.state.prompts[i].text} pid ={this.state.prompts[i].pid} />)
-      writingArea = <ReadingArea pid={this.state.prompts[i].pid} />
+      tab.push(<PromptsWriting 
+          clickHandler={this.clickHandler.bind(this, this.state.prompts[i].pid)} 
+          currentPID={this.state.currentPromptID} 
+          prompt={this.state.prompts[i].text} 
+          pid={this.state.prompts[i].pid} />)
+        writingArea=<ReadingArea pid={this.state.prompts[i].pid} />
     }
     return(
         <div>
@@ -643,7 +650,14 @@ class ReadingPage extends React.Component{
             {writingArea}
             <div class="cover-comments">
               <div id="rct">
-                <Feedback piece_id={this.state.pieceID} onClickComment={this.toggleComment.bind(this)} onClick={this.toggleLike.bind(this)} likeState={this.state.like}/>
+                <Feedback 
+                    piece_id={this.state.pieceID} 
+                    onClickComment={this.toggleComment.bind(this)} 
+                    onClick={this.toggleLike.bind(this)} 
+                    likeState={this.state.like} 
+                    comments={this.state.comments}
+                    showCommentBox={this.state.showCommentBox}
+                />
               </div>
             </div>
         </div>
@@ -673,12 +687,12 @@ class ReadingArea extends React.Component {
 
 
 class CommentBox extends React.Component {
-    constructor(){
-          super();
+    constructor(props){
+      super();
     }
 
     getInititalState() {
-      return {data: []};
+      return { comments: []};
     }
 
     componentDidUpdate(){
@@ -688,7 +702,7 @@ class CommentBox extends React.Component {
     render(){
     return(
       <div className="commentBox">
-      <CommentList data={this.props.data} />
+      <CommentList comments={this.props.comments} />
       <CommentForm />
       </div>
     );
@@ -713,12 +727,12 @@ class CommentBox extends React.Component {
 
   class CommentList extends React.Component{
     // Comment aggregation [(author, text)]
-      constructor(){
-      super();
+      constructor(props) {
+      super(props);
     }
 
     render(){
-      var commentNodes = this.props.data.map(function(comment){
+      var commentNodes = this.props.comments.map(function(comment){
         return(
           <Comment author=  {comment.author} key = {comment.id}>
             {comment.text}
@@ -757,42 +771,37 @@ class CommentBox extends React.Component {
   }
 
   class Feedback extends React.Component {
-     constructor(props) {
-       super(props);
-       this.state= {comment: 0}
-       this.handleComment = this.handleComment.bind(this);
-  }
-
-    handleComment(piece_id, event) {
-      this.setState({comment: !this.state.comment});
+    constructor(props) {
+        super(props);
     }
 
-    commentOn(one){
-       if( one == 1){
-         return(
-         <CommentBox data = {data}/>)
-       }
-      }
+    comments() {
+        if(this.props.showCommentBox === 1) {
+          return(
+                <div>
+                    <CommentBox comments={this.props.comments}/>
+                </div>)
+        }
+        return(<div></div>)
+    }
 
      render() {
-      const textLike = this.props.likeState ? 'Unlike' : 'Like';
-      var commentOnOff = this.state.comment ? 1 : 0;
-      const textComment = "Comments"; return (
-        <div>
-          <div className="rct-1">
-            <div onClick={this.props.onClick} className="like">
-              {textLike}
+        const textLike = this.props.likeState ? 'Unlike' : 'Like';
+        const textComment = "Comments";
+        return (
+            <div>
+                <div className="rct-1">
+                    <div onClick={this.props.onClick} className="like">
+                        {textLike}
+                    </div>
+                    <div onClick={this.props.onClickComment} className="comment-opening">
+                        {textComment}
+                    </div>
+                </div>
+                {this.comments()}
             </div>
-            <div onClick={this.props.onClickComment} className="comment-opening">
-              {textComment}
-            </div>
-        </div>
-        <div>
-        {this.commentOn(commentOnOff)}
-        </div>
-    </div>
-    );
-  }
+        );
+    }
 }
 
 //
