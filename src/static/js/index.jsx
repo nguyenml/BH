@@ -147,6 +147,81 @@ var IO = function() {
   };
 }();
 
+//Switches between the top entries and the newest entries
+class Story extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            favorites: false
+        };
+        this.handleDisplay = this.handleDisplay.bind(this);
+    }
+
+    handleDisplay() {
+        this.setState({
+            favorites: !this.state.favorites
+        });
+    }
+
+    dailyTop(number) {
+        if (number == 0) {
+            return (<Back/>)
+        } else if (number == 1) {
+            return (<Front/>)
+        }
+    }
+
+    render() {
+        const textStory = this.state.favorites
+            ? 'Go to My Writing'
+            : 'Go to My Favorites';
+        var mode = this.state.favorites
+            ? 0
+            : 1;
+        return (
+            <div className="s-tog">
+                <div className = "black_box" onClick={this.handleDisplay}><h1>{textStory}</h1></div>
+                {this.dailyTop(mode)}
+            </div>
+        )
+    }
+};
+
+class Back extends React.Component{
+  constructor(){
+    super();
+    this.state = {result: []}
+  }
+
+  componentDidMount(){
+   this.serverRequest = $.post("/getfavorites", function (result) {
+     this.setState({ result :result});
+   }.bind(this));
+ }
+
+   render(){
+     var tab = [];
+     for (var i = 0; i < this.state.result.length; i++){
+       tab.push(<PromptsFront prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt} date={this.state.result[i].date}/>)
+     }
+     return (
+         <div className="dashboard_front">
+             <div className="following">
+                 <div className="rectangle">
+                     <h1>
+                         Stories I Liked
+                     </h1>
+                 </div>
+                 <hr></hr>
+             </div>
+             <div className = "display_box_container">
+                 {tab}
+             </div>
+         </div>
+     )
+   }
+};
+
 //This function creates the front dashboard layout in templaye "dashboard.html"
 class Front extends React.Component {
   constructor(){
@@ -155,57 +230,29 @@ class Front extends React.Component {
   }
 
   componentDidMount(){
-   this.serverRequest = $.post("/getprompts", function (result) {
+   this.serverRequest = $.post("/getpieces", function (result) {
      this.setState({ result :result});
    }.bind(this));
+
   }
 
   render(){
     var tab = [];
     for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsFront prompt ={this.state.result[i].text} pid ={this.state.result[i].pid} />)
+      tab.push(<PromptsFront prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt}  date={this.state.result[i].date} />)
     }
     return (
         <div className="dashboard_front">
-            <div className="header">
-                <h1>
-                    Dashboard
-                </h1>
-                <div className="rectangle">
-                    <h1>
-                        In Progress
-                    </h1>
-                </div>
-                <div className="current">
-                    <div className="box">
-                        <h1>Project Name</h1>
-                        <img className="pic" src="../static/images/lion.png" height={100}/>
-                    </div>
-                    <div className="box">
-                        <h1>Project Name</h1>
-                        <img className="pic" src="../static/images/128x128.png" height={100}/>
-                    </div>
-                    <div className="box">
-                        <h1>Project Name</h1>
-                        <img className="pic" src="../static/images/wolf.png" height={100}/>
-                    </div>
-                    <div className="box">
-                        <h1>Project Name</h1>
-                        <img className="pic" src="../static/images/paws.png" height={100}/>
-                    </div>
-                </div>
-            </div>
             <div className="following">
                 <div className="rectangle">
                     <h1>
-                        Daily
+                        Stories I Wrote
                     </h1>
                 </div>
                 <hr></hr>
-                <div className="current">
-                    {tab}
-                </div>
-
+            </div>
+            <div className = "display_box_container">
+                {tab}
             </div>
         </div>
     )
@@ -367,22 +414,24 @@ class Prompts extends React.Component{
 class PromptsFront extends React.Component{
   constructor(props){
     super(props);
-    this.prompt = props.prompt;
-    this.state = { promptChoice: 0} ;
-    this.handleChoice = this.handleChoice.bind(this);
+    this.text= props.prompt;
+    this.state = {writing_prompt: "", result:[]}
 }
-    handleChoice(){
-      var text = $.post("/getprompts", function (response) {
-      this.setState({ });
-    });
+  componentDidMount(){
+    var data= {
+      pid:this.props.promptid
     }
-
+    this.serverRequest = $.post("/findprompt", data=data, function (result) {
+    this.setState({ writing_prompt : result});
+    }.bind(this));
+  }
     render() {
       return(
-      <div className="daily_box">
-          <p>{this.prompt}</p>
-          <button className="btn dashboard_read">Read</button>
-          <button className="btn dashboard_read">Write</button>
+      <div className="display_box">
+
+          <h1>{this.state.writing_prompt}</h1>
+          <p>{this.text}<hr></hr></p>
+
       </div>
       )
     }
@@ -429,48 +478,6 @@ class PromptsWriting extends React.Component{
     }
   }
 }
-
-
-
-//Switches between the top entries and the newest entries
-class Story extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            topStories: false
-        };
-        this.handleStories = this.handleStories.bind(this);
-    }
-
-    handleStories() {
-        this.setState({
-            topStories: !this.state.topStories
-        });
-    }
-
-    dailyTop(number) {
-        if (number == 1) {
-            return (<DailyPrompt/>)
-        } else if (number == 0) {
-            return (<Top_Stories/>)
-        }
-    }
-
-    render() {
-        const textStory = this.state.topStories
-            ? 'Top Stories'
-            : 'Daily Prompt';
-        var mode = this.state.topStories
-            ? 0
-            : 1;
-        return (
-            <div className="s-tog">
-                <div onClick={this.handleStories}></div>
-                {this.dailyTop(mode)}
-            </div>
-        )
-    }
-};
 
 /* WRITING */
 
@@ -634,10 +641,10 @@ class ReadingPage extends React.Component{
     var tab = [];
     var writingArea = null;
     for (var i = 0; i < this.state.prompts.length; i++){
-      tab.push(<PromptsWriting 
-          clickHandler={this.clickHandler.bind(this, this.state.prompts[i].pid)} 
-          currentPID={this.state.currentPromptID} 
-          prompt={this.state.prompts[i].text} 
+      tab.push(<PromptsWriting
+          clickHandler={this.clickHandler.bind(this, this.state.prompts[i].pid)}
+          currentPID={this.state.currentPromptID}
+          prompt={this.state.prompts[i].text}
           pid={this.state.prompts[i].pid} />)
         writingArea=<ReadingArea pid={this.state.prompts[i].pid} />
     }
@@ -650,11 +657,11 @@ class ReadingPage extends React.Component{
             {writingArea}
             <div class="cover-comments">
               <div id="rct">
-                <Feedback 
-                    piece_id={this.state.pieceID} 
-                    onClickComment={this.toggleComment.bind(this)} 
-                    onClick={this.toggleLike.bind(this)} 
-                    likeState={this.state.like} 
+                <Feedback
+                    piece_id={this.state.pieceID}
+                    onClickComment={this.toggleComment.bind(this)}
+                    onClick={this.toggleLike.bind(this)}
+                    likeState={this.state.like}
                     comments={this.state.comments}
                     showCommentBox={this.state.showCommentBox}
                 />
@@ -810,7 +817,7 @@ class CommentBox extends React.Component {
 window.onload = function(){
   var url = window.location.href.split('/');
   if(inArray("dashboard",url)){
-    ReactDOM.render(<Front pic="../static/images/lion.jpg"/>, document.getElementById('d_board'));
+    ReactDOM.render(<Story/>, document.getElementById('d_board'));
   }
   else if(inArray("writing",url)){
     writingHandlers();

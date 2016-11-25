@@ -177,15 +177,58 @@
 	  };
 	}();
 
-	//This function creates the front dashboard layout in templaye "dashboard.html"
-	class Front extends React.Component {
+	//Switches between the top entries and the newest entries
+	class Story extends React.Component {
+	  constructor() {
+	    super();
+	    this.state = {
+	      favorites: false
+	    };
+	    this.handleDisplay = this.handleDisplay.bind(this);
+	  }
+
+	  handleDisplay() {
+	    this.setState({
+	      favorites: !this.state.favorites
+	    });
+	  }
+
+	  dailyTop(number) {
+	    if (number == 0) {
+	      return React.createElement(Back, null);
+	    } else if (number == 1) {
+	      return React.createElement(Front, null);
+	    }
+	  }
+
+	  render() {
+	    const textStory = this.state.favorites ? 'Go to My Writing' : 'Go to My Favorites';
+	    var mode = this.state.favorites ? 0 : 1;
+	    return React.createElement(
+	      'div',
+	      { className: 's-tog' },
+	      React.createElement(
+	        'div',
+	        { className: 'black_box', onClick: this.handleDisplay },
+	        React.createElement(
+	          'h1',
+	          null,
+	          textStory
+	        )
+	      ),
+	      this.dailyTop(mode)
+	    );
+	  }
+	};
+
+	class Back extends React.Component {
 	  constructor() {
 	    super();
 	    this.state = { result: [] };
 	  }
 
 	  componentDidMount() {
-	    this.serverRequest = $.post("/getprompts", function (result) {
+	    this.serverRequest = $.post("/getfavorites", function (result) {
 	      this.setState({ result: result });
 	    }.bind(this));
 	  }
@@ -193,73 +236,11 @@
 	  render() {
 	    var tab = [];
 	    for (var i = 0; i < this.state.result.length; i++) {
-	      tab.push(React.createElement(PromptsFront, { prompt: this.state.result[i].text, pid: this.state.result[i].pid }));
+	      tab.push(React.createElement(PromptsFront, { prompt: this.state.result[i].text, promptid: this.state.result[i].prompt, date: this.state.result[i].date }));
 	    }
 	    return React.createElement(
 	      'div',
 	      { className: 'dashboard_front' },
-	      React.createElement(
-	        'div',
-	        { className: 'header' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Dashboard'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'rectangle' },
-	          React.createElement(
-	            'h1',
-	            null,
-	            'In Progress'
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'current' },
-	          React.createElement(
-	            'div',
-	            { className: 'box' },
-	            React.createElement(
-	              'h1',
-	              null,
-	              'Project Name'
-	            ),
-	            React.createElement('img', { className: 'pic', src: '../static/images/lion.png', height: 100 })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'box' },
-	            React.createElement(
-	              'h1',
-	              null,
-	              'Project Name'
-	            ),
-	            React.createElement('img', { className: 'pic', src: '../static/images/128x128.png', height: 100 })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'box' },
-	            React.createElement(
-	              'h1',
-	              null,
-	              'Project Name'
-	            ),
-	            React.createElement('img', { className: 'pic', src: '../static/images/wolf.png', height: 100 })
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'box' },
-	            React.createElement(
-	              'h1',
-	              null,
-	              'Project Name'
-	            ),
-	            React.createElement('img', { className: 'pic', src: '../static/images/paws.png', height: 100 })
-	          )
-	        )
-	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'following' },
@@ -269,15 +250,59 @@
 	          React.createElement(
 	            'h1',
 	            null,
-	            'Daily'
+	            'Stories I Liked'
 	          )
 	        ),
-	        React.createElement('hr', null),
+	        React.createElement('hr', null)
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'display_box_container' },
+	        tab
+	      )
+	    );
+	  }
+	};
+
+	//This function creates the front dashboard layout in templaye "dashboard.html"
+	class Front extends React.Component {
+	  constructor() {
+	    super();
+	    this.state = { result: [] };
+	  }
+
+	  componentDidMount() {
+	    this.serverRequest = $.post("/getpieces", function (result) {
+	      this.setState({ result: result });
+	    }.bind(this));
+	  }
+
+	  render() {
+	    var tab = [];
+	    for (var i = 0; i < this.state.result.length; i++) {
+	      tab.push(React.createElement(PromptsFront, { prompt: this.state.result[i].text, promptid: this.state.result[i].prompt, date: this.state.result[i].date }));
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'dashboard_front' },
+	      React.createElement(
+	        'div',
+	        { className: 'following' },
 	        React.createElement(
 	          'div',
-	          { className: 'current' },
-	          tab
-	        )
+	          { className: 'rectangle' },
+	          React.createElement(
+	            'h1',
+	            null,
+	            'Stories I Wrote'
+	          )
+	        ),
+	        React.createElement('hr', null)
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'display_box_container' },
+	        tab
 	      )
 	    );
 	  }
@@ -499,34 +524,36 @@
 	class PromptsFront extends React.Component {
 	  constructor(props) {
 	    super(props);
-	    this.prompt = props.prompt;
-	    this.state = { promptChoice: 0 };
-	    this.handleChoice = this.handleChoice.bind(this);
+	    this.text = props.prompt;
+	    this.state = { writing_prompt: "", result: [] };
 	  }
-	  handleChoice() {
-	    var text = $.post("/getprompts", function (response) {
-	      this.setState({});
-	    });
+	  componentDidMount() {
+	    var data = {
+	      pid: this.props.promptid
+	    };
+	    this.serverRequest = $.post("/findprompt", data = data, function (result) {
+	      this.setState({ writing_prompt: result });
+	    }.bind(this));
 	  }
-
 	  render() {
 	    return React.createElement(
 	      'div',
-	      { className: 'daily_box' },
+	      { className: 'display_box' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        this.state.writing_prompt
+	      ),
 	      React.createElement(
 	        'p',
 	        null,
-	        this.prompt
+	        this.props.date
 	      ),
 	      React.createElement(
-	        'button',
-	        { className: 'btn dashboard_read' },
-	        'Read'
-	      ),
-	      React.createElement(
-	        'button',
-	        { className: 'btn dashboard_read' },
-	        'Write'
+	        'p',
+	        null,
+	        this.text,
+	        React.createElement('hr', null)
 	      )
 	    );
 	  }
@@ -583,42 +610,6 @@
 	    }
 	  }
 	}
-
-	//Switches between the top entries and the newest entries
-	class Story extends React.Component {
-	  constructor() {
-	    super();
-	    this.state = {
-	      topStories: false
-	    };
-	    this.handleStories = this.handleStories.bind(this);
-	  }
-
-	  handleStories() {
-	    this.setState({
-	      topStories: !this.state.topStories
-	    });
-	  }
-
-	  dailyTop(number) {
-	    if (number == 1) {
-	      return React.createElement(DailyPrompt, null);
-	    } else if (number == 0) {
-	      return React.createElement(Top_Stories, null);
-	    }
-	  }
-
-	  render() {
-	    const textStory = this.state.topStories ? 'Top Stories' : 'Daily Prompt';
-	    var mode = this.state.topStories ? 0 : 1;
-	    return React.createElement(
-	      'div',
-	      { className: 's-tog' },
-	      React.createElement('div', { onClick: this.handleStories }),
-	      this.dailyTop(mode)
-	    );
-	  }
-	};
 
 	/* WRITING */
 
@@ -746,12 +737,12 @@
 	class ReadingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [], currentPID: 0, piece_id: -1, like: 0, comment: 0 };
+	    this.state = { prompts: [], currentPromptID: 0, pieceID: -1, like: 0, showCommentBox: 0, comments: [] };
 	  }
 
 	  componentWillMount() {
 	    this.serverRequest = $.post("/getprompts", function (result) {
-	      this.setState({ result: result });
+	      this.setState({ prompts: result });
 	    }.bind(this));
 	  }
 
@@ -760,21 +751,24 @@
 	  }
 
 	  toggleComment(event) {
-	    var data = {
-	      piece_id: this.state.piece_id
-	    };
-	    $.post('/comment', data = data, response => {
-	      console.log(response);
-	    });
+	    if (this.state.showCommentBox === 0) {
+	      this.setState({ showCommentBox: 1 });
+	      var data = {
+	        piece_id: this.state.pieceID
+	      };
+	      $.post('/comment', data = data, response => {
+	        this.setState({ comments: response });
+	      });
+	    } else {
+	      this.setState({ showCommentBox: 0 });
+	    }
 	  }
-
 	  toggleLike(event) {
 	    var data = {
-	      piece_id: this.state.piece_id
+	      piece_id: this.state.pieceID
 	    };
 	    $.post('/vote', data = data, response => {
 	      this.setState({ like: response["like"] });
-	      console.log(response["like"]);
 	    });
 	  }
 
@@ -784,12 +778,10 @@
 	    };
 	    $.post('/loadrandom', data = data, response => {
 	      $('#text').text(response["text"]);
-	      console.log(response["piece_id"]);
-	      this.setState({ piece_id: response["piece_id"] });
+	      this.setState({ pieceID: response["piece_id"] });
 	      this.setState({ like: response["like"] });
-	      console.log(response);
 	    });
-	    this.setState({ currentPID: pid });
+	    this.setState({ currentPromptID: pid });
 	  }
 
 	  clickHandler(pid, event) {
@@ -799,9 +791,13 @@
 	  render() {
 	    var tab = [];
 	    var writingArea = null;
-	    for (var i = 0; i < this.state.result.length; i++) {
-	      tab.push(React.createElement(PromptsWriting, { clickHandler: this.clickHandler.bind(this, this.state.result[i].pid), currentPID: this.state.currentPID, prompt: this.state.result[i].text, pid: this.state.result[i].pid }));
-	      writingArea = React.createElement(ReadingArea, { pid: this.state.result[i].pid });
+	    for (var i = 0; i < this.state.prompts.length; i++) {
+	      tab.push(React.createElement(PromptsWriting, {
+	        clickHandler: this.clickHandler.bind(this, this.state.prompts[i].pid),
+	        currentPID: this.state.currentPromptID,
+	        prompt: this.state.prompts[i].text,
+	        pid: this.state.prompts[i].pid }));
+	      writingArea = React.createElement(ReadingArea, { pid: this.state.prompts[i].pid });
 	    }
 	    return React.createElement(
 	      'div',
@@ -818,7 +814,14 @@
 	        React.createElement(
 	          'div',
 	          { id: 'rct' },
-	          React.createElement(LikeButton, { piece_id: this.state.piece_id, onClickComment: this.toggleComment.bind(this), onClick: this.toggleLike.bind(this), likeState: this.state.like })
+	          React.createElement(Feedback, {
+	            piece_id: this.state.pieceID,
+	            onClickComment: this.toggleComment.bind(this),
+	            onClick: this.toggleLike.bind(this),
+	            likeState: this.state.like,
+	            comments: this.state.comments,
+	            showCommentBox: this.state.showCommentBox
+	          })
 	        )
 	      )
 	    );
@@ -847,12 +850,12 @@
 	}
 
 	class CommentBox extends React.Component {
-	  constructor() {
+	  constructor(props) {
 	    super();
 	  }
 
 	  getInititalState() {
-	    return { data: [] };
+	    return { comments: [] };
 	  }
 
 	  componentDidUpdate() {
@@ -863,7 +866,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'commentBox' },
-	      React.createElement(CommentList, { data: this.props.data }),
+	      React.createElement(CommentList, { comments: this.props.comments }),
 	      React.createElement(CommentForm, null)
 	    );
 	  }
@@ -886,12 +889,13 @@
 	}
 
 	class CommentList extends React.Component {
-	  constructor() {
-	    super();
+	  // Comment aggregation [(author, text)]
+	  constructor(props) {
+	    super(props);
 	  }
 
 	  render() {
-	    var commentNodes = this.props.data.map(function (comment) {
+	    var commentNodes = this.props.comments.map(function (comment) {
 	      return React.createElement(
 	        Comment,
 	        { author: comment.author, key: comment.id },
@@ -909,6 +913,7 @@
 	var data = [{ id: 1, author: "Pete Hunt", text: "This is one comment" }, { id: 2, author: "Jordan Walke", text: "This is *another* comment" }];
 
 	class Comment extends React.Component {
+	  // Comment data (author, text)
 	  constructor() {
 	    super();
 	  }
@@ -932,27 +937,26 @@
 	  }
 	}
 
-	class LikeButton extends React.Component {
+	class Feedback extends React.Component {
 	  constructor(props) {
 	    super(props);
-	    this.state = { comment: 0 };
-	    this.handleComment = this.handleComment.bind(this);
 	  }
 
-	  handleComment(piece_id, event) {
-	    this.setState({ comment: !this.state.comment });
-	  }
-
-	  commentOn(one) {
-	    if (one == 1) {
-	      return React.createElement(CommentBox, { data: data });
+	  comments() {
+	    if (this.props.showCommentBox === 1) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(CommentBox, { comments: this.props.comments })
+	      );
 	    }
+	    return React.createElement('div', null);
 	  }
 
 	  render() {
 	    const textLike = this.props.likeState ? 'Unlike' : 'Like';
-	    var commentOnOff = this.state.comment ? 1 : 0;
-	    const textComment = "Comments";return React.createElement(
+	    const textComment = "Comments";
+	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
@@ -969,11 +973,7 @@
 	          textComment
 	        )
 	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        this.commentOn(commentOnOff)
-	      )
+	      this.comments()
 	    );
 	  }
 	}
@@ -984,7 +984,7 @@
 	window.onload = function () {
 	  var url = window.location.href.split('/');
 	  if (inArray("dashboard", url)) {
-	    ReactDOM.render(React.createElement(Front, { pic: '../static/images/lion.jpg' }), document.getElementById('d_board'));
+	    ReactDOM.render(React.createElement(Story, null), document.getElementById('d_board'));
 	  } else if (inArray("writing", url)) {
 	    writingHandlers();
 	    ReactDOM.render(React.createElement(WritingPage, null), document.getElementById('writing_page'));

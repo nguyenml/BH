@@ -396,29 +396,49 @@ STORYPAGE***********************************************************************
 /***********************************************************************************************************************************************************************************************************
 DASHBOARD******************************************************************************************************************************************************************************************************/
 
-.header{
-  text-align: left;
-  color: black;
-  flex-direction: row;
-  flex-grow: 1;
-  justify-content: center;
-  margin: 30px auto 0;
-  width: 950px;
-  height: auto;
-  padding-bottom:40px;
-}
-
-.header h1{
-  font-weight: lighter;
+.black_box{
+  width: 100px;
+  height: 50px;
+  border: 1px solid rgba(68, 68, 68, .2);
   text-align: center;
+  margin-left: -400px;
 }
 
-.header hr{
+.black_box h1{
+  font-size: 15px;
+  margin-top: 10px;
+
+}
+
+.display_box_container{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.display_box{
+  text-align: center;
+  color: black;
+  flex:1;
+  display: flex;
+  flex-direction: column;
+  width: 950px;
+  font-size: 25px;
+  padding-bottom: 10px;
+
+}
+
+.display_box p{
+ flex: 1;
+ height: auto;
+}
+
+.display_box hr{
   border: none;
-    height: 1px;
+  height: 1px;
     /* Set the hr color */
-    color: #333; /* old IE */
-    background-color: #333; /* Modern Browsers */
+    color: #808080; /* old IE */
+    background-color: #808080; /* Modern Browsers */
 }
 
 .rectangle{
@@ -435,7 +455,7 @@ DASHBOARD***********************************************************************
 }
 
 .rectangle h1{
-  text-align: left;
+  text-align: center;
 }
 
 .progress{
@@ -515,7 +535,6 @@ DASHBOARD***********************************************************************
   margin: 30px auto 0;
   width: 950px;
   height: auto;
-  padding-bottom:40px;
 }
 
 .following h1{
@@ -974,7 +993,7 @@ div.container-1{
   width: 0px;
 }
 .s-tog{
-  right: 0px;
+  margin-right: 0px;
 }
 
 h2.s-tog{

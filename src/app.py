@@ -126,6 +126,23 @@ def publish():
 def getprompts():
     return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),Prompt.get_dailies()))
 
+@app.route('/getpieces', methods=["POST"])
+def getpieces():
+    pieces = Piece.query.all()
+    pieces = filter(lambda x: x.author_id == current_user.id, pieces)
+    pieces = filter(lambda x: x.is_published == True, pieces)
+    return jsonify(map(lambda x: dict(text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
+
+@app.route('/getfavorites', methods=["POST"])
+def getfavoritepieces():
+    favorites = Feedback.query.filter_by(author_id=current_user.id, vote=1).all()
+    pieces = []
+    for e in favorites:
+        piece = Piece.query.filter_by(id=e.piece_id).first()
+        pieces.append(piece)
+    return jsonify(map(lambda x: dict(text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
+
+
 
 @app.route('/signup', methods=["POST"])
 def signup():
@@ -158,11 +175,20 @@ def login():
 @app.route('/prompt/<pid>', methods=["GET"])
 @login_required
 def get_prompt(pid):
+    print(pid)
     if(pid == None):
         return "Random prompt here"
-    prompt = Prompt.query.filter_by(promptid=pid).first()
+
+    prompt = Prompt.query.filter_by(id=pid).first()
+
     if(not prompt):
         return "No prompt :-("
+    return str(prompt.prompt)
+
+@app.route('/findprompt', methods=["POST"])
+def findprompt():
+    pid = request.form['pid']
+    prompt = Prompt.query.filter_by(id =pid).first()
     return str(prompt.prompt)
 
 @app.route('/addprompt/<prompt>', methods=['GET'])
@@ -185,7 +211,6 @@ def vote():
     else:
         feedback.vote = 0 if feedback.vote else 1
         value = int(feedback.vote)
-        print(feedback.vote)
     db.session.commit()
     return jsonify({"like":value}),200
 
