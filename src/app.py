@@ -131,7 +131,7 @@ def getpieces():
     pieces = Piece.query.all()
     pieces = filter(lambda x: x.author_id == current_user.id, pieces)
     pieces = filter(lambda x: x.is_published == True, pieces)
-    return jsonify(map(lambda x: dict(text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
+    return jsonify(map(lambda x: dict(piece = x.id, text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
 
 @app.route('/getfavorites', methods=["POST"])
 def getfavoritepieces():
@@ -140,7 +140,7 @@ def getfavoritepieces():
     for e in favorites:
         piece = Piece.query.filter_by(id=e.piece_id).first()
         pieces.append(piece)
-    return jsonify(map(lambda x: dict(text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
+    return jsonify(map(lambda x: dict(piece = x.id, text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
 
 
 
@@ -175,7 +175,6 @@ def login():
 @app.route('/prompt/<pid>', methods=["GET"])
 @login_required
 def get_prompt(pid):
-    print(pid)
     if(pid == None):
         return "Random prompt here"
 
@@ -213,6 +212,13 @@ def vote():
         value = int(feedback.vote)
     db.session.commit()
     return jsonify({"like":value}),200
+
+@app.route('/votetotal', methods=['POST'])
+def getvotes():
+    pid = request.form['piece']
+    vote_total = len(Feedback.query.filter_by(piece_id=pid).all())
+    return str(vote_total)
+
 
 
 @app.route('/comment', methods=['POST'])

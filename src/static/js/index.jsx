@@ -23,7 +23,7 @@ var writingHandlers = function() {
 }
 
 var IO = function() {
-  SAVE_INTERVAL = 2500;
+  SAVE_INTERVAL = 1500;
   autoSave = null; // Save Timeout object
   saveObject = null; // Save request object
   loadObject = null; // Load request object
@@ -66,6 +66,7 @@ var IO = function() {
       function(response, status_code, xhr){
         if(response === 'SUCCESS'){
         } else {
+          saveText(pid);
           console.log("Published failed");
         }
       });
@@ -109,6 +110,7 @@ var IO = function() {
 
   var setAutoSave = function(pid) {
     $("#text").on("input propertychange change", function(e) {
+      console.log("Input")
       clearTimeout(autoSave);
       autoSave = setTimeout(function() {
         saveText(pid);
@@ -202,7 +204,7 @@ class Back extends React.Component{
    render(){
      var tab = [];
      for (var i = 0; i < this.state.result.length; i++){
-       tab.push(<PromptsFront prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt} date={this.state.result[i].date}/>)
+       tab.push(<PromptsFront piece = {this.state.result[i].piece} prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt} date={this.state.result[i].date}/>)
      }
      return (
          <div className="dashboard_front">
@@ -239,7 +241,7 @@ class Front extends React.Component {
   render(){
     var tab = [];
     for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsFront prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt}  date={this.state.result[i].date} />)
+      tab.push(<PromptsFront  piece = {this.state.result[i].piece} prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt}  date={this.state.result[i].date} />)
     }
     return (
         <div className="dashboard_front">
@@ -415,23 +417,34 @@ class PromptsFront extends React.Component{
   constructor(props){
     super(props);
     this.text= props.prompt;
-    this.state = {writing_prompt: "", result:[]}
+    this.state = {writing_prompt: "", result:[], votes:0}
 }
+
+  getDate(){
+    return(this.props.date.substring(0,11))
+
+  }
   componentDidMount(){
     var data= {
-      pid:this.props.promptid
+      pid:this.props.promptid,
+      piece:this.props.piece
     }
     this.serverRequest = $.post("/findprompt", data=data, function (result) {
     this.setState({ writing_prompt : result});
+    }.bind(this));
+    this.serverRequest = $.post("/votetotal", data=data,function (votes){
+      this.setState({votes:votes});
     }.bind(this));
   }
     render() {
       return(
       <div className="display_box">
-
+          <div className = "feedback_header">
+            <div className = "feedback_header_date">{this.getDate()}</div>
+            <div className = "feedback_header_likes">&#9734; {this.state.votes}</div>
+            </div>
           <h1>{this.state.writing_prompt}</h1>
           <p>{this.text}<hr></hr></p>
-
       </div>
       )
     }
@@ -621,6 +634,7 @@ class ReadingPage extends React.Component{
   }
 
   setPID(pid, event){
+    $('#text').text(" ");
     var data = {
       prompt_id: pid,
     };

@@ -68,7 +68,7 @@
 	};
 
 	var IO = function () {
-	  SAVE_INTERVAL = 2500;
+	  SAVE_INTERVAL = 1500;
 	  autoSave = null; // Save Timeout object
 	  saveObject = null; // Save request object
 	  loadObject = null; // Load request object
@@ -105,6 +105,7 @@
 	    };
 	    $.post('/publish', data = data, function (response, status_code, xhr) {
 	      if (response === 'SUCCESS') {} else {
+	        saveText(pid);
 	        console.log("Published failed");
 	      }
 	    });
@@ -141,6 +142,7 @@
 
 	  var setAutoSave = function (pid) {
 	    $("#text").on("input propertychange change", function (e) {
+	      console.log("Input");
 	      clearTimeout(autoSave);
 	      autoSave = setTimeout(function () {
 	        saveText(pid);
@@ -236,7 +238,7 @@
 	  render() {
 	    var tab = [];
 	    for (var i = 0; i < this.state.result.length; i++) {
-	      tab.push(React.createElement(PromptsFront, { prompt: this.state.result[i].text, promptid: this.state.result[i].prompt, date: this.state.result[i].date }));
+	      tab.push(React.createElement(PromptsFront, { piece: this.state.result[i].piece, prompt: this.state.result[i].text, promptid: this.state.result[i].prompt, date: this.state.result[i].date }));
 	    }
 	    return React.createElement(
 	      'div',
@@ -280,7 +282,7 @@
 	  render() {
 	    var tab = [];
 	    for (var i = 0; i < this.state.result.length; i++) {
-	      tab.push(React.createElement(PromptsFront, { prompt: this.state.result[i].text, promptid: this.state.result[i].prompt, date: this.state.result[i].date }));
+	      tab.push(React.createElement(PromptsFront, { piece: this.state.result[i].piece, prompt: this.state.result[i].text, promptid: this.state.result[i].prompt, date: this.state.result[i].date }));
 	    }
 	    return React.createElement(
 	      'div',
@@ -525,14 +527,22 @@
 	  constructor(props) {
 	    super(props);
 	    this.text = props.prompt;
-	    this.state = { writing_prompt: "", result: [] };
+	    this.state = { writing_prompt: "", result: [], votes: 0 };
+	  }
+
+	  getDate() {
+	    return this.props.date.substring(0, 11);
 	  }
 	  componentDidMount() {
 	    var data = {
-	      pid: this.props.promptid
+	      pid: this.props.promptid,
+	      piece: this.props.piece
 	    };
 	    this.serverRequest = $.post("/findprompt", data = data, function (result) {
 	      this.setState({ writing_prompt: result });
+	    }.bind(this));
+	    this.serverRequest = $.post("/votetotal", data = data, function (votes) {
+	      this.setState({ votes: votes });
 	    }.bind(this));
 	  }
 	  render() {
@@ -540,14 +550,24 @@
 	      'div',
 	      { className: 'display_box' },
 	      React.createElement(
+	        'div',
+	        { className: 'feedback_header' },
+	        React.createElement(
+	          'div',
+	          { className: 'feedback_header_date' },
+	          this.getDate()
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'feedback_header_likes' },
+	          '☆ ',
+	          this.state.votes
+	        )
+	      ),
+	      React.createElement(
 	        'h1',
 	        null,
 	        this.state.writing_prompt
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        this.props.date
 	      ),
 	      React.createElement(
 	        'p',
@@ -773,6 +793,7 @@
 	  }
 
 	  setPID(pid, event) {
+	    $('#text').text(" ");
 	    var data = {
 	      prompt_id: pid
 	    };
