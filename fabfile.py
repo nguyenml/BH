@@ -29,7 +29,8 @@ SEED_PROMPTS = ["Eye Contact: Write about two people seeing each other for the f
         "Then came the rogue AIs, but the truth isn't quite what some think.",
         "Oh cruelty . . . time to break.",
         "Break education as long as you are crying.",
-        "This is a story that concerns education, getting old, and a drought - and it's a story worth repeating."]
+        "This is a story that concerns education, getting old, and a drought - and it's a story worth repeating.",
+        "Describe a wedding from three points of view."]
 SEED_PIECES = ["ip","sum","es","pot","leo","osc","ter","byt","mot","ret"]
 
 def start():

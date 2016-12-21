@@ -23,7 +23,7 @@ var writingHandlers = function() {
 }
 
 var IO = function() {
-  SAVE_INTERVAL = 1500;
+  SAVE_INTERVAL = 500;
   autoSave = null; // Save Timeout object
   saveObject = null; // Save request object
   loadObject = null; // Load request object
@@ -109,7 +109,7 @@ var IO = function() {
 
 
   var setAutoSave = function(pid) {
-    $("#text").on("input propertychange change", function(e) {
+    $("#text").on("input propertychange change keyup input paste", function(e) {
       console.log("Input")
       clearTimeout(autoSave);
       autoSave = setTimeout(function() {
@@ -137,6 +137,20 @@ var IO = function() {
        return voteObject;
   };
 
+  var comment = function(comment){
+    var data = {comment:comment};
+    commentObject =$.post('/comment',
+      data = data,
+      function(response,status_code, xhr){
+        if(status_code === "success"){
+        }
+        else{
+          console.log("comment fail")
+        }
+      });
+      return commentObject;
+  }
+
   return {
     saveText: saveText,
     loadText: loadText,
@@ -146,6 +160,7 @@ var IO = function() {
     loginHandler: loginHandler,
     clearLoad: clearLoad,
     vote:vote,
+    comment:comment,
   };
 }();
 
@@ -443,7 +458,7 @@ class PromptsFront extends React.Component{
             <div className = "feedback_header_date">{this.getDate()}</div>
             <div className = "feedback_header_likes">&#9734; {this.state.votes}</div>
             </div>
-          <h1>{this.state.writing_prompt}</h1>
+          <h1><b>{this.state.writing_prompt}</b></h1>
           <p>{this.text}<hr></hr></p>
       </div>
       )
@@ -521,7 +536,6 @@ class WritingPage extends React.Component{
 
   highlight(highlight,event){
     this.setState({highlight: false})
-    console.log(this.state.highlight);
   }
 
   clickHandler(highlight,pid,prompt,event){
@@ -567,7 +581,6 @@ class WritingArea extends React.Component {
         return(
             <div>
                 <div className="writing_head">
-                    <button id="publish-button" onClick={IO.publishText.bind(this, this.props.pid)} className="btn submit">Submit</button>
                     <h1 className="no-prompt">{this.props.prompt}</h1>
                 </div>
               </div>
@@ -672,7 +685,7 @@ class ReadingPage extends React.Component{
             <div class="cover-comments">
               <div id="rct">
                 <Feedback
-                    piece_id={this.state.pieceID}
+                    pieceID={this.state.pieceID}
                     onClickComment={this.toggleComment.bind(this)}
                     onClick={this.toggleLike.bind(this)}
                     likeState={this.state.like}
@@ -709,22 +722,26 @@ class ReadingArea extends React.Component {
 
 class CommentBox extends React.Component {
     constructor(props){
-      super();
+      super(props);
+      this.state = {comment: []};
+    //  this.state.piece_id = this.props.pieceID;
     }
 
-    getInititalState() {
-      return { comments: []};
-    }
-
-    componentDidUpdate(){
-      return false;
+    handleCommentSubmit(text){
+      var data = {
+        text:text,
+      //  piece_id:this.state.piece_id,
+      };
+      var comment = $.post("/addcomment", function (comment) {
+        this.setState({ comment: comment});
+      }.bind(this));
     }
 
     render(){
     return(
-      <div className="commentBox">
+      <div className = "commentBox">
       <CommentList comments={this.props.comments} />
-      <CommentForm />
+      <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
     );
   }
@@ -732,15 +749,27 @@ class CommentBox extends React.Component {
   }
 
   class CommentForm extends React.Component{
-    constructor(){
-      super();
+    constructor(props){
+      super(props);
+      this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(){
+      var text = this.refs.text.value.trim();
+      console.log("test");
+      if (!text) {
+      return;
+      }
+      this.props.onCommentSubmit({text: text});
+      this.refs.text.value = '';
+      return;
     }
 
     render(){
       return(
-        <form className="commentForm">
-        <div contentEditable="true" className = "commentType" type="text" placeholder="Say something..." />
-        <input type="submit" value="Post" className = "commentSubmit" />
+        <form className="commentForm" onSubmit={this.handleSubmit}>
+        <input type="text" placeholder="Say something..." ref="text" />
+        <input type="submit" value="Post" className = "commentSubmit"/>
         </form>
       )
     }
@@ -768,10 +797,9 @@ class CommentBox extends React.Component {
     }
   }
 
-  var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
+  //var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
 
   class Comment extends React.Component{
-    // Comment data (author, text)
       constructor(){
       super();
     }
@@ -800,7 +828,7 @@ class CommentBox extends React.Component {
         if(this.props.showCommentBox === 1) {
           return(
                 <div>
-                    <CommentBox comments={this.props.comments}/>
+                    <CommentBox comments={this.props.comments} pieceID= {this.props.pieceID}/>
                 </div>)
         }
         return(<div></div>)

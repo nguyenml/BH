@@ -232,6 +232,16 @@ def comment():
         data.append(dict(name = name, comment = e[1]))
     return jsonify(data),200
 
+@app.route('/addcomment', methods=['POST'])
+@login_required
+def add_comment():
+    author = current_user.first
+    comment = request.form['text']
+    db.session.add(comment)
+    return "success"
+
+
+
 ###
 # Login Manager
 ###

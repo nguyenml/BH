@@ -68,7 +68,7 @@
 	};
 
 	var IO = function () {
-	  SAVE_INTERVAL = 1500;
+	  SAVE_INTERVAL = 500;
 	  autoSave = null; // Save Timeout object
 	  saveObject = null; // Save request object
 	  loadObject = null; // Load request object
@@ -141,7 +141,7 @@
 	  };
 
 	  var setAutoSave = function (pid) {
-	    $("#text").on("input propertychange change", function (e) {
+	    $("#text").on("input propertychange change keyup input paste", function (e) {
 	      console.log("Input");
 	      clearTimeout(autoSave);
 	      autoSave = setTimeout(function () {
@@ -167,6 +167,16 @@
 	    return voteObject;
 	  };
 
+	  var comment = function (comment) {
+	    var data = { comment: comment };
+	    commentObject = $.post('/comment', data = data, function (response, status_code, xhr) {
+	      if (status_code === "success") {} else {
+	        console.log("comment fail");
+	      }
+	    });
+	    return commentObject;
+	  };
+
 	  return {
 	    saveText: saveText,
 	    loadText: loadText,
@@ -175,7 +185,8 @@
 	    publishText: publishText,
 	    loginHandler: loginHandler,
 	    clearLoad: clearLoad,
-	    vote: vote
+	    vote: vote,
+	    comment: comment
 	  };
 	}();
 
@@ -567,7 +578,11 @@
 	      React.createElement(
 	        'h1',
 	        null,
-	        this.state.writing_prompt
+	        React.createElement(
+	          'b',
+	          null,
+	          this.state.writing_prompt
+	        )
 	      ),
 	      React.createElement(
 	        'p',
@@ -658,7 +673,6 @@
 
 	  highlight(highlight, event) {
 	    this.setState({ highlight: false });
-	    console.log(this.state.highlight);
 	  }
 
 	  clickHandler(highlight, pid, prompt, event) {
@@ -707,11 +721,6 @@
 	        React.createElement(
 	          'div',
 	          { className: 'writing_head' },
-	          React.createElement(
-	            'button',
-	            { id: 'publish-button', onClick: IO.publishText.bind(this, this.props.pid), className: 'btn submit' },
-	            'Submit'
-	          ),
 	          React.createElement(
 	            'h1',
 	            { className: 'no-prompt' },
@@ -836,7 +845,7 @@
 	          'div',
 	          { id: 'rct' },
 	          React.createElement(Feedback, {
-	            piece_id: this.state.pieceID,
+	            pieceID: this.state.pieceID,
 	            onClickComment: this.toggleComment.bind(this),
 	            onClick: this.toggleLike.bind(this),
 	            likeState: this.state.like,
@@ -872,15 +881,18 @@
 
 	class CommentBox extends React.Component {
 	  constructor(props) {
-	    super();
+	    super(props);
+	    this.state = { comment: [] };
+	    //  this.state.piece_id = this.props.pieceID;
 	  }
 
-	  getInititalState() {
-	    return { comments: [] };
-	  }
-
-	  componentDidUpdate() {
-	    return false;
+	  handleCommentSubmit(text) {
+	    var data = {
+	      text: text
+	    };
+	    var comment = $.post("/addcomment", function (comment) {
+	      this.setState({ comment: comment });
+	    }.bind(this));
 	  }
 
 	  render() {
@@ -888,22 +900,34 @@
 	      'div',
 	      { className: 'commentBox' },
 	      React.createElement(CommentList, { comments: this.props.comments }),
-	      React.createElement(CommentForm, null)
+	      React.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit })
 	    );
 	  }
 
 	}
 
 	class CommentForm extends React.Component {
-	  constructor() {
-	    super();
+	  constructor(props) {
+	    super(props);
+	    this.handleSubmit = this.handleSubmit.bind(this);
+	  }
+
+	  handleSubmit() {
+	    var text = this.refs.text.value.trim();
+	    console.log("test");
+	    if (!text) {
+	      return;
+	    }
+	    this.props.onCommentSubmit({ text: text });
+	    this.refs.text.value = '';
+	    return;
 	  }
 
 	  render() {
 	    return React.createElement(
 	      'form',
-	      { className: 'commentForm' },
-	      React.createElement('div', { contentEditable: 'true', className: 'commentType', type: 'text', placeholder: 'Say something...' }),
+	      { className: 'commentForm', onSubmit: this.handleSubmit },
+	      React.createElement('input', { type: 'text', placeholder: 'Say something...', ref: 'text' }),
 	      React.createElement('input', { type: 'submit', value: 'Post', className: 'commentSubmit' })
 	    );
 	  }
@@ -931,10 +955,9 @@
 	  }
 	}
 
-	var data = [{ id: 1, author: "Pete Hunt", text: "This is one comment" }, { id: 2, author: "Jordan Walke", text: "This is *another* comment" }];
+	//var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
 
 	class Comment extends React.Component {
-	  // Comment data (author, text)
 	  constructor() {
 	    super();
 	  }
@@ -968,7 +991,7 @@
 	      return React.createElement(
 	        'div',
 	        null,
-	        React.createElement(CommentBox, { comments: this.props.comments })
+	        React.createElement(CommentBox, { comments: this.props.comments, pieceID: this.props.pieceID })
 	      );
 	    }
 	    return React.createElement('div', null);
