@@ -182,6 +182,17 @@ class Feedback(db.Model):
         self.vote = vote
         self.comment = comment
 
+class Comments(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, unique=True, autoincrement=True)
+    piece_id = db.Column(db.Integer, db.ForeignKey('pieces.id'), primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'), primary_key=True)
+    comment = db.Column(db.String)
+
+    def __init__(self, piece_id, author_id, comment=""):
+        self.piece_id = piece_id
+        self.author_id = author_id
+        self.comment = comment
 
 class Groups(db.Model):
     __tablename__ = "groups"

@@ -899,8 +899,6 @@
 	      text: text,
 	      pieceID: pieceID
 	    };
-	    console.log(text);
-	    console.log(data);
 	    $.post('/newcomment', data = data, function (comment) {}.bind(this));
 	  }
 

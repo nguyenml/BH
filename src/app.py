@@ -234,23 +234,41 @@ def comment():
 
 @app.route('/newcomment', methods=['POST'])
 @login_required
-def add_comment():
+def new_comment():
     author = current_user.first
     text = request.form['text']
-    print(text)
     piece_id= int(request.form["pieceID"])
     feedback = Feedback.query.filter_by(author_id=current_user.id, piece_id=piece_id).first()
     if(not feedback):
         new_feedback = Feedback(piece_id, current_user.id, 0, text)
         db.session.add(new_feedback)
-        print("test no feedback")
     else:
-        print("test feedback")
-        new_feedback = Feedback(piece_id, current_user.id, feedback.vote, text)
-        db.session.add(new_feedback)
+        #new_feedback = Feedback(piece_id, current_user.id, feedback.vote, text)
+        feedback.comment = text
+        #db.session.add(new_feedback)
     db.session.commit()
+    print("commited sucesfully")
     return "success"
 
+
+"""
+@app.route('/addcomment', methods=['POST'])
+@login_required
+def add_comment():
+    author = current_user.first
+    text = request.form['text']
+    piece_id= int(request.form["pieceID"])
+    comment = Comment.query.filter_by(author_id=current_user.id, piece_id=piece_id).first()
+    if(not feedback):
+        comment = Comment(piece_id, current_user.id, text)
+        db.session.add(comment)
+    else:
+        new_comment = Comment(piece_id, current_user.id, text)
+        db.session.add(new_comment)
+    db.session.commit()
+    print("commited sucesfully")
+    return "success"
+"""
 
 
 ###
