@@ -232,12 +232,23 @@ def comment():
         data.append(dict(name = name, comment = e[1]))
     return jsonify(data),200
 
-@app.route('/addcomment', methods=['POST'])
+@app.route('/newcomment', methods=['POST'])
 @login_required
 def add_comment():
     author = current_user.first
-    comment = request.form['text']
-    db.session.add(comment)
+    text = request.form['text']
+    print(text)
+    piece_id= int(request.form["pieceID"])
+    feedback = Feedback.query.filter_by(author_id=current_user.id, piece_id=piece_id).first()
+    if(not feedback):
+        new_feedback = Feedback(piece_id, current_user.id, 0, text)
+        db.session.add(new_feedback)
+        print("test no feedback")
+    else:
+        print("test feedback")
+        new_feedback = Feedback(piece_id, current_user.id, feedback.vote, text)
+        db.session.add(new_feedback)
+    db.session.commit()
     return "success"
 
 

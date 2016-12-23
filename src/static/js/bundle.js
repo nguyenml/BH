@@ -67,6 +67,12 @@
 	  });
 	};
 
+	var comSubmit = function () {
+	  $("#comment_submit").submit(function (e) {
+	    e.preventDefault();
+	  });
+	};
+
 	var IO = function () {
 	  SAVE_INTERVAL = 500;
 	  autoSave = null; // Save Timeout object
@@ -167,8 +173,11 @@
 	    return voteObject;
 	  };
 
-	  var comment = function (comment) {
-	    var data = { comment: comment };
+	  var comment = function (text, pieceID) {
+	    var data = {
+	      text: text,
+	      pieceID: pieceID
+	    };
 	    commentObject = $.post('/comment', data = data, function (response, status_code, xhr) {
 	      if (status_code === "success") {} else {
 	        console.log("comment fail");
@@ -883,16 +892,16 @@
 	  constructor(props) {
 	    super(props);
 	    this.state = { comment: [] };
-	    //  this.state.piece_id = this.props.pieceID;
 	  }
 
-	  handleCommentSubmit(text) {
+	  handleCommentSubmit(text, pieceID, event) {
 	    var data = {
-	      text: text
+	      text: text,
+	      pieceID: pieceID
 	    };
-	    var comment = $.post("/addcomment", function (comment) {
-	      this.setState({ comment: comment });
-	    }.bind(this));
+	    console.log(text);
+	    console.log(data);
+	    $.post('/newcomment', data = data, function (comment) {}.bind(this));
 	  }
 
 	  render() {
@@ -900,7 +909,7 @@
 	      'div',
 	      { className: 'commentBox' },
 	      React.createElement(CommentList, { comments: this.props.comments }),
-	      React.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit })
+	      React.createElement(CommentForm, { onCommentSubmit: this.handleCommentSubmit, pieceID: this.props.pieceID })
 	    );
 	  }
 
@@ -914,11 +923,10 @@
 
 	  handleSubmit() {
 	    var text = this.refs.text.value.trim();
-	    console.log("test");
 	    if (!text) {
 	      return;
 	    }
-	    this.props.onCommentSubmit({ text: text });
+	    this.props.onCommentSubmit(text, this.props.pieceID);
 	    this.refs.text.value = '';
 	    return;
 	  }
@@ -928,7 +936,7 @@
 	      'form',
 	      { className: 'commentForm', onSubmit: this.handleSubmit },
 	      React.createElement('input', { type: 'text', placeholder: 'Say something...', ref: 'text' }),
-	      React.createElement('input', { type: 'submit', value: 'Post', className: 'commentSubmit' })
+	      React.createElement('input', { id: 'comment_submit', type: 'submit', value: 'Post', className: 'commentSubmit' })
 	    );
 	  }
 	}
@@ -1033,7 +1041,7 @@
 	    writingHandlers();
 	    ReactDOM.render(React.createElement(WritingPage, null), document.getElementById('writing_page'));
 	  } else if (inArray("reading", url)) {
-	    //ReactDOM.render(<Story/>,document.getElementById('story'))
+	    comSubmit();
 	    ReactDOM.render(React.createElement(ReadingPage, null), document.getElementById('reading-page'));
 	  } else if (inArray("", url)) {
 	    ReactDOM.render(React.createElement(Landing, null), document.getElementById('landing-page'));

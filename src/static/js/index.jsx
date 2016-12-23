@@ -22,6 +22,12 @@ var writingHandlers = function() {
   });
 }
 
+var comSubmit = function(){
+$("#comment_submit").submit(function(e) {
+    e.preventDefault();
+});
+}
+
 var IO = function() {
   SAVE_INTERVAL = 500;
   autoSave = null; // Save Timeout object
@@ -137,8 +143,11 @@ var IO = function() {
        return voteObject;
   };
 
-  var comment = function(comment){
-    var data = {comment:comment};
+  var comment = function(text,pieceID){
+    var data = {
+      text:text,
+      pieceID:pieceID,
+    };
     commentObject =$.post('/comment',
       data = data,
       function(response,status_code, xhr){
@@ -724,16 +733,14 @@ class CommentBox extends React.Component {
     constructor(props){
       super(props);
       this.state = {comment: []};
-    //  this.state.piece_id = this.props.pieceID;
     }
 
-    handleCommentSubmit(text){
+    handleCommentSubmit(text,pieceID, event){
       var data = {
         text:text,
-      //  piece_id:this.state.piece_id,
+        pieceID:pieceID,
       };
-      var comment = $.post("/addcomment", function (comment) {
-        this.setState({ comment: comment});
+      $.post('/newcomment',data=data,function(comment){
       }.bind(this));
     }
 
@@ -741,7 +748,7 @@ class CommentBox extends React.Component {
     return(
       <div className = "commentBox">
       <CommentList comments={this.props.comments} />
-      <CommentForm onCommentSubmit={this.handleCommentSubmit} />
+      <CommentForm onCommentSubmit={this.handleCommentSubmit} pieceID={this.props.pieceID} />
       </div>
     );
   }
@@ -756,11 +763,10 @@ class CommentBox extends React.Component {
 
     handleSubmit(){
       var text = this.refs.text.value.trim();
-      console.log("test");
       if (!text) {
       return;
       }
-      this.props.onCommentSubmit({text: text});
+      this.props.onCommentSubmit(text,this.props.pieceID);
       this.refs.text.value = '';
       return;
     }
@@ -769,7 +775,7 @@ class CommentBox extends React.Component {
       return(
         <form className="commentForm" onSubmit={this.handleSubmit}>
         <input type="text" placeholder="Say something..." ref="text" />
-        <input type="submit" value="Post" className = "commentSubmit"/>
+        <input id="comment_submit" type="submit" value="Post" className = "commentSubmit"/>
         </form>
       )
     }
@@ -866,8 +872,9 @@ window.onload = function(){
     ReactDOM.render(<WritingPage/>, document.getElementById('writing_page'));
   }
   else if(inArray("reading",url)){
-    //ReactDOM.render(<Story/>,document.getElementById('story'))
+    comSubmit();
     ReactDOM.render(<ReadingPage/>, document.getElementById('reading-page'));
+
   }
   else if(inArray("",url)){
     ReactDOM.render(<Landing/>, document.getElementById('landing-page'));
