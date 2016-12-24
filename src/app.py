@@ -229,7 +229,9 @@ def comment():
     data = []
     for e in feedbacks:
         name = Author.query.filter_by(id=e[0]).first().penname
-        data.append(dict(name = name, comment = e[1]))
+        comment = e[1]
+        if(comment != ""):
+            data.append(dict(name = name, comment = e[1]))
     return jsonify(data),200
 
 @app.route('/newcomment', methods=['POST'])
@@ -243,9 +245,7 @@ def new_comment():
         new_feedback = Feedback(piece_id, current_user.id, 0, text)
         db.session.add(new_feedback)
     else:
-        #new_feedback = Feedback(piece_id, current_user.id, feedback.vote, text)
         feedback.comment = text
-        #db.session.add(new_feedback)
     db.session.commit()
     print("commited sucesfully")
     return "success"

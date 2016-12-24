@@ -262,6 +262,7 @@ nav ul li button {
   margin: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .selectionBox{
@@ -292,6 +293,7 @@ padding: 30px;
 margin: 15px;
 overflow: hidden;
 text-overflow: ellipsis;
+cursor: pointer;
 }
 
 .writing_page_prompts{
@@ -407,7 +409,7 @@ DASHBOARD***********************************************************************
 }
 .feedback_header_likes{
   right: 0px;
-  width: 100px
+  width: 100px;
 }
 
 .black_box{
@@ -416,6 +418,7 @@ DASHBOARD***********************************************************************
   border: 1px solid rgba(68, 68, 68, .2);
   text-align: center;
   margin-left: -400px;
+  cursor: pointer;
 }
 
 .black_box h1{
@@ -663,7 +666,7 @@ section{
 #rct {
     display: flex;
     flex-direction: row;
-    width: 250px;
+    margin-left: 5px;
 }
 .like {
     margin-left: 20px;
@@ -674,6 +677,7 @@ section{
     border-style: solid;
     font-size: 20px;
     border: 1px solid rgba(0, 0, 0, .3);
+    cursor: pointer;
 }
 .rct-1 {
     display: flex;
@@ -1021,9 +1025,22 @@ h2.s-tog{
   text-align: right;
 }
 
+.comment{
+  padding-left: 10px;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(0, 0, 0, .3);
+}
+
+.commentList{
+  height: auto;
+
+}
+
 .commentBox{
   font-size: 20px;
-  width:500px;
+  width:650px;
     text-align: center;
     border-style: solid;
     border-left: 0;
@@ -1034,14 +1051,23 @@ h2.s-tog{
   }
 
 h2.commentAuthor{
-  font-size: 18px;
+  flex: 1;
+  font-size: 28px;
   text-align: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+hr.commentLine{
+  flex: 3;
+  border: 1px solid rgba(0, 0, 0, .3);
 }
 
 h2.commentText{
-  font-size: 13px;
+  flex:2;
+  font-size: 19px;
   text-align: left;
-  margin: 5px;
+  padding
+  margin: 0px;
 }
 
 form.commentForm{
@@ -1049,12 +1075,17 @@ form.commentForm{
   padding-bottom: 8px;
 }
 
+form.commentForm textarea[type="text"]{
+  padding-left: 10px;
+  margin: 5px;
+  width: 598px;
+  height: 200px;
+}
+
 .commentType{
   text-align: left;
   height: auto;
   border: 1px solid rgba(0, 0, 0, .3);
-
-
 }
 
 input.commentSubmit{
@@ -1323,6 +1354,10 @@ LANDING*************************************************************************
     font-weight: bold;
     color: #C4550B;
 }
+
+fieldset a.loginSwitch {cursor: pointer; }
+fieldset a.signupSwitch {cursor: pointer; }
+
 @font-face {
     font-family: Typewriter;
     src: url('fonts/TravelingTypewriter.otf');

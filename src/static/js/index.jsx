@@ -16,15 +16,16 @@ var writingHandlers = function() {
   });
 
   $('#text').on('input', function () {
-    console.log("Test");
       var text = this.textContent, count = text.trim().replace(/\s+/g, ' ').split(' ').length;
       $('.words').text(count);
   });
 }
 
 var comSubmit = function(){
-$("#comment_submit").submit(function(e) {
+$('#comment_submit').submit(function(e) {
     e.preventDefault();
+    console.log("test conSubit 2");
+    return false;
 });
 }
 
@@ -336,7 +337,7 @@ class Signup extends React.Component{
                   <input type="text" name="penname" placeholder="Pen Name" required />
                   <input type="submit" value="Sign up" />
               </form>
-              <a onClick={this.props.handleForm}> Already signed up? Log in.</a>
+              <a className="loginSwitch" onClick={this.props.handleForm}> Already signed up? Log in.</a>
           </fieldset>
       </div>
   );
@@ -359,9 +360,7 @@ class Login extends React.Component{
                     <br />
                     <input onClick={this.props.loginHandler} id="login-submit" type="submit" value="Log in" />
                 </form>
-                <a onClick={this.props.handleForm}> Not signed up? Create an account.</a><br></br>
-
-                <a href="#">Forgot Password?</a>
+                <a className="signupSwitch" onClick={this.props.handleForm}> Not signed up? Create an account.</a><br></br>
           </fieldset>
         </div>
     )
@@ -667,6 +666,8 @@ class ReadingPage extends React.Component{
         }
       )
     this.setState({currentPromptID: pid});
+    this.state.showCommentBox = 1;
+    this.toggleComment();
   }
 
   clickHandler(pid, event){
@@ -695,7 +696,7 @@ class ReadingPage extends React.Component{
               <div id="rct">
                 <Feedback
                     pieceID={this.state.pieceID}
-                    onClickComment={this.toggleComment.bind(this)}
+                    upComment={this.toggleComment.bind(this)}
                     onClick={this.toggleLike.bind(this)}
                     likeState={this.state.like}
                     comments={this.state.comments}
@@ -732,7 +733,8 @@ class ReadingArea extends React.Component {
 class CommentBox extends React.Component {
     constructor(props){
       super(props);
-      this.state = {comment: []};
+      this.state = {comments: []};
+      this.handleCommentSubmit = this.handleCommentSubmit.bind(this)
     }
 
     handleCommentSubmit(text,pieceID, event){
@@ -742,6 +744,7 @@ class CommentBox extends React.Component {
       };
       $.post('/newcomment',data=data,function(comment){
       }.bind(this));
+      this.props.upComment();
     }
 
     render(){
@@ -772,10 +775,11 @@ class CommentBox extends React.Component {
     }
 
     render(){
+        comSubmit();
       return(
-        <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Say something..." ref="text" />
-        <input id="comment_submit" type="submit" value="Post" className = "commentSubmit"/>
+        <form  id="comment_submit" className="commentForm" onSubmit={this.handleSubmit}>
+        <textarea type="text" placeholder="Say something..." ref="text" />
+        <input type="submit" value="Post" className = "commentSubmit"/>
         </form>
       )
     }
@@ -790,9 +794,7 @@ class CommentBox extends React.Component {
     render(){
       var commentNodes = this.props.comments.map(function(comment){
         return(
-          <Comment author=  {comment.author} key = {comment.id}>
-            {comment.text}
-            </Comment>
+          <Comment author={comment.name} text={comment.comment}> </Comment>
         );
       });
       return(
@@ -806,20 +808,19 @@ class CommentBox extends React.Component {
   //var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
 
   class Comment extends React.Component{
-      constructor(){
-      super();
+      constructor(props){
+      super(props);
     }
 
     render(){
       return(
         <div className="comment">
         <h2 className="commentAuthor">
-          {this.props.author}
+          <b>{this.props.author}</b>
           </h2>
         <h2 className= "commentText">
-          {this.props.children}
+          {this.props.text}
           </h2>
-          <hr></hr>
         </div>
       )
     }
@@ -834,7 +835,7 @@ class CommentBox extends React.Component {
         if(this.props.showCommentBox === 1) {
           return(
                 <div>
-                    <CommentBox comments={this.props.comments} pieceID= {this.props.pieceID}/>
+                    <CommentBox upComment={this.props.upComment} comments={this.props.comments} pieceID= {this.props.pieceID}/>
                 </div>)
         }
         return(<div></div>)
@@ -849,7 +850,7 @@ class CommentBox extends React.Component {
                     <div onClick={this.props.onClick} className="like">
                         {textLike}
                     </div>
-                    <div onClick={this.props.onClickComment} className="comment-opening">
+                    <div onClick={this.props.upComment} className="comment-opening">
                         {textComment}
                     </div>
                 </div>

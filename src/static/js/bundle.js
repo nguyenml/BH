@@ -60,7 +60,6 @@
 	  $("#publish-button").click(function (e) {});
 
 	  $('#text').on('input', function () {
-	    console.log("Test");
 	    var text = this.textContent,
 	        count = text.trim().replace(/\s+/g, ' ').split(' ').length;
 	    $('.words').text(count);
@@ -68,8 +67,10 @@
 	};
 
 	var comSubmit = function () {
-	  $("#comment_submit").submit(function (e) {
+	  $('#comment_submit').submit(function (e) {
 	    e.preventDefault();
+	    console.log("test conSubit 2");
+	    return false;
 	  });
 	};
 
@@ -417,7 +418,7 @@
 	        ),
 	        React.createElement(
 	          'a',
-	          { onClick: this.props.handleForm },
+	          { className: 'loginSwitch', onClick: this.props.handleForm },
 	          ' Already signed up? Log in.'
 	        )
 	      )
@@ -452,15 +453,10 @@
 	        ),
 	        React.createElement(
 	          'a',
-	          { onClick: this.props.handleForm },
+	          { className: 'signupSwitch', onClick: this.props.handleForm },
 	          ' Not signed up? Create an account.'
 	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'a',
-	          { href: '#' },
-	          'Forgot Password?'
-	        )
+	        React.createElement('br', null)
 	      )
 	    );
 	  }
@@ -821,6 +817,8 @@
 	      this.setState({ like: response["like"] });
 	    });
 	    this.setState({ currentPromptID: pid });
+	    this.state.showCommentBox = 1;
+	    this.toggleComment();
 	  }
 
 	  clickHandler(pid, event) {
@@ -855,7 +853,7 @@
 	          { id: 'rct' },
 	          React.createElement(Feedback, {
 	            pieceID: this.state.pieceID,
-	            onClickComment: this.toggleComment.bind(this),
+	            upComment: this.toggleComment.bind(this),
 	            onClick: this.toggleLike.bind(this),
 	            likeState: this.state.like,
 	            comments: this.state.comments,
@@ -891,7 +889,8 @@
 	class CommentBox extends React.Component {
 	  constructor(props) {
 	    super(props);
-	    this.state = { comment: [] };
+	    this.state = { comments: [] };
+	    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
 	  }
 
 	  handleCommentSubmit(text, pieceID, event) {
@@ -900,6 +899,7 @@
 	      pieceID: pieceID
 	    };
 	    $.post('/newcomment', data = data, function (comment) {}.bind(this));
+	    this.props.upComment();
 	  }
 
 	  render() {
@@ -930,11 +930,12 @@
 	  }
 
 	  render() {
+	    comSubmit();
 	    return React.createElement(
 	      'form',
-	      { className: 'commentForm', onSubmit: this.handleSubmit },
-	      React.createElement('input', { type: 'text', placeholder: 'Say something...', ref: 'text' }),
-	      React.createElement('input', { id: 'comment_submit', type: 'submit', value: 'Post', className: 'commentSubmit' })
+	      { id: 'comment_submit', className: 'commentForm', onSubmit: this.handleSubmit },
+	      React.createElement('textarea', { type: 'text', placeholder: 'Say something...', ref: 'text' }),
+	      React.createElement('input', { type: 'submit', value: 'Post', className: 'commentSubmit' })
 	    );
 	  }
 	}
@@ -949,8 +950,8 @@
 	    var commentNodes = this.props.comments.map(function (comment) {
 	      return React.createElement(
 	        Comment,
-	        { author: comment.author, key: comment.id },
-	        comment.text
+	        { author: comment.name, text: comment.comment },
+	        ' '
 	      );
 	    });
 	    return React.createElement(
@@ -964,8 +965,8 @@
 	//var data= [ {id: 1, author: "Pete Hunt", text: "This is one comment"},{id: 2, author: "Jordan Walke", text: "This is *another* comment"}];
 
 	class Comment extends React.Component {
-	  constructor() {
-	    super();
+	  constructor(props) {
+	    super(props);
 	  }
 
 	  render() {
@@ -975,14 +976,17 @@
 	      React.createElement(
 	        'h2',
 	        { className: 'commentAuthor' },
-	        this.props.author
+	        React.createElement(
+	          'b',
+	          null,
+	          this.props.author
+	        )
 	      ),
 	      React.createElement(
 	        'h2',
 	        { className: 'commentText' },
-	        this.props.children
-	      ),
-	      React.createElement('hr', null)
+	        this.props.text
+	      )
 	    );
 	  }
 	}
@@ -997,7 +1001,7 @@
 	      return React.createElement(
 	        'div',
 	        null,
-	        React.createElement(CommentBox, { comments: this.props.comments, pieceID: this.props.pieceID })
+	        React.createElement(CommentBox, { upComment: this.props.upComment, comments: this.props.comments, pieceID: this.props.pieceID })
 	      );
 	    }
 	    return React.createElement('div', null);
@@ -1019,7 +1023,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { onClick: this.props.onClickComment, className: 'comment-opening' },
+	          { onClick: this.props.upComment, className: 'comment-opening' },
 	          textComment
 	        )
 	      ),
