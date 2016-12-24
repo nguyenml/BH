@@ -214,78 +214,6 @@ class Story extends React.Component {
     }
 };
 
-class Back extends React.Component{
-  constructor(){
-    super();
-    this.state = {result: []}
-  }
-
-  componentDidMount(){
-   this.serverRequest = $.post("/getfavorites", function (result) {
-     this.setState({ result :result});
-   }.bind(this));
- }
-
-   render(){
-     var tab = [];
-     for (var i = 0; i < this.state.result.length; i++){
-       tab.push(<PromptsFront piece = {this.state.result[i].piece} prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt} date={this.state.result[i].date}/>)
-     }
-     return (
-         <div className="dashboard_front">
-             <div className="following">
-                 <div className="rectangle">
-                     <h1>
-                         Stories I Liked
-                     </h1>
-                 </div>
-                 <hr></hr>
-             </div>
-             <div className = "display_box_container">
-                 {tab}
-             </div>
-         </div>
-     )
-   }
-};
-
-//This function creates the front dashboard layout in templaye "dashboard.html"
-class Front extends React.Component {
-  constructor(){
-    super();
-    this.state = {result: []};
-  }
-
-  componentDidMount(){
-   this.serverRequest = $.post("/getpieces", function (result) {
-     this.setState({ result :result});
-   }.bind(this));
-
-  }
-
-  render(){
-    var tab = [];
-    for (var i = 0; i < this.state.result.length; i++){
-      tab.push(<PromptsFront  piece = {this.state.result[i].piece} prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt}  date={this.state.result[i].date} />)
-    }
-    return (
-        <div className="dashboard_front">
-            <div className="following">
-                <div className="rectangle">
-                    <h1>
-                        Stories I Wrote
-                    </h1>
-                </div>
-                <hr></hr>
-            </div>
-            <div className = "display_box_container">
-                {tab}
-            </div>
-        </div>
-    )
-  }
-};
-
 
 //This function creates the class that renders the template for "reading.html"
 class Entry extends React.Component {
@@ -317,58 +245,15 @@ Entry.defaultProps = {  // initialize title
     title: "Title"
 };
 
+/*LANDING PAGE
+================================================================================================
+These functions are used for the landing page.
+================================================================================================
+*/
 
-class Signup extends React.Component{
-  constructor(props){
-    super(props);
-  }
-
-  render(){
-    return(
-      <div className="form-signup">
-          <h2>Sign Up</h2>
-          <h3>read and write from thousands of prompts.
-              <div className="break"></div></h3>
-          <fieldset>
-              <p className="login-msg">Please include 5 cents for good luck.</p>
-              <form action="/signup" method="POST">
-                  <input type="email" name="email" placeholder="Email" required />
-                  <input type="password" name="password" placeholder="Password" required />
-                  <input type="text" name="penname" placeholder="Pen Name" required />
-                  <input type="submit" value="Sign up" />
-              </form>
-              <a className="loginSwitch" onClick={this.props.handleForm}> Already signed up? Log in.</a>
-          </fieldset>
-      </div>
-  );
-  }
-}
-
-class Login extends React.Component{
-  constructor(props){
-    super(props);
-  }
-
-  render(){
-    return(
-        <div className="form-login">
-            <h1>Log in</h1>
-            <fieldset>
-                <form id="login-form" action="/login" method="POST">
-                    <input type="email" name="email" placeholder="Enter your email address" required />
-                    <input type="password" name="password" placeholder="Enter your password" required />
-                    <br />
-                    <input onClick={this.props.loginHandler} id="login-submit" type="submit" value="Log in" />
-                </form>
-                <a className="signupSwitch" onClick={this.props.handleForm}> Not signed up? Create an account.</a><br></br>
-          </fieldset>
-        </div>
-    )
-
-  }
-}
-
-/*LANDING*/
+/*
+This Page is the firt thing a user see's when they load. It has the login and signup screen.
+*/
 class Landing extends React.Component{
   constructor(){
     super();
@@ -410,32 +295,151 @@ class Landing extends React.Component{
   }
 }
 
-
-class Prompts extends React.Component{
+/*
+This class sets up teh signup form to allow potential - users to sign up.
+*/
+class Signup extends React.Component{
   constructor(props){
     super(props);
-    this.prompt = props.prompt;
-    this.state = { promptChoice: 0} ;
-    this.handleChoice = this.handleChoice.bind(this);
   }
 
-  handleChoice(){
-    var text = $.post("/getprompts", function (response) {
-      this.setState({ });
-    });
-  }
-
-  render() {
+  render(){
     return(
-      <div className="prompt_tab">
-        <div onClick ={this.handleChoice} className="daily_box">
-              <p>{this.prompt}</p>
-        </div>
+      <div className="form-signup">
+          <h2>Sign Up</h2>
+          <h3>read and write from thousands of prompts.
+              <div className="break"></div></h3>
+          <fieldset>
+              <p className="login-msg">Please include 5 cents for good luck.</p>
+              <form action="/signup" method="POST">
+                  <input type="email" name="email" placeholder="Email" required />
+                  <input type="password" name="password" placeholder="Password" required />
+                  <input type="text" name="penname" placeholder="Pen Name" required />
+                  <input type="submit" value="Sign up" />
+              </form>
+              <a className="loginSwitch" onClick={this.props.handleForm}> Already signed up? Log in.</a>
+          </fieldset>
       </div>
-    )
+  );
   }
 }
 
+/*
+This class sets up the login form to allow existing users to log in.
+*/
+class Login extends React.Component{
+  constructor(props){
+    super(props);
+  }
+
+  render(){
+    return(
+        <div className="form-login">
+            <h1>Log in</h1>
+            <fieldset>
+                <form id="login-form" action="/login" method="POST">
+                    <input type="email" name="email" placeholder="Enter your email address" required />
+                    <input type="password" name="password" placeholder="Enter your password" required />
+                    <br />
+                    <input onClick={this.props.loginHandler} id="login-submit" type="submit" value="Log in" />
+                </form>
+                <a className="signupSwitch" onClick={this.props.handleForm}> Not signed up? Create an account.</a><br></br>
+          </fieldset>
+        </div>
+    )
+
+  }
+}
+
+/*DASHBOARD PAGE
+===================================================================================
+These functions create the front and back of the dashboard page. Used for personal user information.
+===================================================================================
+
+
+/*
+This function creates the back side of the dashboard which shows all the stories that the
+user enjoyed.
+*/
+class Back extends React.Component{
+  constructor(){
+    super();
+    this.state = {result: []}
+  }
+
+  componentDidMount(){
+   this.serverRequest = $.post("/getfavorites", function (result) {
+     this.setState({ result :result});
+   }.bind(this));
+ }
+
+   render(){
+     var tab = [];
+     for (var i = 0; i < this.state.result.length; i++){
+       tab.push(<PromptsFront piece = {this.state.result[i].piece} prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt} date={this.state.result[i].date}/>)
+     }
+     return (
+         <div className="dashboard_front">
+             <div className="following">
+                 <div className="rectangle">
+                     <h1>
+                         Stories I Liked
+                     </h1>
+                 </div>
+                 <hr></hr>
+             </div>
+             <div className = "display_box_container">
+                 {tab}
+             </div>
+         </div>
+     )
+   }
+};
+
+
+/*
+//This function creates the front side of the dashboard that shows all teh stories they have written.
+*/
+class Front extends React.Component {
+  constructor(){
+    super();
+    this.state = {result: []};
+  }
+
+  componentDidMount(){
+   this.serverRequest = $.post("/getpieces", function (result) {
+     this.setState({ result :result});
+   }.bind(this));
+
+  }
+
+  render(){
+    var tab = [];
+    for (var i = 0; i < this.state.result.length; i++){
+      tab.push(<PromptsFront  piece = {this.state.result[i].piece} prompt ={this.state.result[i].text}  promptid={this.state.result[i].prompt}  date={this.state.result[i].date} />)
+    }
+    return (
+        <div className="dashboard_front">
+            <div className="following">
+                <div className="rectangle">
+                    <h1>
+                        Stories I Wrote
+                    </h1>
+                </div>
+                <hr></hr>
+            </div>
+            <div className = "display_box_container">
+                {tab}
+            </div>
+        </div>
+    )
+  }
+};
+
+
+/*
+This class creates a promp response statistic. It has information such as likes,and date.
+*/
 class PromptsFront extends React.Component{
   constructor(props){
     super(props);
@@ -473,6 +477,50 @@ class PromptsFront extends React.Component{
     }
 }
 
+
+
+/* WRITING PAGE
+=================================================================================
+These functions are all part of the writing page.
+=================================================================================
+*/
+
+
+
+/*
+This class creates a prompt object witha single writing prompt inside a box.
+*/
+
+class Prompts extends React.Component{
+  constructor(props){
+    super(props);
+    this.prompt = props.prompt;
+    this.state = { promptChoice: 0} ;
+    this.handleChoice = this.handleChoice.bind(this);
+  }
+
+  handleChoice(){
+    var text = $.post("/getprompts", function (response) {
+      this.setState({ });
+    });
+  }
+
+  render() {
+    return(
+      <div className="prompt_tab">
+        <div onClick ={this.handleChoice} className="daily_box">
+              <p>{this.prompt}</p>
+        </div>
+      </div>
+    )
+  }
+}
+
+
+
+/*
+This class creates a set of prompts for the writing page.
+*/
 class PromptsWriting extends React.Component{
   constructor(props){
     super(props);
@@ -515,8 +563,10 @@ class PromptsWriting extends React.Component{
   }
 }
 
-/* WRITING */
-
+/*
+This class creates the writing page. It has 7 prompts taken from writingPrompts class and
+ has a field for typing a response
+ */
 class WritingPage extends React.Component{
   constructor(){
     super();
@@ -574,7 +624,9 @@ class WritingPage extends React.Component{
   }
 }
 
-
+/*
+This is the typing area for the writing page.
+*/
 class WritingArea extends React.Component {
     constructor(props) {
         super(props);
@@ -613,7 +665,11 @@ class WritingArea extends React.Component {
     }
 }
 
-/* READING */
+/* READING page
+==============================================================================================
+The functions below are all part of the Reading page.
+==============================================================================================
+*/
 
 class ReadingPage extends React.Component{
   constructor(){
