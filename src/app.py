@@ -94,7 +94,7 @@ def load_random():
             db.session.commit()
         return jsonify(dict(piece_id=piece.id, text=piece.text, like=0))
     else:
-        return ""
+        return jsonify(dict(text="You've read all the response's so far!"))
 
 @app.route("/load", methods=["POST"])
 @login_required
@@ -169,6 +169,7 @@ def login():
         return redirect(url_for("dashboard"))
     else:
         flash('Login failed')
+        print("error")
         return redirect(url_for('landing'))
 
 @app.route('/prompt', defaults={'pid': None}, methods=["GET"])
@@ -216,7 +217,9 @@ def vote():
 @app.route('/votetotal', methods=['POST'])
 def getvotes():
     pid = request.form['piece']
-    vote_total = len(Feedback.query.filter_by(piece_id=pid).all())
+    vote_total = len(Feedback.query.filter_by(piece_id=pid,vote=1).all())
+    print(vote_total)
+    print(pid)
     return str(vote_total)
 
 

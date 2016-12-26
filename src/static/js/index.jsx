@@ -46,9 +46,13 @@ var IO = function() {
   }
 
   var saveText = function(pid) {
+
+    var doc = document.querySelector('#text');
+    var text = doc.innerHTML;
     var data = {
       prompt_id: pid,
-      text: $('#text').text(),
+      //text: $('#text').text(),
+      text: text,
     };
     if(saveObject){
         saveObject.abort();
@@ -80,6 +84,7 @@ var IO = function() {
   };
 
   var loadText = function(pid) {
+    var retText = ""
     var data = {
       prompt_id: pid,
     };
@@ -87,7 +92,7 @@ var IO = function() {
       data=data,
       function(text, status_code, xhr){
         if(status_code === 'success'){
-          $('#text').text(text);
+          $('#text').html(text);
         } else {
           console.log('load fail');
         }
@@ -330,6 +335,7 @@ This class sets up the login form to allow existing users to log in.
 class Login extends React.Component{
   constructor(props){
     super(props);
+    this.state = { permission: false}
   }
 
   render(){
@@ -634,10 +640,9 @@ class WritingArea extends React.Component {
         this.state = {pid: props.pid}
     }
 
-
-
     render() {
       if(this.props.pid == 0){
+                  console.log("test1");
         return(
             <div>
                 <div className="writing_head">
@@ -647,6 +652,7 @@ class WritingArea extends React.Component {
             )
           }
           else{
+            console.log("test true");
             return(
             <div>
                 <div className="writing_head">

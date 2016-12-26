@@ -91,9 +91,13 @@
 	  };
 
 	  var saveText = function (pid) {
+
+	    var doc = document.querySelector('#text');
+	    var text = doc.innerHTML;
 	    var data = {
 	      prompt_id: pid,
-	      text: $('#text').text()
+	      //text: $('#text').text(),
+	      text: text
 	    };
 	    if (saveObject) {
 	      saveObject.abort();
@@ -119,12 +123,13 @@
 	  };
 
 	  var loadText = function (pid) {
+	    var retText = "";
 	    var data = {
 	      prompt_id: pid
 	    };
 	    $.post('/load', data = data, function (text, status_code, xhr) {
 	      if (status_code === 'success') {
-	        $('#text').text(text);
+	        $('#text').html(text);
 	      } else {
 	        console.log('load fail');
 	      }
@@ -402,6 +407,7 @@
 	class Login extends React.Component {
 	  constructor(props) {
 	    super(props);
+	    this.state = { permission: false };
 	  }
 
 	  render() {
@@ -767,6 +773,7 @@
 
 	  render() {
 	    if (this.props.pid == 0) {
+	      console.log("test1");
 	      return React.createElement(
 	        'div',
 	        null,
@@ -781,6 +788,7 @@
 	        )
 	      );
 	    } else {
+	      console.log("test true");
 	      return React.createElement(
 	        'div',
 	        null,
