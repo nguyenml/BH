@@ -99,6 +99,22 @@ var IO = function() {
       });
   };
 
+  var loadFrontText = function(pid) {
+    var retText = ""
+    var data = {
+      prompt_id: pid,
+    };
+    $.post('/load',
+      data=data,
+      function(text, status_code, xhr){
+        if(status_code === 'success'){
+          $('#promptText').html(text);
+        } else {
+          console.log('load fail');
+        }
+      });
+  };
+
   var loadRandomText = function(pid) {
     var data = {
       prompt_id: pid,
@@ -169,6 +185,7 @@ var IO = function() {
   return {
     saveText: saveText,
     loadText: loadText,
+    loadFrontText: loadFrontText,
     loadRandomText: loadRandomText,
     setAutoSave: setAutoSave,
     publishText: publishText,
@@ -450,6 +467,7 @@ class PromptsFront extends React.Component{
   constructor(props){
     super(props);
     this.text= props.prompt;
+    this.tid = "div" + this.props.promptid
     this.state = {writing_prompt: "", result:[], votes:0}
 }
 
@@ -468,6 +486,7 @@ class PromptsFront extends React.Component{
     this.serverRequest = $.post("/votetotal", data=data,function (votes){
       this.setState({votes:votes});
     }.bind(this));
+    document.getElementById(this.tid).innerHTML = this.text;
   }
     render() {
       return(
@@ -477,7 +496,9 @@ class PromptsFront extends React.Component{
             <div className = "feedback_header_likes">&#9734; {this.state.votes}</div>
             </div>
           <h1><b>{this.state.writing_prompt}</b></h1>
-          <p>{this.text}<hr></hr></p>
+          <div>
+          <p id={this.tid} className="pText"><hr></hr></p>
+          </div>
       </div>
       )
     }

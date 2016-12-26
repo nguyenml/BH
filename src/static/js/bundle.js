@@ -136,6 +136,20 @@
 	    });
 	  };
 
+	  var loadFrontText = function (pid) {
+	    var retText = "";
+	    var data = {
+	      prompt_id: pid
+	    };
+	    $.post('/load', data = data, function (text, status_code, xhr) {
+	      if (status_code === 'success') {
+	        $('#promptText').html(text);
+	      } else {
+	        console.log('load fail');
+	      }
+	    });
+	  };
+
 	  var loadRandomText = function (pid) {
 	    var data = {
 	      prompt_id: pid
@@ -195,6 +209,7 @@
 	  return {
 	    saveText: saveText,
 	    loadText: loadText,
+	    loadFrontText: loadFrontText,
 	    loadRandomText: loadRandomText,
 	    setAutoSave: setAutoSave,
 	    publishText: publishText,
@@ -547,6 +562,7 @@
 	  constructor(props) {
 	    super(props);
 	    this.text = props.prompt;
+	    this.tid = "div" + this.props.promptid;
 	    this.state = { writing_prompt: "", result: [], votes: 0 };
 	  }
 
@@ -564,6 +580,7 @@
 	    this.serverRequest = $.post("/votetotal", data = data, function (votes) {
 	      this.setState({ votes: votes });
 	    }.bind(this));
+	    document.getElementById(this.tid).innerHTML = this.text;
 	  }
 	  render() {
 	    return React.createElement(
@@ -594,10 +611,13 @@
 	        )
 	      ),
 	      React.createElement(
-	        'p',
+	        'div',
 	        null,
-	        this.text,
-	        React.createElement('hr', null)
+	        React.createElement(
+	          'p',
+	          { id: this.tid, className: 'pText' },
+	          React.createElement('hr', null)
+	        )
 	      )
 	    );
 	  }
