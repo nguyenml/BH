@@ -61,8 +61,8 @@
   margin-top: 9px;
 }
 
-.submited{
-  background-color: green;
+button.submitted {
+  background: green;
 }
 
 .overlay {
@@ -1106,6 +1106,11 @@ input.commentSubmit{
 }
 /*****************************************************************************************************************************************************************************************************************
 LANDING**********************************************************************************************************************************************************/
+body div.explanation{
+  text-align: center;
+  font-size: 30px;
+}
+
 .landing_article {
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;

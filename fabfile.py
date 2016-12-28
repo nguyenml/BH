@@ -1,5 +1,6 @@
 import os
 import json
+from prompts import *
 from subprocess import call
 
 from passlib.hash import sha256_crypt as crypto
@@ -20,17 +21,6 @@ REQUIRED = ["db_database",
         "db_username",
         "db_password"]
 
-SEED_PROMPTS = ["Eye Contact: Write about two people seeing each other for the first time.",
-        "You are a childs imaginary friend. You are fading away as the child grows older. You have one last talk with the child the day before their 18th birthday.",
-        "Arianna, a thing of cruelty and knowledge.",
-        "In the early fall, that starship navigator was growing up.",
-        "It will be the season of wisdom, the season of perversion.",
-        "That lady, that person of complete justice.",
-        "Then came the rogue AIs, but the truth isn't quite what some think.",
-        "Oh cruelty . . . time to break.",
-        "Break education as long as you are crying.",
-        "This is a story that concerns education, getting old, and a drought - and it's a story worth repeating.",
-        "Describe a wedding from three points of view."]
 SEED_PIECES = ["ip","sum","es","pot","leo","osc","ter","byt","mot","ret"]
 
 def start():

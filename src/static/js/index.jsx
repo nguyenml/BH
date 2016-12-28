@@ -29,6 +29,12 @@ $('#comment_submit').submit(function(e) {
 });
 }
 
+var pubButton = function(){
+  $("#publish-button").click(function() {
+    document.getElementById("publish-button").className = 'btn submitted';
+  });
+}
+
 var IO = function() {
   SAVE_INTERVAL = 500;
   autoSave = null; // Save Timeout object
@@ -661,9 +667,19 @@ class WritingArea extends React.Component {
         this.state = {pid: props.pid}
     }
 
+
+      componentWillMount(){
+       pubButton();
+      }
+
+    publish(){
+      console.log("test c");
+      IO.publishText(this.props.pid);
+      pubButton();
+    }
+
     render() {
       if(this.props.pid == 0){
-                  console.log("test1");
         return(
             <div>
                 <div className="writing_head">
@@ -677,7 +693,7 @@ class WritingArea extends React.Component {
             return(
             <div>
                 <div className="writing_head">
-                    <button id="publish-button" onClick={IO.publishText.bind(this, this.props.pid)} className="btn submit">Submit</button>
+                    <button id="publish-button" onClick={this.publish.bind(this)} className="btn submit">Submit</button>
                     <h1>{this.props.prompt}</h1>
                     <p className="words">WordCount:</p>
                 </div>
