@@ -1,1 +1,1 @@
-web: gunicorn -b 127.0.0.1:$PORT app:app --log-level debug
+web: gunicorn -b 127.0.0.1:5000 app:app --log-level debug
