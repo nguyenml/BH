@@ -2,6 +2,8 @@
 
 import os
 import random
+import datetime
+from datetime import date
 
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -124,7 +126,17 @@ def publish():
 
 @app.route('/getprompts', methods=["POST"])
 def getprompts():
-    return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),Prompt.get_dailies()))
+    now = datetime.datetime.now()
+    start = date(2016, 12, 20)
+    today = date(now.year,now.month,now.day)
+    days = today - start
+    p1 = days.days
+    p7 = days.days + 7
+    prompts = []
+    for e in range(p1,p7):
+        prompt = Prompt.get_prompts(e)
+        prompts.append(prompt)
+    return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),prompts))
 
 @app.route('/getpieces', methods=["POST"])
 def getpieces():

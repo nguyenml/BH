@@ -59,7 +59,4 @@ SEED_PROMPTS = ["Eye Contact: Write about two people seeing each other for the f
         "You wake up one morning to a silent vibration from your phone. It read- Please remain in your homes, if you are not at home, find shelter immediately. Close all blinds and shades, block out all windows. Do not look outside. Do not look at the sky. Do not make noise. Your cooperation is vital to your survival. Appointed government personnel will update you shortly.",
         "You go to check the mail and see a package. That's great because you love packages. This one is wrapped in a dark red fabric that you've never really seen before... or felt before. The box begans to shake once you pick it up. That's when you realize you haven't even ordered anything.",
         "You are renting a room in someone's house as you transition to city life. The owner tells you the basement is absolutely one hundred percent off limits. As the weeks pass, you become obsessed with the basement. One day you manage to crack the lock and open the door. You slowly creak open the door, glance a peek inside, and immediately slam the door shut, putting all the locks back on. What did you see in there?",
-
-
-
         ]

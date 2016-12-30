@@ -43,6 +43,15 @@ var IO = function() {
   voteObject = null; // Vote
   commentObject = null
 
+  var NewPrompt = function(){
+    var init = new Date(2012, 11, 29);
+    var now = Date.now();
+    var diff = now - initialDate;
+    var timeMili = 24 * 60 * 60 * 1000;
+    var daysSince = Math.floor(difference / timeMili);
+    return daysSince;
+  }
+
   var loginHandler = function(){
     var data = {};
     var inputs = $('#login-form :input');

@@ -144,6 +144,10 @@ class Prompt(db.Model):
         self.date_created = dt.now()
 
     @classmethod
+    def get_prompts(cls,pid):
+        return cls.query.filter_by(id = pid).first()
+
+    @classmethod
     def get_dailies(cls):
         today = dt.today()
         week_ago = today - timedelta(days=7)
