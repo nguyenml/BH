@@ -88,6 +88,15 @@
 	  voteObject = null; // Vote
 	  commentObject = null;
 
+	  var NewPrompt = function () {
+	    var init = new Date(2012, 11, 29);
+	    var now = Date.now();
+	    var diff = now - initialDate;
+	    var timeMili = 24 * 60 * 60 * 1000;
+	    var daysSince = Math.floor(difference / timeMili);
+	    return daysSince;
+	  };
+
 	  var loginHandler = function () {
 	    var data = {};
 	    var inputs = $('#login-form :input');
@@ -732,7 +741,7 @@
 	class WritingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!", highlight: false };
+	    this.state = { result: [], pid: [], currentPID: 1, currentPrompt: "Choose a prompt to write!", highlight: false };
 	    this.highlight = this.highlight.bind(this);
 	  }
 
@@ -744,8 +753,9 @@
 
 	  setPID(pid, event) {
 	    var text = IO.loadText(pid);
-	    this.setState({ currentPID: pid });
 	    IO.setAutoSave(pid);
+	    this.setState({ currentPID: pid });
+	    console.log("test");
 	  }
 
 	  setPrompt(prompt, event) {
@@ -802,7 +812,6 @@
 	  }
 
 	  publish() {
-	    console.log("test c");
 	    IO.publishText(this.props.pid);
 	    pubButton();
 	  }

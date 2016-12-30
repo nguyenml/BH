@@ -612,7 +612,7 @@ This class creates the writing page. It has 7 prompts taken from writingPrompts 
 class WritingPage extends React.Component{
   constructor(){
     super();
-    this.state = { result: [], pid: [], currentPID: 0, currentPrompt: "Choose a prompt to write!", highlight: false};
+    this.state = { result: [], pid: [], currentPID: 1, currentPrompt: "Choose a prompt to write!", highlight: false};
     this.highlight = this.highlight.bind(this);
 
   }
@@ -626,8 +626,8 @@ class WritingPage extends React.Component{
 
   setPID(pid, event){
     var text = IO.loadText(pid);
-    this.setState({currentPID: pid});
     IO.setAutoSave(pid);
+    this.setState({currentPID: pid});
   }
 
   setPrompt(prompt, event){
@@ -682,7 +682,6 @@ class WritingArea extends React.Component {
       }
 
     publish(){
-      console.log("test c");
       IO.publishText(this.props.pid);
       pubButton();
     }
@@ -712,8 +711,6 @@ class WritingArea extends React.Component {
               </div>
             )
             }
-
-
     }
 }
 

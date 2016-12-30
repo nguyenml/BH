@@ -230,8 +230,6 @@ def vote():
 def getvotes():
     pid = request.form['piece']
     vote_total = len(Feedback.query.filter_by(piece_id=pid,vote=1).all())
-    print(vote_total)
-    print(pid)
     return str(vote_total)
 
 
