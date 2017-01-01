@@ -5,7 +5,7 @@ import random
 import datetime
 from datetime import date
 
-from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
+from flask import Flask, render_template, request, redirect, flash, url_for, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, current_user
 
@@ -16,7 +16,21 @@ app.app_context().push()
 
 @app.route('/')
 def landing():
-    return render_template('landing.html')
+    user_id = request.cookies.get('YourSessionCookie')
+    print(user_id)
+    user_id = request.cookies.get('YourSessionCookie')
+    if user_id:
+        print(user_id)
+        num = int(user_id)
+        user = Author.query.get(num)
+        if user:
+            login_user(user)
+            return redirect(url_for("dashboard"))
+        else:
+            return render_template('landing.html')
+    else:
+        print("no cookie")
+        return render_template('landing.html')
 
 @app.route('/dashboard')
 @login_required
@@ -133,10 +147,14 @@ def getprompts():
     p1 = days.days
     p7 = days.days + 7
     prompts = []
+    pList= []
     for e in range(p1,p7):
         prompt = Prompt.get_prompts(e)
         prompts.append(prompt)
-    return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),prompts))
+    for i in reversed(prompts):
+        pList.append(i)
+
+    return jsonify(map(lambda x: dict(text= x.prompt, pid = x.id),pList))
 
 @app.route('/getpieces', methods=["POST"])
 def getpieces():
@@ -166,7 +184,9 @@ def signup():
     if(is_valid):
         author = Author.add_new_author(email, password, penname)
         login_user(author)
-        return redirect('/dashboard')
+        response = redirect(url_for("dashboard"))
+        response.set_cookie('YourSessionCookie', str(author.id))
+        return response
     else:
         flash("Signup failed")
         return redirect('/')
@@ -178,11 +198,21 @@ def login():
     if(Author.validate_login(email, password)):
         author = Author.get_by_email(email)
         login_user(author)
-        return redirect(url_for("dashboard"))
+        response = redirect(url_for("dashboard"))
+        response.set_cookie('YourSessionCookie', str(author.id))
+        return response
     else:
         flash('Login failed')
-        print("error")
-        return redirect(url_for('landing'))
+        print("Incorrect Username or Password")
+        return redirect('/')
+
+@app.route('/logout', methods=["POST"])
+def logout():
+    current_user.is_logged_in = False
+    resp = redirect(url_for("landing"))
+    resp.set_cookie('YourSessionCookie',"",expires=0)
+    return redirect('/')
+
 
 @app.route('/prompt', defaults={'pid': None}, methods=["GET"])
 @app.route('/prompt/<pid>', methods=["GET"])

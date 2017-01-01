@@ -22,4 +22,3 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 r = redis.from_url(app.config['REDIS_URL'])
-

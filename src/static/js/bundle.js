@@ -243,12 +243,17 @@
 	      favorites: false
 	    };
 	    this.handleDisplay = this.handleDisplay.bind(this);
+	    this.logout = this.logout.bind(this);
 	  }
 
 	  handleDisplay() {
 	    this.setState({
 	      favorites: !this.state.favorites
 	    });
+	  }
+
+	  logout() {
+	    this.serverRequest = $.post("/logout", function (result) {}.bind(this));
 	  }
 
 	  dailyTop(number) {
@@ -264,17 +269,21 @@
 	    var mode = this.state.favorites ? 0 : 1;
 	    return React.createElement(
 	      'div',
-	      { className: 's-tog' },
+	      null,
 	      React.createElement(
 	        'div',
-	        { className: 'black_box', onClick: this.handleDisplay },
+	        { className: 's-tog' },
 	        React.createElement(
-	          'h1',
-	          null,
-	          textStory
-	        )
-	      ),
-	      this.dailyTop(mode)
+	          'div',
+	          { className: 'black_box', onClick: this.handleDisplay },
+	          React.createElement(
+	            'h1',
+	            null,
+	            textStory
+	          )
+	        ),
+	        this.dailyTop(mode)
+	      )
 	    );
 	  }
 	};
@@ -376,6 +385,15 @@
 	          'div',
 	          { id: 'login' },
 	          this.checkForm(this.state.signupLogin)
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'intro' },
+	          React.createElement(
+	            'p',
+	            null,
+	            'Over the past semester at college I began reading Stephen King\'s The Skeleton Key. I kind of got into those little fun readings I could distract myself with during work. It was easy for me to kind of go over a quick short story in a 15 minute break between class or even a bus ride home. I decided I wanted to write a short horror story, and began sketching ideas during my boring physics lectures. I kept starting a story but I never really had a core idea to work with. I would scrap most of my work, get frustrated and distracted, ending up quitting for that day.  It took me 3 weeks to write a 500 word short story. It was cool though, having it in my binder, reading it sometimes, knowing I wrote a story. The story itself was pretty bad but that\'s okay because it was fun and it was the first thing I\'ve written since highschool. I looked up tips on writing and came upon writing prompts. The last time I had a writing prompt was my SAT. Literally nothing about that memory was pleasant. But I gave it a shot anyways.To my surprise, if you arent forced to write, writing can be really fun. After spending time answering and writing my own prompts, I had an idea to create something just for that. It became working project I\'ve been developing in my spare time over the past few months. The premise is simple, everyday a new prompt will be posted, and you can answer that prompt if you like. You can also read anyone else\'s response to that prompt. The prompts last 7 days, so If you dont have time that day to write, you\'ve got a whole week to give a reply. Let me know what you guys think! -Marv'
+	          )
 	        )
 	      )
 	    );
@@ -755,7 +773,6 @@
 	    var text = IO.loadText(pid);
 	    IO.setAutoSave(pid);
 	    this.setState({ currentPID: pid });
-	    console.log("test");
 	  }
 
 	  setPrompt(prompt, event) {
