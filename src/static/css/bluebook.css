@@ -297,6 +297,7 @@ border-radius: 69px 69px 69px 69px;
 color: #FFF;
 order: 1;
 padding: 30px;
+padding-bottom: 10px;
 margin: 15px;
 overflow: hidden;
 text-overflow: ellipsis;

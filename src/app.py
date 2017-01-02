@@ -17,8 +17,6 @@ app.app_context().push()
 @app.route('/')
 def landing():
     user_id = request.cookies.get('YourSessionCookie')
-    print(user_id)
-    user_id = request.cookies.get('YourSessionCookie')
     if user_id:
         print(user_id)
         num = int(user_id)
@@ -183,7 +181,7 @@ def signup():
 
     if(is_valid):
         author = Author.add_new_author(email, password, penname)
-        login_user(author)
+        login_user(author,remember=True)
         response = redirect(url_for("dashboard"))
         response.set_cookie('YourSessionCookie', str(author.id))
         return response
@@ -197,7 +195,7 @@ def login():
     password = request.form["password"]
     if(Author.validate_login(email, password)):
         author = Author.get_by_email(email)
-        login_user(author)
+        login_user(author,remember=True)
         response = redirect(url_for("dashboard"))
         response.set_cookie('YourSessionCookie', str(author.id))
         return response
@@ -208,9 +206,7 @@ def login():
 
 @app.route('/logout', methods=["POST"])
 def logout():
-    current_user.is_logged_in = False
-    resp = redirect(url_for("landing"))
-    resp.set_cookie('YourSessionCookie',"",expires=0)
+    logout_user()
     return redirect('/')
 
 
