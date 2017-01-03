@@ -23,12 +23,17 @@ def landing():
         user = Author.query.get(num)
         if user:
             login_user(user)
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("home"))
         else:
             return render_template('landing.html')
     else:
         print("no cookie")
         return render_template('landing.html')
+
+@app.route('/home')
+@login_required
+def home():
+    return render_template('home.html')
 
 @app.route('/dashboard')
 @login_required
@@ -235,7 +240,12 @@ def add_prompt(prompt):
     db.session.add(SuggestedPrompt(prompt))
     db.session.commit()
     db.session.close()
-    return "Thank you for your submission! It will be put under consideration."
+    return redirect(url_for("thanks"))
+
+@app.route("/thanks")
+@login_required
+def thanks():
+    return render_template("submitted.html")
 
 @app.route('/vote', methods=['POST'])
 @login_required

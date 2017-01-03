@@ -1436,3 +1436,10 @@ footer li {
     padding-right: 30px;
 }
 }
+
+/***HOME****/
+.home-container{
+  width: 900px;
+  height: auto;
+
+}
