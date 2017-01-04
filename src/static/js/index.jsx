@@ -253,6 +253,7 @@ class Story extends React.Component {
                 <div className = "black_box" onClick={this.handleDisplay}><h1>{textStory}</h1></div>
                 {this.dailyTop(mode)}
             </div>
+
           </div>
         )
     }
@@ -575,6 +576,7 @@ This class creates a set of prompts for the writing page.
 class PromptsWriting extends React.Component{
   constructor(props){
     super(props);
+    this.state = {published:false}
   }
 
   setHighlight(){
@@ -583,7 +585,37 @@ class PromptsWriting extends React.Component{
     }
   }
 
+  ispublished(){
+   var data = {
+     pid:this.props.pid,
+   };
+    this.serverRequest = $.post("/ispublished",data=data, function(result){
+          if(result == "1"){
+            this.setState({published:true});
+          }
+          else {
+          }
+    }.bind(this));
+  }
+
+ componentDidMount(){
+   this.ispublished()
+ }
+
   render() {
+    if(this.state.published){
+      return(
+        <div>
+          <div className="promptInfo" onClick= {this.props.clickHandler}>
+            <div className="p-box-green">
+              <p className="writing_page_prompts">
+                {this.props.prompt}
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    }
     if(this.setHighlight()){
       return(
         <div>
@@ -692,7 +724,6 @@ class WritingArea extends React.Component {
 
     publish(){
       IO.publishText(this.props.pid);
-      pubButton();
     }
 
     render() {
@@ -712,7 +743,7 @@ class WritingArea extends React.Component {
                 <div className="writing_head">
                     <button id="publish-button" onClick={this.publish.bind(this)} className="btn submit">Submit</button>
                     <h1>{this.props.prompt}</h1>
-                    <p className="words">WordCount:</p>
+                {  /*<p className="words">WordCount:</p>*/}
                 </div>
                 <section className="writingpage_section">
                     <article id="text" contentEditable="true" className="content writingpage_article"></article>

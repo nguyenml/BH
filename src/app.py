@@ -7,7 +7,7 @@ from datetime import date
 
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import login_user, login_required, current_user
+from flask_login import login_user, login_required, current_user, logout_user
 
 from src import app, login_manager, r, db
 from models import Author, SuggestedPrompt, Prompt, Piece, Feedback
@@ -139,6 +139,23 @@ def publish():
         print("publish failed")
         return "Publish Unsuccessful"
 
+@app.route("/ispublished",methods=["POST"])
+@login_required
+def ispublished():
+    isp = False
+    pid = request.form['pid']
+    piece = Piece.get_piece(author_id=current_user.id, prompt_id=pid)
+    if(piece):
+        if(piece.is_published):
+            isp = True
+            return  "1"
+        else:
+            return "0"
+    else:
+        return "0"
+
+
+
 
 
 @app.route('/getprompts', methods=["POST"])
@@ -187,7 +204,7 @@ def signup():
     if(is_valid):
         author = Author.add_new_author(email, password, penname)
         login_user(author,remember=True)
-        response = redirect(url_for("dashboard"))
+        response = redirect(url_for("home"))
         response.set_cookie('YourSessionCookie', str(author.id))
         return response
     else:
@@ -196,24 +213,27 @@ def signup():
 
 @app.route('/login', methods=["POST"])
 def login():
+    error=None
     email = request.form["email"]
     password = request.form["password"]
     if(Author.validate_login(email, password)):
         author = Author.get_by_email(email)
         login_user(author,remember=True)
-        response = redirect(url_for("dashboard"))
+        response = redirect(url_for("home"))
         response.set_cookie('YourSessionCookie', str(author.id))
         return response
     else:
-        flash('Login failed')
+        error = 'Invalid credentials'
         print("Incorrect Username or Password")
         return redirect('/')
 
-@app.route('/logout', methods=["POST"])
+@app.route("/logout")
+@login_required
 def logout():
     logout_user()
-    return redirect('/')
-
+    resp = redirect('/')
+    resp.set_cookie('YourSessionCookie', "",expires=0)
+    return resp
 
 @app.route('/prompt', defaults={'pid': None}, methods=["GET"])
 @app.route('/prompt/<pid>', methods=["GET"])
@@ -237,7 +257,8 @@ def findprompt():
 @app.route('/addprompt/<prompt>', methods=['GET'])
 @login_required
 def add_prompt(prompt):
-    db.session.add(SuggestedPrompt(prompt))
+    sug = SuggestedPrompt(prompt,current_user.id)
+    db.session.add(sug)
     db.session.commit()
     db.session.close()
     return redirect(url_for("thanks"))

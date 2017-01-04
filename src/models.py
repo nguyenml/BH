@@ -168,8 +168,9 @@ class SuggestedPrompt(db.Model):
     prompt = db.Column(db.Text())
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'))
 
-    def __init__(self, prompt):
+    def __init__(self, prompt,author_id):
         self.prompt = prompt
+        self.author_id = author_id
 
 
 class Feedback(db.Model):

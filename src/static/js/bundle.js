@@ -703,6 +703,7 @@
 	class PromptsWriting extends React.Component {
 	  constructor(props) {
 	    super(props);
+	    this.state = { published: false };
 	  }
 
 	  setHighlight() {
@@ -711,7 +712,44 @@
 	    }
 	  }
 
+	  ispublished() {
+	    var data = {
+	      pid: this.props.pid
+	    };
+	    this.serverRequest = $.post("/ispublished", data = data, function (result) {
+	      if (result == "1") {
+	        console.log("PUBLISHED");
+	        this.setState({ published: true });
+	      } else {
+	        console.log("NOT");
+	      }
+	    }.bind(this));
+	  }
+
+	  componentDidMount() {
+	    this.ispublished();
+	  }
+
 	  render() {
+	    if (this.state.published) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'promptInfo', onClick: this.props.clickHandler },
+	          React.createElement(
+	            'div',
+	            { className: 'p-box-green' },
+	            React.createElement(
+	              'p',
+	              { className: 'writing_page_prompts' },
+	              this.props.prompt
+	            )
+	          )
+	        )
+	      );
+	    }
 	    if (this.setHighlight()) {
 	      return React.createElement(
 	        'div',
@@ -830,7 +868,6 @@
 
 	  publish() {
 	    IO.publishText(this.props.pid);
-	    pubButton();
 	  }
 
 	  render() {
@@ -865,11 +902,6 @@
 	            'h1',
 	            null,
 	            this.props.prompt
-	          ),
-	          React.createElement(
-	            'p',
-	            { className: 'words' },
-	            'WordCount:'
 	          )
 	        ),
 	        React.createElement(
