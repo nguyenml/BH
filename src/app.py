@@ -185,6 +185,7 @@ def getpieces():
     return jsonify(map(lambda x: dict(piece = x.id, text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
 
 @app.route('/getfavorites', methods=["POST"])
+@login_required
 def getfavoritepieces():
     favorites = Feedback.query.filter_by(author_id=current_user.id, vote=1).all()
     pieces = []
@@ -192,6 +193,13 @@ def getfavoritepieces():
         piece = Piece.query.filter_by(id=e.piece_id).first()
         pieces.append(piece)
     return jsonify(map(lambda x: dict(piece = x.id, text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
+
+@app.route('/getpenname', methods=["POST"])
+@login_required
+def get_pen_name():
+    print("hi")
+    print(current_user.penname)
+    return str(current_user.penname)
 
 
 
