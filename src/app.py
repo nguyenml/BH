@@ -111,9 +111,10 @@ def load_random():
         if(not feedback):
             db.session.add(Feedback(piece.id, current_user.id))
             db.session.commit()
+        print(piece.id)
         return jsonify(dict(piece_id=piece.id, text=piece.text, like=0))
     else:
-        return jsonify(dict(text="You've read all the response's so far!"))
+        return jsonify(dict(text="You've read all the response's so far!",))
 
 @app.route("/load", methods=["POST"])
 @login_required
@@ -268,10 +269,26 @@ def add_prompt(prompt):
 def thanks():
     return render_template("submitted.html")
 
+@app.route('/getauthor',methods=['POST'])
+@login_required
+def get_author():
+    if(int(request.form["piece_id"])):
+        piece = Piece.query.filter_by(id=int(request.form["piece_id"])).first()
+        if(piece):
+            author = Author.query.filter_by(id = int(piece.author_id)).first()
+            return jsonify({"author":str(author.penname)})
+        else:
+            return jsonify({"author":" "})
+    else:
+        return jsonify({"author":" "})
+
+
+
+
+
 @app.route('/vote', methods=['POST'])
 @login_required
 def vote():
-    print(request.form)
     feedback = Feedback.query.filter_by(author_id=current_user.id, piece_id=int(request.form["piece_id"])).first()
     value = int(feedback.vote)
     if(not feedback):

@@ -737,7 +737,6 @@ class WritingArea extends React.Component {
             )
           }
           else{
-            console.log("test true");
             return(
             <div>
                 <div className="writing_head">
@@ -763,7 +762,7 @@ The functions below are all part of the Reading page.
 class ReadingPage extends React.Component{
   constructor(){
     super();
-    this.state = { prompts: [], currentPromptID: 0, pieceID:-1, like: 0, showCommentBox:0, comments: []};
+    this.state = {currentAuthor: " ", prompts: [], currentPromptID: 0, currentPID: 1, pieceID:-1, like: 0, showCommentBox:0, comments: []};
   }
 
   componentWillMount(){
@@ -808,6 +807,7 @@ class ReadingPage extends React.Component{
           $('#text').text(response["text"]);
           this.setState({pieceID: response["piece_id"]})
           this.setState({like: response["like"]})
+          this.getAuthor();
         }
       )
     this.setState({currentPromptID: pid});
@@ -815,20 +815,40 @@ class ReadingPage extends React.Component{
     this.toggleComment();
   }
 
-  clickHandler(pid, event){
-    this.setPID(pid, event);
+  setPrompt(prompt, event){
+    this.setState({currentPrompt: prompt});
   }
+
+  clickHandler(pid,prompt,event){
+    this.setPID(pid, event);
+    this.setPrompt(prompt,event);
+  }
+
+  getAuthor(event){
+    if(this.state.pieceID != null){
+    var data = {
+      piece_id:this.state.pieceID,
+    };
+    $.post('/getauthor',data=data,(response) => {
+      this.setState({currentAuthor: response["author"]})
+    })
+    }
+    else{
+      this.setState({currentAuthor: " "})
+    }
+  }
+
 
   render(){
     var tab = [];
     var writingArea = null;
     for (var i = 0; i < this.state.prompts.length; i++){
-      tab.push(<PromptsWriting
-          clickHandler={this.clickHandler.bind(this, this.state.prompts[i].pid)}
+      tab.push(<PromptsReading
+          clickHandler={this.clickHandler.bind(this, this.state.prompts[i].pid, this.state.prompts[i].text)}
           currentPID={this.state.currentPromptID}
           prompt={this.state.prompts[i].text}
-          pid={this.state.prompts[i].pid} />)
-        writingArea=<ReadingArea pid={this.state.prompts[i].pid} />
+          pid={this.state.prompts[i].pid}
+          pieceID={this.state.pieceID}/>)
     }
     return(
         <div>
@@ -836,7 +856,7 @@ class ReadingPage extends React.Component{
                 {tab}
 
             </div>
-            {writingArea}
+            <ReadingArea author={this.state.currentAuthor} pid={this.state.currentPromptID} prompt={this.state.currentPrompt}/>
             <div class="cover-comments">
               <div id="rct">
                 <Feedback
@@ -855,17 +875,69 @@ class ReadingPage extends React.Component{
   }
 }
 
+/*
+This class creates a set of prompts for the writing page.
+*/
+class PromptsReading extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {published:false}
+  }
+
+  setHighlight(){
+    if(this.props.currentPID === this.props.pid){
+     return(true);
+    }
+  }
+
+
+  render() {
+    if(this.setHighlight()){
+      return(
+        <div>
+          <div className="promptInfo" onClick= {this.props.clickHandler}>
+            <div className="p-box-blue">
+              <p className="writing_page_prompts">
+                {this.props.prompt}
+              </p>
+            </div>
+          </div>
+        </div>
+
+      )
+    }
+    else{
+    return(
+      <div>
+        <div className="promptInfo" onClick= {this.props.clickHandler}>
+          <div className="p-box">
+            <p className="writing_page_prompts">
+              {this.props.prompt}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+    }
+  }
+}
+
+
 class ReadingArea extends React.Component {
 
     constructor(props) {
         super(props);
         this.pid = props.pid;
-        this.state = {pid: props.pid}
+        this.state = {pid: props.pid, currentAuthor:" "}
     }
 
     render() {
         return (
             <div>
+              <div className="reading_head">
+                  <h1>{this.props.prompt}</h1>
+                  <p> Author: {this.props.author}</p>
+                </div>
                 <section className="writingpage_section">
                     <article id="text" contentEditable="false" className="content writingpage_article"></article>
                 </section>

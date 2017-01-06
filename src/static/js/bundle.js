@@ -718,11 +718,8 @@
 	    };
 	    this.serverRequest = $.post("/ispublished", data = data, function (result) {
 	      if (result == "1") {
-	        console.log("PUBLISHED");
 	        this.setState({ published: true });
-	      } else {
-	        console.log("NOT");
-	      }
+	      } else {}
 	    }.bind(this));
 	  }
 
@@ -886,7 +883,6 @@
 	        )
 	      );
 	    } else {
-	      console.log("test true");
 	      return React.createElement(
 	        'div',
 	        null,
@@ -923,7 +919,7 @@
 	class ReadingPage extends React.Component {
 	  constructor() {
 	    super();
-	    this.state = { prompts: [], currentPromptID: 0, pieceID: -1, like: 0, showCommentBox: 0, comments: [] };
+	    this.state = { currentAuthor: " ", prompts: [], currentPromptID: 0, currentPID: 1, pieceID: -1, like: 0, showCommentBox: 0, comments: [] };
 	  }
 
 	  componentWillMount() {
@@ -967,26 +963,45 @@
 	      $('#text').text(response["text"]);
 	      this.setState({ pieceID: response["piece_id"] });
 	      this.setState({ like: response["like"] });
+	      this.getAuthor();
 	    });
 	    this.setState({ currentPromptID: pid });
 	    this.state.showCommentBox = 1;
 	    this.toggleComment();
 	  }
 
-	  clickHandler(pid, event) {
+	  setPrompt(prompt, event) {
+	    this.setState({ currentPrompt: prompt });
+	  }
+
+	  clickHandler(pid, prompt, event) {
 	    this.setPID(pid, event);
+	    this.setPrompt(prompt, event);
+	  }
+
+	  getAuthor(event) {
+	    if (this.state.pieceID != null) {
+	      var data = {
+	        piece_id: this.state.pieceID
+	      };
+	      $.post('/getauthor', data = data, response => {
+	        this.setState({ currentAuthor: response["author"] });
+	      });
+	    } else {
+	      this.setState({ currentAuthor: " " });
+	    }
 	  }
 
 	  render() {
 	    var tab = [];
 	    var writingArea = null;
 	    for (var i = 0; i < this.state.prompts.length; i++) {
-	      tab.push(React.createElement(PromptsWriting, {
-	        clickHandler: this.clickHandler.bind(this, this.state.prompts[i].pid),
+	      tab.push(React.createElement(PromptsReading, {
+	        clickHandler: this.clickHandler.bind(this, this.state.prompts[i].pid, this.state.prompts[i].text),
 	        currentPID: this.state.currentPromptID,
 	        prompt: this.state.prompts[i].text,
-	        pid: this.state.prompts[i].pid }));
-	      writingArea = React.createElement(ReadingArea, { pid: this.state.prompts[i].pid });
+	        pid: this.state.prompts[i].pid,
+	        pieceID: this.state.pieceID }));
 	    }
 	    return React.createElement(
 	      'div',
@@ -996,7 +1011,7 @@
 	        { className: 'selectionBox' },
 	        tab
 	      ),
-	      writingArea,
+	      React.createElement(ReadingArea, { author: this.state.currentAuthor, pid: this.state.currentPromptID, prompt: this.state.currentPrompt }),
 	      React.createElement(
 	        'div',
 	        { 'class': 'cover-comments' },
@@ -1017,18 +1032,89 @@
 	  }
 	}
 
+	/*
+	This class creates a set of prompts for the writing page.
+	*/
+	class PromptsReading extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.state = { published: false };
+	  }
+
+	  setHighlight() {
+	    if (this.props.currentPID === this.props.pid) {
+	      return true;
+	    }
+	  }
+
+	  render() {
+	    if (this.setHighlight()) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'promptInfo', onClick: this.props.clickHandler },
+	          React.createElement(
+	            'div',
+	            { className: 'p-box-blue' },
+	            React.createElement(
+	              'p',
+	              { className: 'writing_page_prompts' },
+	              this.props.prompt
+	            )
+	          )
+	        )
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'promptInfo', onClick: this.props.clickHandler },
+	          React.createElement(
+	            'div',
+	            { className: 'p-box' },
+	            React.createElement(
+	              'p',
+	              { className: 'writing_page_prompts' },
+	              this.props.prompt
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }
+	}
+
 	class ReadingArea extends React.Component {
 
 	  constructor(props) {
 	    super(props);
 	    this.pid = props.pid;
-	    this.state = { pid: props.pid };
+	    this.state = { pid: props.pid, currentAuthor: " " };
 	  }
 
 	  render() {
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'reading_head' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          this.props.prompt
+	        ),
+	        React.createElement(
+	          'p',
+	          null,
+	          ' Author: ',
+	          this.props.author
+	        )
+	      ),
 	      React.createElement(
 	        'section',
 	        { className: 'writingpage_section' },

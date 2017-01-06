@@ -109,7 +109,7 @@ class Piece(db.Model):
         self.prompt_id = pid
 
     def __repr__(self):
-        return "Prompt#:%s\nAuthor#:%s\nText:%s\n" % (self.prompt_id, self.author_id, self.text)
+        return "ID#:%s\nPrompt#:%s\nAuthor#:%s\nText:%s\n" % (self.id, self.prompt_id, self.author_id, self.text)
 
     def update(self, text):
         self.text = text
