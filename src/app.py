@@ -181,7 +181,6 @@ def getprompts():
 def getpieces():
     pieces = Piece.query.all()
     pieces = filter(lambda x: x.author_id == current_user.id, pieces)
-    pieces = filter(lambda x: x.is_published == True, pieces)
     return jsonify(map(lambda x: dict(piece = x.id, text = x.text, prompt = x.prompt_id, date = x.date_started),pieces))
 
 @app.route('/getfavorites', methods=["POST"])
