@@ -562,7 +562,6 @@
 	    for (var i = 0; i < this.state.result.length; i++) {
 	      tab.push(React.createElement(PromptsFront, { piece: this.state.result[i].piece, prompt: this.state.result[i].text, promptid: this.state.result[i].prompt, date: this.state.result[i].date }));
 	    }
-	    console.log(this.state.result);
 	    if (this.state.result.length > 0) {
 	      return React.createElement(
 	        'div',
@@ -588,7 +587,6 @@
 	        )
 	      );
 	    } else {
-	      console.log("TESTING");
 	      return React.createElement(
 	        'div',
 	        { className: 'dashboard_front' },
