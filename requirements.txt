@@ -1,0 +1,23 @@
+Flask
+Flask-WTF
+Flask-SQLAlchemy
+flask-login
+Fabric
+psycopg2
+google-api-python-client
+alembic
+passlib
+pycrypto
+redis
+
+# ----------------------
+# Testing
+# ----------------------
+mock
+nose
+
+# ----------------------
+# Production Server
+# ----------------------
+gevent
+gunicorn

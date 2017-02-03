@@ -1,0 +1,108 @@
+{% extends "basewithnav.html" %}
+    {%block content%}
+    <div class = "cover">
+        <div id = "s_main"></div>
+        <script type="text/babel">
+function Story() {
+          var text = "FILLER TEXT"
+          return (
+            <div className="story">
+
+              <div className="storyInfo">
+                <h1>Prompt</h1>
+                <div className="userInfo">
+                <p className="userInfo"> Likes #</p>
+                <p className="userInfo"> Follows # </p>
+                <p className="userInfo"> Views  # </p>
+                </div>
+                <div className="storyPage_box">
+                <h3>Story Title Chosen by Winner</h3>
+                <p>{text}</p>
+                <p>Max word Count</p>
+                <p>Due date</p>
+                <p>Theme/Genre</p>
+                </div>
+                <div className="users">
+                </div>
+              </div>
+
+              <div className="notes">
+                <div className="storyPage_box">
+                <h2> Everytime a writer posts a chapter they summazrize or write some notes on where the story is headed </h2>
+                </div>
+
+              </div>
+              <hr></hr>
+              <div className="story_text">
+              <StoryText/>
+              </div>
+            </div>
+          );
+        }
+
+        class StoryText extends React.Component { // eslint-disable-line react/prefer-stateless-function
+          constructor(){
+            super();
+            this.state = {chapter: 1}
+            this.nextChapter = this.nextChapter.bind(this)
+            this.backChapter = this.backChapter.bind(this)
+          }
+
+
+          backChapter(){
+              if(this.state.chapter!= 1){
+                this.setState({chapter: this.state.chapter - 1})
+              }
+          }
+
+
+
+          nextChapter(){
+            if(this.state.chapter!= 10){
+            this.setState({chapter: this.state.chapter + 1})
+          }
+          }
+
+
+          render() {
+             var chapters = ['1','2','3','4'];
+             var max = 10;
+             const next = "Next";
+             const back = "Back";
+             var index = 0;
+            return (
+              <div>
+              <div className="storyText">
+              <div className="soFar">
+              <h1 onClick={this.nextChapter}>Chapter {this.state.chapter}</h1>
+              <p> Author Name </p>
+              <div className="storyText">
+              <div onClick = {this.nextChapter}>
+              {next}
+              </div>
+              <div onClick = {this.backChapter}>
+              {back}
+              </div>
+              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+
+              Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus.
+              <br></br>
+              <br></br>
+              Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.
+
+              Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante.
+              <br></br>
+              <br></br>
+              Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate eleifend sapien. Vestibulum purus quam, scelerisque ut, mollis sed, nonummy id, metus. Nullam accumsan lorem in dui. Cras ultricies mi eu turpis hendrerit fringilla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In ac dui quis mi</p>
+              </div>
+
+              </div>
+              </div>
+              </div>
+            );
+          }
+        }
+        ReactDOM.render(<Story/>, document.getElementById('s_main'));
+        </script>
+    </div>
+    {% endblock %}

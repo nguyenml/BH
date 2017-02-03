@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block header %}
+<div class="nav">
+    <ul>
+        <li class="block"><a href = "dashboard" class="block" href="#"><img src="../static/images/64x64.png" class="logo"></img>BardHop</a></li>
+        <li class="write"><a href="writing">Write</a></li>
+        <li class="read"><a href="reading">Read</a></li>
+        <li class="user"><a href="dashboard">Me</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<body>
+  <div class="home-container" \
+    style="
+    justify-content: center;
+    text-align: left;
+    flex-direction: row;
+    height: auto;
+    margin: 30px auto 0;
+    width: 950px;">
+    <h1 style="font-weight:bold; font-family:'bree-1','bree-2',helvetica, sans-serif;"> What is BardHop ? </h1>
+      <p style="font-family:'Lora', serif; font-size:17px; height:120px;"> BardHop is a website for reading and writing short stories with a little twist. Instead of free writing stories and pieces, there is a select topic to write about everyday.
+      You can write anything as long as it relates or follows to the prompt given that day. BardHop keeps track of all your writings as well as any writing that you enjoyed! This is a great service for people who
+    need a little push to finally write something or have chronic writers block syndrome. You are more than welcome to use an idea here for your own personal project.</p>
+    <h1 style ="font-weight:bold;"> How does this work ? </h1>
+      <p style="font-family:'Lora', serif; font-size:17px; height:87px;"> Everyday a new prompt will be posted. The prompts last 7 days, so you don't have to finish your story that very day. Once you finish writing your piece, you can "publish" it for anyone else to read.
+      If you don't want anyone to read your work (understandable), you can make your writing private so only you can see it. All the works you were apart of is located in the Me tab.</p>
+    <h1 style="font-weight:bold;"> What type of prompts will be posted ? </h1>
+      <p style="font-family:'Lora', serif; font-size:17px; height:165px; margin-bottom:20px;" > The prompts target multiple types of writing.
+        Some can be goofy and just for fun while others can be serious and self-reflective. Some prompts are for creative thinking and storytelling, and some are well defined situations.
+        You don't have to follow the prompt all the way through! It's always good fun to put a little spin on an idea and make it your own. A lot of these prompts I wrote myself from ideas I had in the past.
+         Other prompts, I shamelessly found online that were just fantastic and I had to reuse them.
+        I also take suggestions for prompts! If you have a great idea for a prompt, please submit it in the form below. Even thinking up prompts can be satisfying.
+         I personally can spend hours at a coffeeshop thinking of clever fun prompts to write to.
+    <h1 style="font-weight:bold;"> About this site </h1>
+    <p style="font-family:'Lora', serif; font-size:17px; height:160px; margin-bottom:20px; padding-bottom:20px;"> I originally wanted to make a website that people would just submit their old works for others to read. I got the idea after consuming all of Stephen King's Skeleton Crew.
+       I love reading short stories and could not find enough of them online.
+    So I thought, why not have the authors write stories here?
+     That's what I tried to aim for at first. Turns out it's really hard to just spontaneously come up with an idea to write about.
+     I had never written before(outside of required english classes) and I thought all you needed was a blank canvas to get to work.
+     After starting over multpliple times, I began to lookup guides and tips for beginners. One of them was using writing prompts. I gave it a shot and here we are.
+    </p>
+    <h1 style="font-weight:bold;"> But I'm not a writer! </h1>
+      <p style="font-family:'Lora', serif; font-size:17px; height:300px; margin-bottom:20px; padding-bottom:20px;">
+      For anyone who has never tried to write, this is a great place to begin.I myself, am a 20 year old college student who has just picked up writing no more than 3 months ago. I used to hate the idea of writing, since I spent most of my childhood being forced to write an essay that conforms to a certain criteria. The last writing prompt I answered was my SAT's so you can understand why I associated writing with evil.
+      Turns out, if you write without the notion that it's for a grade, it can be pretty exciting. So ignore all the thesis statements, intro paragraphs and inverted pyramids, just write for you.</p>
+
+      <form action="/addprompt" id="usrform" style="height:5em; margin-bottom:100px;">
+        Suggest a Prompt:<textarea id='add-prompt' class="form-control" form="usrform" name="prompt" rows="2" cols="50"></textarea>
+  <input type="submit" value="Submit" id="prompt-sub">
+</form>
+  </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+  $('#prompt-sub').on('click', function(e){
+        e.preventDefault();
+        $.ajax({url: "/addprompt/" + $('#add-prompt').val(), success: function(result){
+          document.getElementById("add-prompt").value = "Thank You for your submission!";
+          }
+          })
+      });
+  });
+  </script>
+</body>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

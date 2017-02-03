@@ -1,0 +1,78 @@
+<html>
+
+<head>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script src="https://fb.me/react-15.2.0.js"></script>
+    <script src="https://fb.me/react-dom-15.2.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bluebook.css') }}">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/3.0.0/screenfull.js"></script>
+</head>
+
+<!-- Modals -->
+
+
+<body class = "writingpage_body">
+    <nav>
+        <a href="#" class="nav-toggle-btn"></a>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Read</a></li>
+            <li><a href="#">Write</a></li>
+
+            <div class="nav-btn">
+                <li>
+                    <button type="button" class="btn btn-form" data-toggle="modal" data-target="#settings-modal">Settings</button>
+                </li>
+            </div>
+    </nav>
+
+    <div class="text place">
+        <textarea id="writing" form="writing" class='hiddentextbox'></textarea>
+    </div>
+
+    <div class="click">
+        <ul class="icon">
+            <li><i id="toggle" class="fa fa-arrows-alt" aria-hidden="true" title="Fullscreen"></i></li>
+            <li><i id="hideshow" class="fa fa-sticky-note-o" aria-hidden="true" title="Prompt"></i></li>
+            <li><i id="hideshowwords" class="fa fa-hashtag" aria-hidden="true" title="Word Count"></i></li>
+        </ul>
+    </div>
+    <div class="prompt">
+        <p><strong>Prompt</strong></p>
+        <div id="prompt"></div>
+    </div>
+    <script type="text/babel">
+        var Prompt = React.createClass({ propTypes: { title: React.PropTypes.string.isRequired }, getDefaultProps: function () { return { title: "Title" } }, render: function() { return(
+        <h1>{this.props.title}</h1>) } }); ReactDOM.render(
+        <Prompt title={Title}/>, document.getElementById('prompt'));
+    </script>
+
+    <div class="word">
+        <p id="wordcount" class="wordcount"><strong></strong></p>
+    </div>
+    <script src={{ url_for( 'static', filename='js/bluebook.js' ) }}></script>
+
+    <section class="writingpage_section">
+
+        <article id="text" contenteditable="true" class="content writingpage_article"></article>
+
+    </section>
+</body>
+
+</html>
