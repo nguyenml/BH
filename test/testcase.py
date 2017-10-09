@@ -35,4 +35,5 @@ class BaseTestCase(unittest.TestCase):
         db.session.rollback()
         db.session.remove()
         db.drop_all()
-
+    
+    def getAll(self):
